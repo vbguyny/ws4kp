@@ -1,0 +1,336 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" type="text/css" href="Styles/twc3.css?v=29">
+    <script type="text/javascript" src="Scripts/jquery-3.1.0.min.js"></script>
+    <script type="text/javascript" src="Scripts/libgif.js?v=29"></script>
+    <script type="text/javascript" src="Scripts/TravelCities.js?v=29"></script>
+    <script type="text/javascript" src="Scripts/RegionalCities.js?v=29"></script>
+    <script type="text/javascript" src="Scripts/Icons.js?v=29"></script>
+    <script type="text/javascript" src="Scripts/stations.js?v=29"></script>
+    <script type="text/javascript" src="Scripts/jeoquery.js"></script>
+    <script type="text/javascript" src="Scripts/Timer.js?v=29"></script>
+    <script type="text/javascript" src="Scripts/twc3.js?v=29"></script>
+</head>
+<body>
+
+    <!-- This will force the browser to download the font before the canvas is rendered. -->
+    <div id="Star4000">123 This is a test</div>
+    <div id="Star4000Extended">123 This is a test</div>
+    <div id="Star4000LargeCompressedNumbers">123 This is a test</div>
+    <div id="Star4000LargeCompressed">123 This is a test</div>
+    <div id="Star4000Large">123 This is a test</div>
+    <div id="Star4000Small">123 This is a test</div>
+    <div id="Star4Radar">123 This is a test</div>
+
+    <img id="imgLogo" src="Images/Logo3.gif" />
+    <img id="imgNoaa" src="Images/noaa5.gif" />
+
+    <canvas id="canvasBackGroundDateTime" width="175" height="60"></canvas>
+    <canvas id="canvasBackGroundCurrentConditions" width="640" height="80"></canvas>
+
+    <a name="aProgress"><canvas id="canvasProgress" width="640" height="480"></canvas></a>
+    <a name="aCurrentWeather"><canvas id="canvasCurrentWeather" width="640" height="480"></canvas></a>
+    <a name="aLatestObservations"><canvas id="canvasLatestObservations" width="640" height="480"></canvas></a>
+    <a name="aTravelForecast"><canvas id="canvasTravelForecast" width="640" height="480"></canvas></a>
+    <a name="aRegionalForecast"><canvas id="canvasRegionalForecast" width="640" height="480"></canvas></a>
+    <a name="aRegionalObservations"><canvas id="canvasRegionalObservations" width="640" height="480"></canvas></a>
+    <a name="aLocalForecast"><canvas id="canvasLocalForecast" width="640" height="480"></canvas></a>
+    <!--<a name="aExtendedForecast"><canvas id="canvasExtendedForecast" width="640" height="480"></canvas></a>-->
+    <a name="aExtendedForecast1"><canvas id="canvasExtendedForecast1" width="640" height="480"></canvas></a>
+    <a name="aExtendedForecast2"><canvas id="canvasExtendedForecast2" width="640" height="480"></canvas></a>
+    <a name="aAlmanac"><canvas id="canvasAlmanac" width="640" height="480"></canvas></a>
+    <a name="aAlmanacTides"><canvas id="canvasAlmanacTides" width="640" height="480"></canvas></a>
+    <a name="aOutlook"><canvas id="canvasOutlook" width="640" height="480"></canvas></a>
+    <a name="aMarineForecast"><canvas id="canvasMarineForecast" width="640" height="480"></canvas></a>
+    <a name="aAirQuality"><canvas id="canvasAirQuality" width="640" height="480"></canvas></a>
+    <a name="aLocalRadar"><canvas id="canvasLocalRadar" width="640" height="480"></canvas></a>
+    <a name="aHazards"><canvas id="canvasHazards" width="640" height="480"></canvas></a>
+    
+    <audio id="audMusic" type="audio/mp3" src=""></audio>
+    
+    <div id="divDebug">
+
+        <div id="divProgress">0</div>
+
+        <table id="tblDopplerRadarMap">
+            <tbody>
+                <tr>
+                    <td>
+                        <div id="divDopplerRadarMap"></div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <br />
+
+        <table id="tblRegionalForecastMap">
+            <tbody>
+                <tr>
+                    <td>
+                        <div id="divRegionalForecastMap"></div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <br />
+
+        <table id="tblRegionalCurrentMap">
+            <tbody>
+                <tr>
+                    <td>
+                        <div id="divRegionalCurrentMap"></div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <br />
+
+        <!--<input id="btnGetCurrentWeather" type="button" value="Get Weather" />-->
+        <table id="tblCurrentWeather">
+            <tbody>
+                <tr>
+                    <td>
+                        <div id="divTemperature"></div>
+                    </td>
+                    <td>
+                        <div id="divStation"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div id="divConditions"></div>
+                    </td>
+                    <td>
+                        <div id="divHumidity"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td rowspan="3">
+                        <div id="divIcon"></div>
+                    </td>
+                    <td>
+                        <div id="divDewpoint"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div id="divCeiling"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div id="divVisibility"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div id="divWind"></div>
+                    </td>
+                    <td>
+                        <div id="divPressure"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div id="divGust"></div>
+                    </td>
+                    <td>
+                        <div id="divHeatIndex"></div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <br />
+
+        <table id="tblHazards">
+            <tbody>
+                <tr>
+                    <td>
+                        <div id="divHazards"></div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <table id="tblHazardsScroll">
+            <tbody>
+                <tr>
+                    <td>
+                        <div id="divHazardsScroll"></div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <br />
+
+        <table id="tblLocalForecast">
+            <tbody>
+                <tr>
+                    <td>
+                        <div id="divLocalForecastAlerts"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div id="divLocalForecast1"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div id="divLocalForecast2"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div id="divLocalForecast3"></div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <br />
+
+        <table id="tblExtendedForcast">
+            <tbody>
+                <tr>
+                    <td colspan="2">
+                        <div id="divDayShortName1"></div>
+                    </td>
+                    <td colspan="2">
+                        <div id="divDayShortName2"></div>
+                    </td>
+                    <td>
+                        <div id="divDayShortName3"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <div id="divIcon1"></div>
+                    </td>
+                    <td colspan="2">
+                        <div id="divIcon2"></div>
+                    </td>
+                    <td colspan="2">
+                        <div id="divIcon3"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <div id="divConditions1"></div>
+                    </td>
+                    <td colspan="2">
+                        <div id="divConditions2"></div>
+                    </td>
+                    <td colspan="2">
+                        <div id="divConditions3"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div id="divLo1"></div>
+                    </td>
+                    <td>
+                        <div id="divHi1"></div>
+                    </td>
+                    <td>
+                        <div id="divLo2"></div>
+                    </td>
+                    <td>
+                        <div id="divHi2"></div>
+                    </td>
+                    <td>
+                        <div id="divLo3"></div>
+                    </td>
+                    <td>
+                        <div id="divHi3"></div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <br />
+
+        <table id="tblSunData">
+            <tbody>
+                <tr>
+                    <td></td>
+                    <td><div id="divSunriseTodayName"></div></td>
+                    <td><div id="divSunsetTomorrowName"></div></td>
+                </tr>
+                <tr>
+                    <td><div id="divSunrise"></div></td>
+                    <td><div id="divSunriseToday"></div></td>
+                    <td><div id="divSunriseTomorrow"></div></td>
+                </tr>
+                <tr>
+                    <td><div id="divSunset"></div></td>
+                    <td><div id="divSunsetToday"></div></td>
+                    <td><div id="divSunsetTomorrow"></div></td>
+                </tr>
+            </tbody>
+        </table>
+        <table id="tblMoonData">
+            <tbody>
+                <tr>
+                    <td><div id="divMoonPhase1"></div></td>
+                    <td><div id="divMoonPhase2"></div></td>
+                    <td><div id="divMoonPhase3"></div></td>
+                    <td><div id="divMoonPhase4"></div></td>
+                </tr>
+                <tr>
+                    <td><div id="divMoonDate1"></div></td>
+                    <td><div id="divMoonDate2"></div></td>
+                    <td><div id="divMoonDate3"></div></td>
+                    <td><div id="divMoonDate4"></div></td>
+                </tr>
+            </tbody>
+        </table>
+        <br />
+
+        <table id="tblOutlook">
+            <tbody>
+                <tr>
+                    <td><div id="divOutlookTemp"></div></td>
+                </tr>
+                <tr>
+                    <td><div id="divOutlookPrcp"></div></td>
+                </tr>
+            </tbody>
+        </table>
+        <br />
+
+        <table id="tblTravelCities">
+            <tbody>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td><div id="divTravelCitiesLow"></div></td>
+                    <td><div id="divTravelCitiesHigh"></div></td>
+                </tr>
+            </tbody>
+        </table>
+        <table id="tblTravelCitiesScroll">
+            <tbody>
+                <tr>
+                    <td>
+                        <div id="divTravelCitiesScroll"></div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <br />
+
+        <table id="tblRegionalObservations">
+            <tbody>
+                <tr>
+                    <td><div id="divRegionalObservationsCityName"></div></td>
+                    <td><div id="divRegionalObservationsTemperature"></div></td>
+                    <td><div id="divRegionalObservationsConditions"></div></td>
+                    <td><div id="divRegionalObservationsWind"></div></td>
+                </tr>
+            </tbody>
+        </table>
+        <br />
+    </div>
+</body>
+</html>

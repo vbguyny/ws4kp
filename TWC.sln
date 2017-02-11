@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4C09BEDF-4156-4DEE-AB45-BAE0AF4FA9F1}"
+	ProjectSection(SolutionItems) = preProject
+		CORS\Default.aspx = CORS\Default.aspx
+		GenerateStationsJson.aspx = GenerateStationsJson.aspx
+		Scripts\Icons.js = Scripts\Icons.js
+		Scripts\jeoquery.js = Scripts\jeoquery.js
+		Scripts\jquery-3.1.0.min.js = Scripts\jquery-3.1.0.min.js
+		Scripts\jquery.autocomplete.min.js = Scripts\jquery.autocomplete.min.js
+		Scripts\jquery.touchSwipe.min.js = Scripts\jquery.touchSwipe.min.js
+		Scripts\libgif.js = Scripts\libgif.js
+		manifest.json = manifest.json
+		Styles\outlook1.css = Styles\outlook1.css
+		outlook1.html = outlook1.html
+		Scripts\outlook1.js = Scripts\outlook1.js
+		Scripts\RegionalCities.js = Scripts\RegionalCities.js
+		speech1.html = speech1.html
+		Scripts\speech1.js = Scripts\speech1.js
+		Scripts\stations.js = Scripts\stations.js
+		Scripts\Timer.js = Scripts\Timer.js
+		Scripts\TimerWorker.js = Scripts\TimerWorker.js
+		Scripts\TravelCities.js = Scripts\TravelCities.js
+		Scripts\twc1.js = Scripts\twc1.js
+		Styles\twc2.css = Styles\twc2.css
+		twc2.html = twc2.html
+		Scripts\twc2.js = Scripts\twc2.js
+		Styles\twc3.css = Styles\twc3.css
+		twc3.html = twc3.html
+		Scripts\twc3.js = Scripts\twc3.js
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,174 @@
+﻿@font-face 
+{
+    font-family: "Star4000";
+    src: url('../fonts/Star4000.woff') format('woff');
+    /*font-weight: bold;
+    font-style: italic;*/
+}
+@font-face 
+{
+    font-family: "Star 4 Radar";
+    src: url('../fonts/Star 4 Radar.woff') format('woff');
+}
+@font-face 
+{
+    font-family: 'Star4000 Extended';
+    src: url('../fonts/Star4000 Extended.woff') format('woff');
+}
+@font-face 
+{
+    /*font-family: 'Star4000 Large Compressed Numbers';*/
+    font-family: 'Star4000LCN';
+    /*src: url('../fonts/Star4000 Large Compressed Numbers.woff') format('woff');*/
+    src: url('../fonts/Star4000LCN.woff') format('woff');
+}
+@font-face
+ {
+    font-family: 'Star4000 Large Compressed';
+    src: url('../fonts/Star4000 Large Compressed.woff') format('woff');
+}
+@font-face 
+{
+    font-family: 'Star4000 Large';
+    src: url('../fonts/Star4000 Large.woff') format('woff');
+}
+@font-face
+ {
+    font-family: 'Star4000 Small';
+    src: url('../fonts/Star4000 Small.woff') format('woff');
+}
+
+body
+{
+    font-family: "Star4000";
+    margin: 0 0 0 0;
+    overflow: hidden;
+}
+
+input
+{
+    font-family: "Star4000";
+}
+
+#tblCurrentWeather
+{
+    width: 500px;
+    height: 280px;
+    font-size: 20px;
+}
+
+#tblExtendedForcast
+{
+    width: 500px;
+    height: 280px;
+    font-size: 20px;
+}
+
+#tblLocalForcast
+{
+    /*width: 500px;
+    height: 280px;
+    font-size: 20px;*/
+}
+
+#tblHazards
+{
+    /*width: 500px;
+    height: 280px;
+    font-size: 20px;*/
+    color: #ff0000;
+}
+
+#tblRegionalForecastMap, #tblRegionalCurrentMap, #tblDopplerRadarMap
+{
+    /*width: 640px;*/
+    /*height: 312px;*/
+    border: 1px solid #000000;
+    border-spacing: 0px;
+}
+
+jsgif
+{
+    display: none;
+}
+
+#Star4000
+{
+    visibility: hidden;
+    position: absolute;
+    font-family: 'Star4000';
+}
+#Star4000Extended
+{
+    visibility: hidden;
+    position: absolute;
+    font-family: 'Star4000 Extended';
+}
+#Star4000LargeCompressed
+{
+    visibility: hidden;
+    position: absolute;
+    font-family: 'Star4000 Large Compressed';
+}
+#Star4000Large
+{
+    visibility: hidden;
+    position: absolute;
+    font-family: 'Star4000 Large';
+}
+#Star4000LargeCompressedNumbers
+{
+    visibility: hidden;
+    position: absolute;
+    /*font-family: 'Star4000 Large Compressed Numbers';*/
+    font-family: 'Star4000LCN';
+}
+#Star4000Small
+{
+    visibility: hidden;
+    position: absolute;
+    font-family: 'Star4000 Small';
+}
+#Star4Radar
+{
+    visibility: hidden;
+    position: absolute;
+    font-family: 'Star 4 Radar';
+}
+
+#imgLogo, #imgNoaa
+{
+    visibility: hidden;
+    position: absolute;
+}
+
+#canvasProgress
+{
+    /*width: 640px;*/
+    /*height: 480px;*/
+    /*color: #1c0a57;*/
+}
+#canvasBackGroundDateTime, #canvasBackGroundCurrentConditions
+{
+    display: none;
+}
+
+#divDebug
+{
+    /* Cannot hide the entire div otherwise the Travel Forecast doesn't work */
+    /*display: none;*/
+
+    visibility: hidden;
+    position: absolute;
+    top: -10000px;
+}
+
+audio
+{
+    display: none;
+}
+
+.HideCursor
+{
+    cursor: none !important;
+}
