@@ -4,7 +4,7 @@
 
 Welcome to the WeatherStar 4000+ project page!
 
-This project was originally created by Mike Battaglia in the Fall of 2016 because of wanting to create his own weather site which displayed the information in a way that was done by the Weather Channel in the mid to late 90's.  Eventually he watched enough videos and YouTube and read enough articles on how to get and parse data directly from the National Weather Service (NWS) that he was able to create his own version of the site.  After three interations, he is now considering the site feature complete and you can view the live version here: https://battaglia.ddns.net/twc/twc2.html
+This project was originally created by Mike Battaglia in the Fall of 2016 because of the desire to create his own weather site which displayed the information in a way that was done by the Weather Channel in the mid to late 90's.  Eventually he watched enough videos and YouTube and read enough articles on how to get and parse data directly from the National Weather Service (NWS) which allowed him to create his own version of the WeatherStar 4000.  After three interations, he now considers the site feature complete and you can view the live version here: https://battaglia.ddns.net/twc/twc2.html
 
 ## Segments
 
@@ -20,12 +20,12 @@ This project was originally created by Mike Battaglia in the Fall of 2016 becaus
 
 ## Features
 
-* Support weather for all 50 US states.
-* Can utilitize mobile GPS.
+* Support for all 50 US states.
+* Utilitize mobile GPS.
 * Fullscreen mode.
 * Plays background music.
 * Uses narration to read the information on the screen (does not work in iOS).
-* Display Station, Radar, and Zone Ids for current location.
+* Displays station, radar, and zone IDs for the current location.
 * 10 minute auto refresh setting.
 * Convert between English and Metric units.
 * Choose between three built-in themes.
@@ -33,17 +33,30 @@ This project was originally created by Mike Battaglia in the Fall of 2016 becaus
 
 ## Setup
 
-It is recommended that you download all of the source code to a folder and use Internet Information Services (IIS) 7.5 or later to create a virtual directory which points to this folder.
+It is recommended that you download all of the source code to a folder and use Internet Information Services (IIS) 7.5 or later with ASP .NET 4.5 or later to create a virtual directory which points to this folder.
+
+If you plan on exposing this site publicly, you will need to update the code in `CORS/Default.aspx` to have your public IP address and domain name:
+```c#
+	switch (Page.Request.Url.Host)
+	{
+		case "localhost":
+		case "192.168.2.98":
+		case "battaglia.ddns.net":
+		case "[Your domain here]":
+			OkToProcessRequest = true;
+			break;
+	}
+```
 
 Then use a browser to access the site by navigating to the `twc2.html` page.
 
-NOTE: the GPS function will not work in Chrome 50 or later if the site is not using an SSL certificate.
+NOTE: The GPS function will not work in Chrome 50 or later if the site is not using an SSL certificate.
 
 ### CORS
 
-The design of this site was to have a little back end logic on the server side as possible. However due to issues with specific AJAX calls to weather.gov there are too many issues with cross-origin resource sharing (CORS).  In order to work around CORS prevention in most browsers the AJAX calls go through a server first acting as a middle man which sends the request to weather.gov and the response back to the end user.
+The design of this site was to have as little back end logic on the server side as possible. However weather.gov has too many issues with cross-origin resource sharing (CORS).  In order to work around CORS prevention in most browsers the AJAX calls go through a server first acting as a middle man which sends the request to weather.gov and the response back to the end user.
 
-In order to setup CORS on your server this will only work on IIS which is able to support ASP .NET 4.5 or later.
+In order to setup CORS on your server you will need IIS 7.5 or later which is able to support ASP .NET 4.5 or later.
 
 The live site uses itself as the CORS server however there are a few free third-party CORS servers that can be used if you are not able/willing to set one up yourself.
 
