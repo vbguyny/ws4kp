@@ -245,3 +245,8 @@ https://www.weather.gov/climate/calendar_outlook.php?wfo=okx
 
 Weather.gov changes:
 https://forecast-v3.weather.gov/documentation?redirect=legacy
+
+Puerto Rico and the Virgin Islands:
+
+Doppler image: (http://radar.weather.gov/ridge/RadarImg/N0R/JUA/) http://radar.weather.gov/ridge/radar.php?rid=jua
+
