@@ -1,5 +1,4 @@
 {
-  /* ?v=23 */
   //"short_name": "WS4K+",
   "name": "WeatherStar 4000+ (BETA)",
   "icons": [
@@ -9,6 +8,6 @@
       "type": "images/png"
     }
   ],
-  "start_url": "/twc/twc2.html",
+  "start_url": "/twc/index.html",
   "display": "standalone"
 }

@@ -4,7 +4,7 @@
 
 Welcome to the WeatherStar 4000+ project page!
 
-This project was originally created by Mike Battaglia in the Fall of 2016 because of the desire to create his own weather site which displayed the information in a way that was done by the Weather Channel in the mid to late 90's.  Eventually he watched enough videos and YouTube and read enough articles on how to get and parse data directly from the National Weather Service (NWS) which allowed him to create his own version of the WeatherStar 4000.  After three interations, he now considers the site feature complete and you can view the live version here: https://battaglia.ddns.net/twc/twc2.html
+This project was originally created by Mike Battaglia in the Fall of 2016 because of the desire to create his own weather site which displayed the information in a way that was done by the Weather Channel in the mid to late 90's.  Eventually he watched enough videos and YouTube and read enough articles on how to get and parse data directly from the National Weather Service (NWS) which allowed him to create his own version of the WeatherStar 4000.  After three interations, he now considers the site feature complete and you can view the live version here: https://battaglia.ddns.net/twc
 
 ## Segments
 
@@ -48,7 +48,7 @@ If you plan on exposing this site publicly, you will need to update the code in 
 	}
 ```
 
-Then use a browser to access the site by navigating to the `twc2.html` page.
+Then use a browser to access the site by navigating to the `index.html` page.
 
 NOTE: The GPS function will not work in Chrome 50 or later if the site is not using an SSL certificate.
 
