@@ -1,4 +1,4 @@
-# WeatherStar 4000+ (BETA)
+# WeatherStar 4000+
 
 ## About
 

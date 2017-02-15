@@ -243,10 +243,14 @@ https://www.weather.gov/climate/l3mto.php
 https://www.weather.gov/climate/calendar_outlook.php?wfo=okx 
  Also see http://www.cpc.ncep.noaa.gov/products/predictions/multi_season/13_seasonal_outlooks/color/shortlegend.gif
 
+----------------------------------------------------------------------------------------------------------------------------
+
 Weather.gov changes:
 https://forecast-v3.weather.gov/documentation?redirect=legacy
+
+----------------------------------------------------------------------------------------------------------------------------
 
 Puerto Rico and the Virgin Islands:
 
 Doppler image: (http://radar.weather.gov/ridge/RadarImg/N0R/JUA/) http://radar.weather.gov/ridge/radar.php?rid=jua
-
+Map: http://imgur.com/FmQpVYp

@@ -10574,7 +10574,7 @@ var Progress = function (e)
             ////DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "Conditions", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 55, "WeatherStar", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "4000+", 3);
-            DrawTitleText(context, "WeatherStar", "4000+ (BETA)");
+            DrawTitleText(context, "WeatherStar", "4000+ 1.0.30");
 
             // Draw a box for the progress.
             //context.fillStyle = "#000000";

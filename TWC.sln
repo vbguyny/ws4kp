@@ -22,9 +22,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Scripts\Timer.js = Scripts\Timer.js
 		Scripts\TimerWorker.js = Scripts\TimerWorker.js
 		Scripts\TravelCities.js = Scripts\TravelCities.js
-		Styles\twc2.css = Styles\twc2.css
-		twc2.html = twc2.html
-		Scripts\twc2.js = Scripts\twc2.js
+		Styles\twc3.css = Styles\twc3.css
+		twc3.html = twc3.html
+		Scripts\twc3.js = Scripts\twc3.js
 	EndProjectSection
 EndProject
 Global
