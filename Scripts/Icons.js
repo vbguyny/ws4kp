@@ -1134,14 +1134,22 @@ var GetFileNameFromUrl = function(Url)
 }
 
 //var GetWeatherRegionalIconFromIconLink = function (WeatherIconLink)
-var GetWeatherRegionalIconFromIconLink = function (WeatherIconLink, WeatherConditions, WeatherParameters)
+//var GetWeatherRegionalIconFromIconLink = function (WeatherIconLink, WeatherConditions, WeatherParameters)
+var GetWeatherRegionalIconFromIconLink = function (WeatherIconLink, WeatherConditions, WeatherParameters, IsNightTime)
 {
     var Icon = "";
     var WeatherIcon = WeatherIconLink;
 
     if (WeatherIconLink.indexOf(".gif") == -1)
     {
-        WeatherIcon = GetWeatherIconFromIconLink(WeatherIconLink, WeatherConditions, WeatherParameters, true);
+        if (IsNightTime)
+        {
+            WeatherIcon = GetWeatherIconFromIconLink(WeatherIconLink, WeatherConditions, WeatherParameters, false);
+        }
+        else
+        {
+            WeatherIcon = GetWeatherIconFromIconLink(WeatherIconLink, WeatherConditions, WeatherParameters, true);
+        }
     }
 
     if (!WeatherIcon)
@@ -1201,7 +1209,14 @@ var GetWeatherRegionalIconFromIconLink = function (WeatherIconLink, WeatherCondi
 
         case "ef_scatshowers.gif":
         case "scattered-showers.gif":
-            Icon = "Scattered-Showers.gif";
+            if (IsNightTime)
+            {
+                Icon = "Scattered-Showers-Night.gif";
+            }
+            else
+            {
+                Icon = "Scattered-Showers.gif";
+            }
             break;
 
         case "CC_Showers.gif":
@@ -1259,7 +1274,14 @@ var GetWeatherRegionalIconFromIconLink = function (WeatherIconLink, WeatherCondi
 
         case "ef_scattstorms.gif":
         case "scattered-tstorms.gif":
-            Icon = "Scattered-Tstorms-1992.gif";
+            if (IsNightTime)
+            {
+                Icon = "Scattered-Tstorms-Night.gif";
+            }
+            else
+            {
+                Icon = "Scattered-Tstorms-1992.gif";
+            }
             break;
 
         case "cc_tstorm.gif":
@@ -1277,7 +1299,14 @@ var GetWeatherRegionalIconFromIconLink = function (WeatherIconLink, WeatherCondi
             break;
 
         case "ef_scatsnowshowers.gif":
-            Icon = "Scattered-Snow-Showers.gif";
+            if (IsNightTime)
+            {
+                Icon = "Scattered-Snow-Showers-Night.gif";
+            }
+            else
+            {
+                Icon = "Scattered-Snow-Showers.gif";
+            }
             break;
 
         case "ef_isolatedtstorms.gif":

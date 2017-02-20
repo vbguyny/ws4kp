@@ -3,16 +3,17 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
-    <link rel="stylesheet" type="text/css" href="Styles/twc3.css?v=30">
+    <link rel="stylesheet" type="text/css" href="Styles/twc3.css?v=31">
     <script type="text/javascript" src="Scripts/jquery-3.1.0.min.js"></script>
-    <script type="text/javascript" src="Scripts/libgif.js?v=30"></script>
-    <script type="text/javascript" src="Scripts/TravelCities.js?v=30"></script>
-    <script type="text/javascript" src="Scripts/RegionalCities.js?v=30"></script>
-    <script type="text/javascript" src="Scripts/Icons.js?v=30"></script>
-    <script type="text/javascript" src="Scripts/stations.js?v=30"></script>
+    <script type="text/javascript" src="Scripts/libgif.js?v=31"></script>
+    <script type="text/javascript" src="Scripts/TravelCities.js?v=31"></script>
+    <script type="text/javascript" src="Scripts/RegionalCities.js?v=31"></script>
+    <script type="text/javascript" src="Scripts/Icons.js?v=31"></script>
+    <script type="text/javascript" src="Scripts/stations.js?v=31"></script>
     <script type="text/javascript" src="Scripts/jeoquery.js"></script>
-    <script type="text/javascript" src="Scripts/Timer.js?v=30"></script>
-    <script type="text/javascript" src="Scripts/twc3.js?v=30"></script>
+    <script type="text/javascript" src="Scripts/Timer.js?v=31"></script>
+    <!--<script type="text/javascript" src="Scripts/timemachine.min.js"></script>-->
+    <script type="text/javascript" src="Scripts/twc3.js?v=31"></script>
 </head>
 <body>
 
@@ -35,7 +36,8 @@
     <a name="aCurrentWeather"><canvas id="canvasCurrentWeather" width="640" height="480"></canvas></a>
     <a name="aLatestObservations"><canvas id="canvasLatestObservations" width="640" height="480"></canvas></a>
     <a name="aTravelForecast"><canvas id="canvasTravelForecast" width="640" height="480"></canvas></a>
-    <a name="aRegionalForecast"><canvas id="canvasRegionalForecast" width="640" height="480"></canvas></a>
+    <a name="aRegionalForecast1"><canvas id="canvasRegionalForecast1" width="640" height="480"></canvas></a>
+    <a name="aRegionalForecast2"><canvas id="canvasRegionalForecast2" width="640" height="480"></canvas></a>
     <a name="aRegionalObservations"><canvas id="canvasRegionalObservations" width="640" height="480"></canvas></a>
     <a name="aLocalForecast"><canvas id="canvasLocalForecast" width="640" height="480"></canvas></a>
     <!--<a name="aExtendedForecast"><canvas id="canvasExtendedForecast" width="640" height="480"></canvas></a>-->
@@ -70,7 +72,12 @@
             <tbody>
                 <tr>
                     <td>
-                        <div id="divRegionalForecastMap"></div>
+                        <div id="divRegionalForecastMap1"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div id="divRegionalForecastMap2"></div>
                     </td>
                 </tr>
             </tbody>

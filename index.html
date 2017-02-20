@@ -3,30 +3,45 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
-    <!--<meta name="viewport" content="height=580, initial-scale=1" />-->
-    <meta name="viewport" content="width=660"/>
+
+    <title>WeatherStar 4000+</title>
+    <meta name="description" content="Web based WeatherStar 4000 simulator that reports current and forecast weather conditions plus a few extras!" />
+    <meta name="keywords" content="WeatherStar 4000+" />
+    <meta name="author" content="Michael Battaglia" />
+    <meta name="copyright" content="2016-2017" />
+    <meta name="application-name" content="WeatherStar 4000+" />
+
+    <meta property="og:title" content="WeatherStar 4000+" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="http://battaglia.ddns.net/twc/images/logo200.png" />
+    <meta property="og:url" content="http://battaglia.ddns.net/twc/index.html" />
+    <meta property="og:description" content="Web based WeatherStar 4000 simulator that reports current and forecast weather conditions plus a few extras!" />
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="WeatherStar 4000+" />
+    <meta name="twitter:description" content="Web based WeatherStar 4000 simulator that reports current and forecast weather conditions plus a few extras!" />
+    <meta name="twitter:image" content="http://battaglia.ddns.net/twc/images/logo200.png" />
+
+    <meta name="viewport" content="width=660" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <link rel="manifest" href="manifest.json?v=30" />
-    <!--<link rel="icon" href="images/logo3.gif">-->
+    <link rel="manifest" href="manifest.json?v=31" />
     <link rel="icon" href="images/logo192.png" />
-    <link rel="stylesheet" type="text/css" href="Styles/index.css?v=30">
+    <link rel="stylesheet" type="text/css" href="Styles/index.css?v=31" />
     <script type="text/javascript" src="Scripts/jquery-3.1.0.min.js"></script>
     <script type="text/javascript" src="Scripts/jquery.autocomplete.min.js"></script>
     <script type="text/javascript" src="Scripts/NoSleep.min.js"></script>
     <script type="text/javascript" src="Scripts/jquery.touchSwipe.min.js"></script>
-    <script type="text/javascript" src="Scripts/Timer.js?v=30"></script>
-    <script type="text/javascript" src="Scripts/index.js?v=30"></script>
+    <script type="text/javascript" src="Scripts/Timer.js?v=31"></script>
+    <script type="text/javascript" src="Scripts/index.js?v=31"></script>
 
     <!-- Place this tag in your head or just before your close body tag. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
-    
-    <title>WeatherStar 4000+</title>
 </head>
 <body>
 
     <!--<a href="https://github.com/vbguyny/ws4kp"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>-->
-        
+
     <div id="divQuery">
         <form id="frmGetLatLng">
             <input id="txtAddress" type="text" value="" placeholder="Zip or City, State" /><button id="btnGetGps" type="button" title="Get GPS Location"><img id="imgGetGps" src="images/nav/ic_gps_fixed_black_18dp_1x.png" /></button>
@@ -93,7 +108,7 @@
                 </div>
             </div>
         </div>
-        <div id="divTwcBottom">            
+        <div id="divTwcBottom">
             <!--Bottom <a id="aFullScreenBottom" href="#" class="ToggleFullScreen"><img src="images/nav/ic_fullscreen_exit_white_24dp_2x.png" title="Exit Fullscreen" /></a>-->
             <div id="divTwcBottomLeft">
                 <a id="aMenuBottom" href="#" class="NavigateMenu"><img src="images/nav/ic_menu_white_24dp_1x.png" title="Menu" /></a>
