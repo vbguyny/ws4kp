@@ -1837,6 +1837,8 @@ var GetAirQuality = function (WeatherParameters)
         error: function (xhr, error, errorThrown)
         {
             console.error("GetAirQuality failed: " + errorThrown);
+
+            GetMarineForecast(WeatherParameters);
         }
     });
 };
@@ -1971,6 +1973,8 @@ var GetAirQuality2 = function (WeatherParameters)
         error: function (xhr, error, errorThrown)
         {
             console.error("GetAirQuality failed: " + errorThrown);
+
+            GetMarineForecast(WeatherParameters);
         }
     });
 };
@@ -10809,7 +10813,7 @@ var Progress = function (e)
             ////DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "Conditions", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 55, "WeatherStar", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "4000+", 3);
-            DrawTitleText(context, "WeatherStar", "4000+ 1.31");
+            DrawTitleText(context, "WeatherStar", "4000+ 1.32");
 
             // Draw a box for the progress.
             //context.fillStyle = "#000000";

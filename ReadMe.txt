@@ -247,6 +247,9 @@ https://www.weather.gov/climate/calendar_outlook.php?wfo=okx
 
 Weather.gov changes:
 https://forecast-v3.weather.gov/documentation?redirect=legacy
+https://forecast-v3.weather.gov/documentation
+
+Marine Forecast: Advisories: https://api.weather.gov/alerts?active=1&zone_type=marine&zone=ANZ345 (features[i].properties[i].event)
 
 ----------------------------------------------------------------------------------------------------------------------------
 
