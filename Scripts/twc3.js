@@ -1150,6 +1150,7 @@ var GetMarineForecast = function (WeatherParameters)
     var Url = "https://www.wunderground.com/cgi-bin/findweather/getForecast?query="; //Montauk%2C+NY
     Url += encodeURIComponent(WeatherParameters.City) + "%2C";
     Url += WeatherParameters.State;
+    Url += "&hdf=1"; // mjb 08/15/18
 
     WeatherParameters.MarineForecast = null;
 
@@ -10813,7 +10814,7 @@ var Progress = function (e)
             ////DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "Conditions", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 55, "WeatherStar", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "4000+", 3);
-            DrawTitleText(context, "WeatherStar", "4000+ 1.32");
+            DrawTitleText(context, "WeatherStar", "4000+ 1.33");
 
             // Draw a box for the progress.
             //context.fillStyle = "#000000";

@@ -1,3 +1,6 @@
+26 Weather APIs, 12 Support JSON:
+https://www.programmableweb.com/news/26-weather-apis-12-support-json/2012/01/11
+
 Icons: http://s122.photobucket.com/user/weatherstooge/library/TWC%20Icons%20-%201990-1998/RFTF?sort=4&page=1
 http://twcclassics.com/downloads/icons.html
 http://twctodayforums.com/forums/twc-fan-art/michael's-modified-twc-icons/
