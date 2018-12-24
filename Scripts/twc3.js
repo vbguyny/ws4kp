@@ -3072,6 +3072,13 @@ $(function ()
                         var ZipCode = data.address.Postal;
                         var Country = data.address.CountryCode;
 
+                        switch (ZipCode)
+                        {
+                            case "88888": // The North Pole.
+                                ZipCode = "20001";
+                                break;
+                        }
+
                         _WeatherParameters.ZipCode = ZipCode;
                         _WeatherParameters.Country = Country;
                     }
