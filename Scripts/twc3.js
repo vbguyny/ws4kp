@@ -443,31 +443,122 @@ var GetClosestCurrentWeather = function (WeatherParameters, Distance)
 
 };
 
-var GetMonthPrecipitation = function (WeatherParameters)
-{
+//var GetMonthPrecipitation = function (WeatherParameters)
+//{
+//    var Now = new Date();
+//    var Url = "https://www.wunderground.com/history/airport/";
+//    Url += WeatherParameters.StationId + "/";
+//    Url += Now.getFullYear().pad() + "/";
+//    Url += (Now.getMonth() + 1).pad(2) + "/";
+//    Url += Now.getDate().pad(2) + "/";
+//    Url += "MonthlyHistory.html";
+//    //Url = "cors/?u=" + encodeURIComponent(Url);
+
+//    // Load the xml file using ajax 
+//    $.ajaxCORS({
+//        type: "GET",
+//        url: Url,
+//        dataType: "html",
+//        crossDomain: true,
+//        cache: false,
+//        success: function (html)
+//        {
+//            var $html = $(html);
+//            //$html.find("img").attr("src", ""); // Prevents the browser from loading any images on this page.
+//            $html.find("[src]").attr("src", ""); // Prevents the browser from loading any images on this page.
+
+//            WeatherParameters.WeatherMonthlyTotalsParser = new WeatherMonthlyTotalsParser($html);
+//            console.log(WeatherParameters.WeatherMonthlyTotalsParser);
+
+//            WeatherParameters.WeatherMonthlyTotals = new WeatherMonthlyTotals(WeatherParameters.WeatherMonthlyTotalsParser);
+//            console.log(WeatherParameters.WeatherMonthlyTotals);
+//            //PopulateCurrentConditions(WeatherParameters.WeatherMonthlyTotals);
+
+//            // Check to see if we need to also parse the Almanac information
+//            if (WeatherParameters.Progress.Almanac != LoadStatuses.Loaded)
+//            {
+//                if (WeatherParameters.WeatherMonthlyTotalsParser.Precipitation == "")
+//                {
+//                    WeatherParameters.Progress.Almanac = LoadStatuses.NoData;
+//                    GetCurrentWeather(WeatherParameters);
+//                    ShowRegionalMap(_WeatherParameters);
+//                    return;
+//                }
+
+//                WeatherParameters.MoonPhasesParser = new MoonPhasesParser2($html);
+//                console.log(WeatherParameters.MoonPhasesParser);
+
+//                WeatherParameters.SunRiseSetParserToday = new SunRiseSetParser2($html);
+//                console.log(WeatherParameters.SunRiseSetParserToday);
+
+//                var Now = new Date();
+//                Now = Now.addDays(1);
+//                var Url = "https://www.wunderground.com/history/airport/";
+//                Url += WeatherParameters.StationId + "/";
+//                Url += Now.getFullYear().pad() + "/";
+//                Url += (Now.getMonth() + 1).pad(2) + "/";
+//                Url += Now.getDate().pad(2) + "/";
+//                Url += "MonthlyHistory.html";
+//                //Url = "cors/?u=" + encodeURIComponent(Url);
+//                $.ajaxCORS({
+//                    type: "GET",
+//                    url: Url,
+//                    dataType: "html",
+//                    crossDomain: true,
+//                    cache: false,
+//                    success: function (html)
+//                    {
+//                        var $html = $(html);
+//                        $html.find("[src]").attr("src", ""); // Prevents the browser from loading any images on this page.
+
+//                        WeatherParameters.SunRiseSetParserTomorrow = new SunRiseSetParser2($html);
+//                        console.log(WeatherParameters.SunRiseSetParserTomorrow);
+
+//                        WeatherParameters.AlmanacInfo = new AlmanacInfo(WeatherParameters.MoonPhasesParser, WeatherParameters.SunRiseSetParserToday, WeatherParameters.SunRiseSetParserTomorrow);
+//                        console.log(WeatherParameters.AlmanacInfo);
+//                        //PopulateAlmanacInfo(WeatherParameters);
+
+//                        GetOutlook(WeatherParameters);
+//                        //GetTideInfo(WeatherParameters);
+
+//                        //GetCurrentWeather(WeatherParameters);
+//                        //ShowRegionalMap(_WeatherParameters);
+//                    },
+//                    error: function (xhr, error, errorThrown)
+//                    {
+//                        console.error("Getting SunRiseSetParserTomorrow failed: " + errorThrown);
+//                    }
+//                });
+//            }
+
+//        },
+//        error: function (xhr, error, errorThrown)
+//        {
+//            console.error("GetMonthPrecipitation failed: " + errorThrown);
+//        }
+//    });
+//};
+
+var GetMonthPrecipitation = function (WeatherParameters) {
     var Now = new Date();
-    var Url = "https://www.wunderground.com/history/airport/";
-    Url += WeatherParameters.StationId + "/";
-    Url += Now.getFullYear().pad() + "/";
-    Url += (Now.getMonth() + 1).pad(2) + "/";
-    Url += Now.getDate().pad(2) + "/";
-    Url += "MonthlyHistory.html";
-    //Url = "cors/?u=" + encodeURIComponent(Url);
+    var FirstOfMonth = new Date(Now.getFullYear(), Now.getMonth(), 01);
+    var LastOfMonth = new Date(Now.getFullYear(), Now.getMonth() + 1, 01).addDays(-1);
+
+    //https://api-ak.wunderground.com/api/d8585d80376a429e/history_2018120120181231/lang:EN/units:english/bestfct:1/v:2.0/q/KHWV.json?showObs=0&ttl=120
+    var Url = "https://api-ak.wunderground.com/api/d8585d80376a429e/history_";
+    Url += FirstOfMonth.getFullYear().pad() + (FirstOfMonth.getMonth() + 1).pad(2) + FirstOfMonth.getDate().pad(2);
+    Url += LastOfMonth.getFullYear().pad() + (LastOfMonth.getMonth() + 1).pad(2) + LastOfMonth.getDate().pad(2);
+    Url += "/lang:EN/units:english/bestfct:1/v:2.0/q/" + WeatherParameters.ZipCode + ".json?showObs=0&ttl=120";
 
     // Load the xml file using ajax 
     $.ajaxCORS({
         type: "GET",
         url: Url,
-        dataType: "html",
+        dataType: "json",
         crossDomain: true,
         cache: false,
-        success: function (html)
-        {
-            var $html = $(html);
-            //$html.find("img").attr("src", ""); // Prevents the browser from loading any images on this page.
-            $html.find("[src]").attr("src", ""); // Prevents the browser from loading any images on this page.
-
-            WeatherParameters.WeatherMonthlyTotalsParser = new WeatherMonthlyTotalsParser($html);
+        success: function (json) {
+            WeatherParameters.WeatherMonthlyTotalsParser = new WeatherMonthlyTotalsParser(json);
             console.log(WeatherParameters.WeatherMonthlyTotalsParser);
 
             WeatherParameters.WeatherMonthlyTotals = new WeatherMonthlyTotals(WeatherParameters.WeatherMonthlyTotalsParser);
@@ -475,65 +566,71 @@ var GetMonthPrecipitation = function (WeatherParameters)
             //PopulateCurrentConditions(WeatherParameters.WeatherMonthlyTotals);
 
             // Check to see if we need to also parse the Almanac information
-            if (WeatherParameters.Progress.Almanac != LoadStatuses.Loaded)
-            {
-                if (WeatherParameters.WeatherMonthlyTotalsParser.Precipitation == "")
-                {
+            if (WeatherParameters.Progress.Almanac != LoadStatuses.Loaded) {
+                if (WeatherParameters.WeatherMonthlyTotalsParser.Precipitation == "") {
                     WeatherParameters.Progress.Almanac = LoadStatuses.NoData;
                     GetCurrentWeather(WeatherParameters);
                     ShowRegionalMap(_WeatherParameters);
                     return;
                 }
 
-                WeatherParameters.MoonPhasesParser = new MoonPhasesParser2($html);
-                console.log(WeatherParameters.MoonPhasesParser);
+                //https://api.weather.com/v2/astro?apiKey=6532d6454b8aa370768e63d6ba5a832e&geocode=40.81999969%2C-73&days=1&date=20181223&format=json
+                var Url = "https://api.weather.com/v2/astro?apiKey=6532d6454b8aa370768e63d6ba5a832e&geocode=";
+                Url += WeatherParameters.Latitude.toString() + "%2C";
+                Url += WeatherParameters.Longitude.toString();
+                Url += "&days=1&date=" + Now.getFullYear().pad() + (Now.getMonth() + 1).pad(2) + Now.getDate().pad(2) + "&format=json";
 
-                WeatherParameters.SunRiseSetParserToday = new SunRiseSetParser2($html);
-                console.log(WeatherParameters.SunRiseSetParserToday);
-
-                var Now = new Date();
-                Now = Now.addDays(1);
-                var Url = "https://www.wunderground.com/history/airport/";
-                Url += WeatherParameters.StationId + "/";
-                Url += Now.getFullYear().pad() + "/";
-                Url += (Now.getMonth() + 1).pad(2) + "/";
-                Url += Now.getDate().pad(2) + "/";
-                Url += "MonthlyHistory.html";
-                //Url = "cors/?u=" + encodeURIComponent(Url);
+                // Load the xml file using ajax 
                 $.ajaxCORS({
                     type: "GET",
                     url: Url,
-                    dataType: "html",
+                    dataType: "json",
                     crossDomain: true,
                     cache: false,
-                    success: function (html)
-                    {
-                        var $html = $(html);
-                        $html.find("[src]").attr("src", ""); // Prevents the browser from loading any images on this page.
+                    success: function (json) {
+                        WeatherParameters.MoonPhasesParser = new MoonPhasesParser3(json);
+                        console.log(WeatherParameters.MoonPhasesParser);
 
-                        WeatherParameters.SunRiseSetParserTomorrow = new SunRiseSetParser2($html);
-                        console.log(WeatherParameters.SunRiseSetParserTomorrow);
+                        WeatherParameters.SunRiseSetParserToday = new SunRiseSetParser3(json);
+                        console.log(WeatherParameters.SunRiseSetParserToday);
 
-                        WeatherParameters.AlmanacInfo = new AlmanacInfo(WeatherParameters.MoonPhasesParser, WeatherParameters.SunRiseSetParserToday, WeatherParameters.SunRiseSetParserTomorrow);
-                        console.log(WeatherParameters.AlmanacInfo);
-                        //PopulateAlmanacInfo(WeatherParameters);
+                        var Now = new Date();
+                        Now = Now.addDays(1);
+                        //https://api.weather.com/v2/astro?apiKey=6532d6454b8aa370768e63d6ba5a832e&geocode=40.81999969%2C-73&days=1&date=20181223&format=json
+                        var Url = "https://api.weather.com/v2/astro?apiKey=6532d6454b8aa370768e63d6ba5a832e&geocode=";
+                        Url += WeatherParameters.Latitude.toString() + "%2C";
+                        Url += WeatherParameters.Longitude.toString();
+                        Url += "&days=1&date=" + Now.getFullYear().pad() + (Now.getMonth() + 1).pad(2) + Now.getDate().pad(2) + "&format=json";
 
-                        GetOutlook(WeatherParameters);
-                        //GetTideInfo(WeatherParameters);
+                        $.ajaxCORS({
+                            type: "GET",
+                            url: Url,
+                            dataType: "json",
+                            crossDomain: true,
+                            cache: false,
+                            success: function (html) {
+                                WeatherParameters.SunRiseSetParserTomorrow = new SunRiseSetParser3(json);
+                                console.log(WeatherParameters.SunRiseSetParserTomorrow);
 
-                        //GetCurrentWeather(WeatherParameters);
-                        //ShowRegionalMap(_WeatherParameters);
+                                WeatherParameters.AlmanacInfo = new AlmanacInfo(WeatherParameters.MoonPhasesParser, WeatherParameters.SunRiseSetParserToday, WeatherParameters.SunRiseSetParserTomorrow);
+                                console.log(WeatherParameters.AlmanacInfo);
+
+                                GetOutlook(WeatherParameters);
+                            },
+                            error: function (xhr, error, errorThrown) {
+                                console.error("Getting SunRiseSetParserTomorrow failed: " + errorThrown);
+                            }
+                        });
                     },
-                    error: function (xhr, error, errorThrown)
-                    {
+                    error: function (xhr, error, errorThrown) {
                         console.error("Getting SunRiseSetParserTomorrow failed: " + errorThrown);
                     }
                 });
+
             }
 
         },
-        error: function (xhr, error, errorThrown)
-        {
+        error: function (xhr, error, errorThrown) {
             console.error("GetMonthPrecipitation failed: " + errorThrown);
         }
     });
@@ -2960,7 +3057,8 @@ $(function ()
                     data: {
                         location: Longitude + "," + Latitude,
                         distance: 1000, // Find location upto 1 KM.
-                        f: 'json'
+                        f: 'json',
+                        featureTypes: 'postal',
                     },
                     jsonp: 'callback',
                     dataType: 'jsonp'
@@ -6244,223 +6342,220 @@ var ConvertConditionsToMetric = function (Condition)
     {
         Word = Words[Index];
 
-        if (Word.startsWith("MPH") == true)
-        {
-            if ($.isNumeric(Words[Index - 1]) == true)
-            {
-                Words[Index - 1] = ConvertMphToKph(Words[Index - 1]);
-            }
-            if (Words[Index - 2] == "TO")
-            {
-                if ($.isNumeric(Words[Index - 3]) == true)
-                {
-                    Words[Index - 3] = ConvertMphToKph(Words[Index - 3]);
+        try {
+            if (Word.startsWith("MPH") == true) {
+                if ($.isNumeric(Words[Index - 1]) == true) {
+                    Words[Index - 1] = ConvertMphToKph(Words[Index - 1]);
                 }
-            }
-
-            Words[Index] = Word.replaceAll("MPH", "KPH");
-        }
-
-            // X TO Y INCH[ES].
-        else if (Word.startsWith("INCH") == true)
-        {
-            //if (Words[Index - 1] == "AN")
-
-            if ($.isNumeric(Words[Index - 1]) == true)
-            {
-                Words[Index - 1] = Math.round(ConvertInchesToCentimeters(Words[Index - 1]));
-            }
-            if (Words[Index - 2] == "TO")
-            {
-                if ($.isNumeric(Words[Index - 3]) == true)
-                {
-                    Words[Index - 3] = Math.round(ConvertInchesToCentimeters(Words[Index - 3]));
-                }
-            }
-
-            Words[Index] = Words[Index].replaceAll("INCHES", "CMS");
-            Words[Index] = Words[Index].replaceAll("INCH", "CM");
-        }
-
-            // X TO Y FEET.
-        else if (Word.startsWith("FEET") == true)
-        {
-            if ($.isNumeric(Words[Index - 1]) == true)
-            {
-                Words[Index - 1] = ConvertFeetToMeters(Words[Index - 1]);
-            }
-            if (Words[Index - 2] == "TO")
-            {
-                if ($.isNumeric(Words[Index - 3]) == true)
-                {
-                    Words[Index - 3] = ConvertFeetToMeters(Words[Index - 3]);
-                }
-            }
-
-            Words[Index] = Word.replaceAll("FEET", "METERS");
-        }
-
-            // X TO Y MILE[S].
-        else if (Word.startsWith("MILE") == true)
-        {
-            if ($.isNumeric(Words[Index - 1]) == true)
-            {
-                Words[Index - 1] = ConvertMilesToKilometers(Words[Index - 1]);
-            }
-            if (Words[Index - 2] == "TO")
-            {
-                if ($.isNumeric(Words[Index - 3]) == true)
-                {
-                    Words[Index - 3] = ConvertMilesToKilometers(Words[Index - 3]);
-                }
-            }
-
-            Words[Index] = Word.replaceAll("MILE", "KM");
-        }
-
-            // X AM.
-        else if (Word.startsWith("AM") == true)
-        {
-            if ($.isNumeric(Words[Index - 1]) == true)
-            {
-                var HH = parseInt(Words[Index - 1]);
-                if (HH == 12)
-                {
-                    HH = 0;
-                }
-                Words[Index - 1] = HH.toString() + ":00";
-                Words[Index] = Word.replaceAll("AM", "?");
-            }
-        }
-
-            // X PM.
-        else if (Word.startsWith("PM") == true)
-        {
-            if ($.isNumeric(Words[Index - 1]) == true)
-            {
-                var HH = parseInt(Words[Index - 1]);
-                if (HH < 12)
-                {
-                    HH += 12;
-                }
-                Words[Index - 1] = HH.toString() + ":00";
-                Words[Index] = Word.replaceAll("PM", "?");
-            }
-        }
-
-            //// LOWS|HIGHS IN THE MID|UPPER|LOWER XS.
-            //else if (Word == "MID" || Word == "UPPER" || Word == "LOWER")
-            //{
-            //    var TempF = parseInt(Words[Index + 1]);
-            //    var TempC = TempF;
-
-            //    switch (Word)
-            //    {
-            //        case "MID":
-            //            TempC += 5;
-            //            break;
-            //        case "UPPER":
-            //            TempC += 9;
-            //            break;
-            //        case "LOWER":
-            //            TempC += 1;
-            //            break;
-            //    }
-            //    TempC = Math.round(ConvertFahrenheitToCelsius(TempC));
-
-            //    Words[Index + 1] = Words[Index + 1].replaceAll(TempF.toString() + "S", TempC.toString());
-            //    Words[Index] = "NEAR";
-            //}
-
-            // LOWS|HIGHS IN THE [MID|UPPER|LOWER] XS.
-            // LOWS|HIGHS NEAR XS.
-        else if (Word == "LOWS" || Word == "HIGHS")
-        {
-            if (Words[Index + 1] == "IN" && Words[Index + 2] == "THE")
-            {
-                if (Words[Index + 3] == "MID" || Words[Index + 3] == "UPPER" || Words[Index + 3] == "LOWER")
-                {
-                    var TempF = parseInt(Words[Index + 4]);
-                    var TempC = TempF;
-
-                    switch (Words[Index + 3])
-                    {
-                        case "MID":
-                            TempC += 5;
-                            break;
-                        case "UPPER":
-                            TempC += 9;
-                            break;
-                        case "LOWER":
-                            TempC += 1;
-                            break;
+                if (Words[Index - 2] == "TO") {
+                    if ($.isNumeric(Words[Index - 3]) == true) {
+                        Words[Index - 3] = ConvertMphToKph(Words[Index - 3]);
                     }
+                }
+
+                Words[Index] = Word.replaceAll("MPH", "KPH");
+            }
+
+                // X TO Y INCH[ES].
+            else if (Word.startsWith("INCH") == true) {
+                //if (Words[Index - 1] == "AN")
+
+                if ($.isNumeric(Words[Index - 1]) == true) {
+                    Words[Index - 1] = Math.round(ConvertInchesToCentimeters(Words[Index - 1]));
+                }
+                if (Words[Index - 2] == "TO") {
+                    if ($.isNumeric(Words[Index - 3]) == true) {
+                        Words[Index - 3] = Math.round(ConvertInchesToCentimeters(Words[Index - 3]));
+                    }
+                }
+
+                Words[Index] = Words[Index].replaceAll("INCHES", "CMS");
+                Words[Index] = Words[Index].replaceAll("INCH", "CM");
+            }
+
+                // X TO Y FEET.
+            else if (Word.startsWith("FEET") == true) {
+                if ($.isNumeric(Words[Index - 1]) == true) {
+                    Words[Index - 1] = ConvertFeetToMeters(Words[Index - 1]);
+                }
+                if (Words[Index - 2] == "TO") {
+                    if ($.isNumeric(Words[Index - 3]) == true) {
+                        Words[Index - 3] = ConvertFeetToMeters(Words[Index - 3]);
+                    }
+                }
+
+                Words[Index] = Word.replaceAll("FEET", "METERS");
+            }
+
+                // X TO Y MILE[S].
+            else if (Word.startsWith("MILE") == true) {
+                if ($.isNumeric(Words[Index - 1]) == true) {
+                    Words[Index - 1] = ConvertMilesToKilometers(Words[Index - 1]);
+                }
+                if (Words[Index - 2] == "TO") {
+                    if ($.isNumeric(Words[Index - 3]) == true) {
+                        Words[Index - 3] = ConvertMilesToKilometers(Words[Index - 3]);
+                    }
+                }
+
+                Words[Index] = Word.replaceAll("MILE", "KM");
+            }
+
+                // X AM.
+            else if (Word.startsWith("AM") == true) {
+                if ($.isNumeric(Words[Index - 1]) == true) {
+                    var HH = parseInt(Words[Index - 1]);
+                    if (HH == 12) {
+                        HH = 0;
+                    }
+                    Words[Index - 1] = HH.toString() + ":00";
+                    Words[Index] = Word.replaceAll("AM", "?");
+                }
+            }
+
+                // X PM.
+            else if (Word.startsWith("PM") == true) {
+                if ($.isNumeric(Words[Index - 1]) == true) {
+                    var HH = parseInt(Words[Index - 1]);
+                    if (HH < 12) {
+                        HH += 12;
+                    }
+                    Words[Index - 1] = HH.toString() + ":00";
+                    Words[Index] = Word.replaceAll("PM", "?");
+                }
+            }
+
+                //// LOWS|HIGHS IN THE MID|UPPER|LOWER XS.
+                //else if (Word == "MID" || Word == "UPPER" || Word == "LOWER")
+                //{
+                //    var TempF = parseInt(Words[Index + 1]);
+                //    var TempC = TempF;
+
+                //    switch (Word)
+                //    {
+                //        case "MID":
+                //            TempC += 5;
+                //            break;
+                //        case "UPPER":
+                //            TempC += 9;
+                //            break;
+                //        case "LOWER":
+                //            TempC += 1;
+                //            break;
+                //    }
+                //    TempC = Math.round(ConvertFahrenheitToCelsius(TempC));
+
+                //    Words[Index + 1] = Words[Index + 1].replaceAll(TempF.toString() + "S", TempC.toString());
+                //    Words[Index] = "NEAR";
+                //}
+
+                // LOWS|HIGHS IN THE [MID|UPPER|LOWER] XS.
+                // LOWS|HIGHS NEAR XS.
+            else if (Word == "LOWS" || Word == "HIGHS") {
+                if (Words[Index + 1] == "IN" && Words[Index + 2] == "THE") {
+                    if (Words[Index + 3] == "MID" || Words[Index + 3] == "UPPER" || Words[Index + 3] == "LOWER") {
+                        var TempF = parseInt(Words[Index + 4]);
+                        var TempC = TempF;
+
+                        switch (Words[Index + 3]) {
+                            case "MID":
+                                TempC += 5;
+                                break;
+                            case "UPPER":
+                                TempC += 9;
+                                break;
+                            case "LOWER":
+                                TempC += 1;
+                                break;
+                        }
+                        TempC = Math.round(ConvertFahrenheitToCelsius(TempC));
+
+                        Words[Index + 4] = Words[Index + 4].replaceAll(TempF.toString() + "S", TempC.toString());
+                        Words[Index + 3] = "NEAR";
+
+                        if (Words[Index + 5] && Words[Index + 5] == "TO") {
+                            var TempF = parseInt(Words[Index + 7]);
+                            var TempC = TempF;
+
+                            switch (Words[Index + 6]) {
+                                case "MID":
+                                    TempC += 5;
+                                    break;
+                                case "UPPER":
+                                    TempC += 9;
+                                    break;
+                                case "LOWER":
+                                    TempC += 1;
+                                    break;
+                            }
+                            TempC = Math.round(ConvertFahrenheitToCelsius(TempC));
+
+                            Words[Index + 7] = Words[Index + 7].replaceAll(TempF.toString() + "S", TempC.toString());
+                            Words[Index + 6] = "NEAR";
+                        }
+                    }
+                    else if (Words[Index + 3] == "NEAR") {
+                        if (Words[Index + 4] == "MID" || Words[Index + 4] == "UPPER" || Words[Index + 4] == "LOWER") {
+                            var TempF = parseInt(Words[Index + 5]);
+                            var TempC = TempF;
+
+                            switch (Words[Index + 4]) {
+                                case "MID":
+                                    TempC += 5;
+                                    break;
+                                case "UPPER":
+                                    TempC += 9;
+                                    break;
+                                case "LOWER":
+                                    TempC += 1;
+                                    break;
+                            }
+                            TempC = Math.round(ConvertFahrenheitToCelsius(TempC));
+
+                            Words[Index + 5] = Words[Index + 5].replaceAll(TempF.toString() + "S", TempC.toString());
+                            Words[Index + 4] = "?";
+
+                        }
+                    }
+                    else {
+                        var TempF = parseInt(Words[Index + 3]);
+                        var TempC = TempF;
+                        TempC += 5;
+                        TempC = Math.round(ConvertFahrenheitToCelsius(TempC));
+
+                        Words[Index + 3] = "NEAR " + Words[Index + 3].replaceAll(TempF.toString() + "S", TempC.toString());
+                    }
+                }
+                else if (Words[Index + 1] == "NEAR" || Words[Index + 1] == "AROUND") {
+                    var TempF = parseInt(Words[Index + 2]);
+                    var TempC = TempF;
+                    TempC += 1;
                     TempC = Math.round(ConvertFahrenheitToCelsius(TempC));
 
-                    Words[Index + 4] = Words[Index + 4].replaceAll(TempF.toString() + "S", TempC.toString());
-                    Words[Index + 3] = "NEAR";
+                    Words[Index + 2] = Words[Index + 2].replaceAll(TempF.toString(), TempC.toString());
 
-                    if (Words[Index + 5] && Words[Index + 5] == "TO")
-                    {
-                        var TempF = parseInt(Words[Index + 7]);
-                        var TempC = TempF;
-
-                        switch (Words[Index + 6])
-                        {
-                            case "MID":
-                                TempC += 5;
-                                break;
-                            case "UPPER":
-                                TempC += 9;
-                                break;
-                            case "LOWER":
-                                TempC += 1;
-                                break;
-                        }
-                        TempC = Math.round(ConvertFahrenheitToCelsius(TempC));
-
-                        Words[Index + 7] = Words[Index + 7].replaceAll(TempF.toString() + "S", TempC.toString());
-                        Words[Index + 6] = "NEAR";
-                    }
+                    Words[Index + 3] = Words[Index + 3].replaceAll("ABOVE", "?");
+                    Words[Index + 3] = Words[Index + 3].replaceAll("BELOW", "?");
                 }
-                else if (Words[Index + 3] == "NEAR")
-                {
-                    if (Words[Index + 4] == "MID" || Words[Index + 4] == "UPPER" || Words[Index + 4] == "LOWER")
-                    {
-                        var TempF = parseInt(Words[Index + 5]);
-                        var TempC = TempF;
-
-                        switch (Words[Index + 4])
-                        {
-                            case "MID":
-                                TempC += 5;
-                                break;
-                            case "UPPER":
-                                TempC += 9;
-                                break;
-                            case "LOWER":
-                                TempC += 1;
-                                break;
-                        }
-                        TempC = Math.round(ConvertFahrenheitToCelsius(TempC));
-
-                        Words[Index + 5] = Words[Index + 5].replaceAll(TempF.toString() + "S", TempC.toString());
-                        Words[Index + 4] = "?";
-
-                    }
-                }
-                else
-                {
-                    var TempF = parseInt(Words[Index + 3]);
+                else {
+                    var TempF = parseInt(Words[Index + 1]);
                     var TempC = TempF;
                     TempC += 5;
                     TempC = Math.round(ConvertFahrenheitToCelsius(TempC));
 
-                    Words[Index + 3] = "NEAR " + Words[Index + 3].replaceAll(TempF.toString() + "S", TempC.toString());
+                    Words[Index + 1] = Words[Index + 1].replaceAll(TempF.toString(), TempC.toString());
+
+                    if (Words[Index + 2] && Words[Index + 2] == "TO") {
+                        var TempF = parseInt(Words[Index + 3]);
+                        var TempC = TempF;
+                        TempC += 5;
+                        TempC = Math.round(ConvertFahrenheitToCelsius(TempC));
+
+                        Words[Index + 3] = Words[Index + 3].replaceAll(TempF.toString(), TempC.toString());
+                    }
                 }
             }
-            else if (Words[Index + 1] == "NEAR" || Words[Index + 1] == "AROUND")
-            {
+            else if (Words[Index] == "LOW" || Words[Index] == "HIGH" || Words[Index + 1] == "AS") {
                 var TempF = parseInt(Words[Index + 2]);
                 var TempC = TempF;
                 TempC += 1;
@@ -6471,138 +6566,88 @@ var ConvertConditionsToMetric = function (Condition)
                 Words[Index + 3] = Words[Index + 3].replaceAll("ABOVE", "?");
                 Words[Index + 3] = Words[Index + 3].replaceAll("BELOW", "?");
             }
-            else
-            {
+            else if (Word == "MID" || Word == "UPPER" || Word == "LOWER") {
                 var TempF = parseInt(Words[Index + 1]);
                 var TempC = TempF;
-                TempC += 5;
+
+                switch (Word) {
+                    case "MID":
+                        TempC += 5;
+                        break;
+                    case "UPPER":
+                        TempC += 9;
+                        break;
+                    case "LOWER":
+                        TempC += 1;
+                        break;
+                }
                 TempC = Math.round(ConvertFahrenheitToCelsius(TempC));
 
+                Words[Index + 1] = Words[Index + 1].replaceAll(TempF.toString() + "S", TempC.toString());
                 Words[Index + 1] = Words[Index + 1].replaceAll(TempF.toString(), TempC.toString());
-
-                if (Words[Index + 2] && Words[Index + 2] == "TO")
-                {
-                    var TempF = parseInt(Words[Index + 3]);
+                Words[Index] = "NEAR";
+            }
+            else if (Word == "AROUND") {
+                if (Words[Index - 1] == "TEMPERATURES") {
+                    var TempF = parseInt(Words[Index + 1]);
                     var TempC = TempF;
-                    TempC += 5;
+                    TempC += 1;
                     TempC = Math.round(ConvertFahrenheitToCelsius(TempC));
 
-                    Words[Index + 3] = Words[Index + 3].replaceAll(TempF.toString(), TempC.toString());
+                    Words[Index + 1] = Words[Index + 1].replaceAll(TempF.toString(), TempC.toString());
+
+                    Words[Index + 2] = Words[Index + 2].replaceAll("ABOVE", "?");
+                    Words[Index + 2] = Words[Index + 2].replaceAll("BELOW", "?");
                 }
             }
-        }
-        else if (Words[Index] == "LOW" || Words[Index] == "HIGH" || Words[Index + 1] == "AS")
-        {
-            var TempF = parseInt(Words[Index + 2]);
-            var TempC = TempF;
-            TempC += 1;
-            TempC = Math.round(ConvertFahrenheitToCelsius(TempC));
 
-            Words[Index + 2] = Words[Index + 2].replaceAll(TempF.toString(), TempC.toString());
-
-            Words[Index + 3] = Words[Index + 3].replaceAll("ABOVE", "?");
-            Words[Index + 3] = Words[Index + 3].replaceAll("BELOW", "?");
-        }
-        else if (Word == "MID" || Word == "UPPER" || Word == "LOWER")
-        {
-            var TempF = parseInt(Words[Index + 1]);
-            var TempC = TempF;
-
-            switch (Word)
-            {
-                case "MID":
-                    TempC += 5;
-                    break;
-                case "UPPER":
-                    TempC += 9;
-                    break;
-                case "LOWER":
-                    TempC += 1;
-                    break;
+            else if (Word.startsWith("-20S") == true) {
+                Words[Index] = Word.replace("-20S", "NEAR -25");
             }
-            TempC = Math.round(ConvertFahrenheitToCelsius(TempC));
-
-            Words[Index + 1] = Words[Index + 1].replaceAll(TempF.toString() + "S", TempC.toString());
-            Words[Index + 1] = Words[Index + 1].replaceAll(TempF.toString(), TempC.toString());
-            Words[Index] = "NEAR";
-        }
-        else if (Word == "AROUND")
-        {
-            if (Words[Index - 1] == "TEMPERATURES")
-            {
-                var TempF = parseInt(Words[Index + 1]);
-                var TempC = TempF;
-                TempC += 1;
-                TempC = Math.round(ConvertFahrenheitToCelsius(TempC));
-
-                Words[Index + 1] = Words[Index + 1].replaceAll(TempF.toString(), TempC.toString());
-
-                Words[Index + 2] = Words[Index + 2].replaceAll("ABOVE", "?");
-                Words[Index + 2] = Words[Index + 2].replaceAll("BELOW", "?");
+            else if (Word.startsWith("-10S") == true) {
+                Words[Index] = Word.replace("-10S", "NEAR -20");
+            }
+            else if (Word.startsWith("0S") == true) {
+                Words[Index] = Word.replace("0S", "NEAR -15");
+            }
+            else if (Word.startsWith("10S") == true) {
+                Words[Index] = Word.replace("10S", "NEAR -10");
+            }
+            else if (Word.startsWith("20S") == true) {
+                Words[Index] = Word.replace("20S", "NEAR -5");
+            }
+            else if (Word.startsWith("30S") == true) {
+                Words[Index] = Word.replace("30S", "NEAR 0");
+            }
+            else if (Word.startsWith("40S") == true) {
+                Words[Index] = Word.replace("40S", "NEAR 5");
+            }
+            else if (Word.startsWith("50S") == true) {
+                Words[Index] = Word.replace("50S", "NEAR 12");
+            }
+            else if (Word.startsWith("60S") == true) {
+                Words[Index] = Word.replace("60S", "NEAR 17");
+            }
+            else if (Word.startsWith("70S") == true) {
+                Words[Index] = Word.replace("70S", "NEAR 25");
+            }
+            else if (Word.startsWith("80S") == true) {
+                Words[Index] = Word.replace("80S", "NEAR 30");
+            }
+            else if (Word.startsWith("90S") == true) {
+                Words[Index] = Word.replace("90S", "NEAR 35");
+            }
+            else if (Word.startsWith("100S") == true) {
+                Words[Index] = Word.replace("100S", "NEAR 40");
+            }
+            else if (Word.startsWith("110S") == true) {
+                Words[Index] = Word.replace("110S", "NEAR 45");
+            }
+            else if (Word.startsWith("120S") == true) {
+                Words[Index] = Word.replace("120S", "NEAR 50");
             }
         }
-
-        else if (Word.startsWith("-20S") == true)
-        {
-            Words[Index] = Word.replace("-20S", "NEAR -25");
-        }
-        else if (Word.startsWith("-10S") == true)
-        {
-            Words[Index] = Word.replace("-10S", "NEAR -20");
-        }
-        else if (Word.startsWith("0S") == true)
-        {
-            Words[Index] = Word.replace("0S", "NEAR -15");
-        }
-        else if (Word.startsWith("10S") == true)
-        {
-            Words[Index] = Word.replace("10S", "NEAR -10");
-        }
-        else if (Word.startsWith("20S") == true)
-        {
-            Words[Index] = Word.replace("20S", "NEAR -5");
-        }
-        else if (Word.startsWith("30S") == true)
-        {
-            Words[Index] = Word.replace("30S", "NEAR 0");
-        }
-        else if (Word.startsWith("40S") == true)
-        {
-            Words[Index] = Word.replace("40S", "NEAR 5");
-        }
-        else if (Word.startsWith("50S") == true)
-        {
-            Words[Index] = Word.replace("50S", "NEAR 12");
-        }
-        else if (Word.startsWith("60S") == true)
-        {
-            Words[Index] = Word.replace("60S", "NEAR 17");
-        }
-        else if (Word.startsWith("70S") == true)
-        {
-            Words[Index] = Word.replace("70S", "NEAR 25");
-        }
-        else if (Word.startsWith("80S") == true)
-        {
-            Words[Index] = Word.replace("80S", "NEAR 30");
-        }
-        else if (Word.startsWith("90S") == true)
-        {
-            Words[Index] = Word.replace("90S", "NEAR 35");
-        }
-        else if (Word.startsWith("100S") == true)
-        {
-            Words[Index] = Word.replace("100S", "NEAR 40");
-        }
-        else if (Word.startsWith("110S") == true)
-        {
-            Words[Index] = Word.replace("110S", "NEAR 45");
-        }
-        else if (Word.startsWith("120S") == true)
-        {
-            Words[Index] = Word.replace("120S", "NEAR 50");
-        }
-
+        catch (ex) { }
     }
     
     Metric = Words.join(' ');
@@ -7531,9 +7576,16 @@ var GetLatLng = function (Url)
 
 };
 
-var WeatherMonthlyTotalsParser = function (html)
-{
-    this.Precipitation = html.find("span:contains(Precipitation)").parent().parent().children().eq(4).find(".wx-value").text();
+//var WeatherMonthlyTotalsParser = function (html)
+//{
+//    this.Precipitation = html.find("span:contains(Precipitation)").parent().parent().children().eq(4).find(".wx-value").text();
+//};
+var WeatherMonthlyTotalsParser = function (json) {
+    this.Precipitation = "";
+
+    try {
+        this.Precipitation = json.history.summary.precip_sum;
+    } catch (ex) { }
 };
 
 var WeatherMonthlyTotals = function (WeatherMonthlyTotalsParser)
@@ -7615,6 +7667,51 @@ var MoonPhasesParser2 = function (html)
     });
 };
 
+var MoonPhasesParser3 = function (json) {
+    var Now = new Date();
+
+    var _self = this;
+    this.Phases = [];
+
+    $(json.astroPhases).each(function () {
+        var phase = this;
+
+        //    Url += Now.getFullYear().pad() + "/";
+        //    Url += (Now.getMonth() + 1).pad(2) + "/";
+        //    Url += Now.getDate().pad(2) + "/";
+
+        var phaseDate = new Date(phase.date);
+
+        var Phase = {
+            date: (phaseDate.getMonth() + 1).pad(2) + "/" + phaseDate.getDate().pad(2) + "/" + phaseDate.getFullYear().pad(),
+            time: "12:00:00",
+            phase: "",
+        };
+
+        switch (phase.moonPhase)
+        {
+            case "WANING_HALF_LAST_QTR":
+                Phase.phase = "Last";
+                break;
+            case "NEW_MOON":
+                Phase.phase = "New";
+                break;
+            case "WAXING_HALF_FIRST_QTR":
+                Phase.phase = "First";
+                break;
+            case "FULL_MOON":
+                Phase.phase = "Full";
+                break;
+        }
+
+        _self.Phases.push(Phase);
+
+        if (_self.Phases.length == 4) {
+            return false;
+        }
+    });
+};
+
 function getMonthFromString(mon)
 {
     return new Date(Date.parse(mon + " 1, 2012")).getMonth() + 1
@@ -7670,6 +7767,105 @@ var SunRiseSetParser2 = function (html)
     }
 };
 
+var SunRiseSetParser3 = function (json) {
+    var _self = this;
+
+    var riseSet = json.astroData[0].sun.riseSet
+
+    //if (riseSet.riseUTC == "Sun rise doesn't exist")
+    //{
+    //    _self.SunRise = "";
+    //}
+    //else
+    //{
+    //    //_self.SunRise = riseSet.riseUTC;
+    //    var riseUtcTime = riseSet.riseUTC.split("T")[1].split(":");
+    //    _self.SunRise = riseUtcTime[0] + ":" + riseUtcTime[1];
+    //}
+
+    //if (riseSet.setUTC == "Sun set doesn't exist")
+    //{
+    //    _self.SunSet = "";
+    //}
+    //else
+    //{
+    //    //_self.SunSet = riseSet.setUTC;
+    //    var setUtcTime = riseSet.setUTC.split("T")[1].split(":");
+    //    _self.SunSet = setUtcTime[0] + ":" + setUtcTime[1];
+    //}
+
+    if (riseSet.rise == "Sun rise doesn't exist")
+    {
+        _self.SunRise = "";
+    }
+    else
+    {
+        var riseTime = riseSet.riseLocal.split("T")[1].split(":");
+        _self.SunRise = riseTime[0] + ":" + riseTime[1];
+    }
+
+    if (riseSet.set == "Sun set doesn't exist")
+    {    
+        _self.SunSet = "";
+    }
+    else 
+    {
+        var setTime = riseSet.setLocal.split("T")[1].split(":");
+        _self.SunSet = setTime[0] + ":" + setTime[1];
+    }
+
+    if (riseSet.riseLocal == "Sun rise doesn't exist")
+    {
+        _self.SunRiseLocal = "";
+    }
+    else
+    {
+        var riseLocalTime = new Date(riseSet.riseLocal);
+        _self.SunRiseLocal = riseLocalTime.getHours().pad(2) + ":" + riseLocalTime.getMinutes().pad(2);
+    }
+
+    if (riseSet.setLocal == "Sun set doesn't exist")
+    {
+        _self.SunSetLocal = "";
+    }
+    else
+    {
+        var setLocalTime = new Date(riseSet.setLocal);
+        _self.SunSetLocal = setLocalTime.getHours().pad(2) + ":" + setLocalTime.getMinutes().pad(2);
+    }
+
+    var tz = parseInt(riseSet.riseLocal.split("-")[3]) * -1;
+
+    var dt = new Date();
+    if (dt.dst() == true)
+    {
+        tz++;
+    }
+
+    switch (tz)
+    {
+        case -5:
+            _self.TimeZone = "EST";
+            break;
+        case -6:
+            _self.TimeZone = "CST";
+            break;
+        case -7:
+            _self.TimeZone = "MST";
+            break;
+        case -8:
+            _self.TimeZone = "PST";
+            break;
+        case -9:
+            _self.TimeZone = "AST";
+            break;
+        case -10:
+            _self.TimeZone = "HST";
+            break;
+    }
+
+};
+
 var getTimeFromString = function (tim)
 {
     var time = tim;
@@ -7719,11 +7915,23 @@ var AlmanacInfo = function (MoonPhasesParser, SunRiseSetParserToday, SunRiseSetP
     this.TomorrowSunRise = GetDateFromTime((new Date()).addDays(1), SunRiseSetParserTomorrow.SunRise);
     this.TomorrowSunSet = GetDateFromTime((new Date()).addDays(1), SunRiseSetParserTomorrow.SunSet);
 
-    this.TodaySunRiseLocal = GetDateFromTime(new Date(), SunRiseSetParserToday.SunRise, SunRiseSetParserToday.TimeZone);
-    this.TodaySunSetLocal = GetDateFromTime(new Date(), SunRiseSetParserToday.SunSet, SunRiseSetParserToday.TimeZone);
+    this.TodaySunRiseLocal = GetDateFromTime(new Date(), SunRiseSetParserToday.SunRiseLocal);//, SunRiseSetParserToday.TimeZone);
+    this.TodaySunSetLocal = GetDateFromTime(new Date(), SunRiseSetParserToday.SunSetLocal);///, SunRiseSetParserToday.TimeZone);
 
-    this.TomorrowSunRiseLocal = GetDateFromTime((new Date()).addDays(1), SunRiseSetParserTomorrow.SunRise, SunRiseSetParserToday.TimeZone);
-    this.TomorrowSunSetLocal = GetDateFromTime((new Date()).addDays(1), SunRiseSetParserTomorrow.SunSet, SunRiseSetParserToday.TimeZone);
+    this.TomorrowSunRiseLocal = GetDateFromTime((new Date()).addDays(1), SunRiseSetParserTomorrow.SunRiseLocal);//, SunRiseSetParserToday.TimeZone);
+    this.TomorrowSunSetLocal = GetDateFromTime((new Date()).addDays(1), SunRiseSetParserTomorrow.SunSetLocal);//, SunRiseSetParserToday.TimeZone);
+
+    //this.TodaySunRise = new Date(SunRiseSetParserToday.SunRise);
+    //this.TodaySunSet = new Date(SunRiseSetParserToday.SunSet);
+
+    //this.TomorrowSunRise = new Date(SunRiseSetParserTomorrow.SunRise);
+    //this.TomorrowSunSet = new Date(SunRiseSetParserTomorrow.SunSet);
+
+    //this.TodaySunRiseLocal = new Date(SunRiseSetParserToday.SunRiseLocal);
+    //this.TodaySunSetLocal = new Date(SunRiseSetParserToday.SunSetLocal);
+
+    //this.TomorrowSunRiseLocal = new Date(SunRiseSetParserTomorrow.SunRiseLocal);
+    //this.TomorrowSunSetLocal = new Date(SunRiseSetParserTomorrow.SunSetLocal);
 
 };
 
@@ -10814,7 +11022,7 @@ var Progress = function (e)
             ////DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "Conditions", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 55, "WeatherStar", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "4000+", 3);
-            DrawTitleText(context, "WeatherStar", "4000+ 1.33");
+            DrawTitleText(context, "WeatherStar", "4000+ 1.34");
 
             // Draw a box for the progress.
             //context.fillStyle = "#000000";
