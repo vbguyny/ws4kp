@@ -608,7 +608,7 @@ var GetMonthPrecipitation = function (WeatherParameters) {
                             dataType: "json",
                             crossDomain: true,
                             cache: false,
-                            success: function (html) {
+                            success: function (json) {
                                 WeatherParameters.SunRiseSetParserTomorrow = new SunRiseSetParser3(json);
                                 console.log(WeatherParameters.SunRiseSetParserTomorrow);
 
@@ -863,9 +863,20 @@ var GetTideInfo2 = function (WeatherParameters) {
 
                         var Predictions = json.predictions;
 
-                        $(Predictions).each(function (Index) {
+                        var Index = 0;
+
+                        $(Predictions).each(function () {
                             if (Index > 3) {
                                 return false;
+                            }
+
+                            var Now = new Date();
+                            var date = new Date(this.t);
+
+                            // Skip elements that are less than the current time.
+                            if (date.getTime() < Now.getTime())
+                            {
+                                return true;
                             }
 
                             var TideHeight = this.v;
@@ -880,9 +891,10 @@ var GetTideInfo2 = function (WeatherParameters) {
                                     break;
                             }
 
-                            var date = new Date(this.t);
                             TideTimes.push(date.toTimeAMPM());
                             TideDays.push(date.getDayShortName());
+
+                            Index++;
                         });
 
                         $(TideTimes).each(function (Index) {
