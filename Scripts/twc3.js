@@ -792,6 +792,148 @@ var GetTideInfo = function (WeatherParameters)
     });
 };
 
+var GetTideInfo2 = function (WeatherParameters) {
+    var Url = "https://tidesandcurrents.noaa.gov/mdapi/latest/webapi/tidepredstations.json?"; //lat=40&lon=-73&radius=50";
+    Url += "lat=" + WeatherParameters.Latitude + "&";
+    Url += "lon=" + WeatherParameters.Longitude + "&radius=50";
+    //Url = "cors/?u=" + encodeURIComponent(Url);
+
+    var MaxStationCount = 2;
+    var StationCount = 0;
+    var TideInfoCount = 0;
+
+    WeatherParameters.WeatherTides = null;
+
+    // Load the xml file using ajax 
+    $.ajaxCORS({
+        type: "GET",
+        url: Url,
+        dataType: "json",
+        crossDomain: true,
+        cache: false,
+        success: function (json) {
+            var StationIds = $(json.stationList);
+
+            if (StationIds.length == 0) {
+                // No tide stations available for this location.
+
+                PopulateAlmanacInfo(_WeatherParameters);
+                GetCurrentWeather(WeatherParameters);
+                ShowRegionalMap(_WeatherParameters);
+                //GetMarineForecast(_WeatherParameters);
+
+                return;
+            }
+
+            var Today = new Date();
+            var Tomorrow = Today.addDays(1);
+
+            StationIds.each(function () {
+                var StationName = this.name;
+                var StationId = this.stationId;
+
+                //https://tidesandcurrents.noaa.gov/api/datagetter?product=predictions&application=NOS.COOPS.TAC.WL&begin_date=20181228&end_date=20181229&datum=MLLW&station=9410840&time_zone=lst_ldt&units=english&interval=hilo&format=json
+                var Url = "https://tidesandcurrents.noaa.gov/api/datagetter?product=predictions&application=NOS.COOPS.TAC.WL";
+                Url += "&begin_date=" + Today.getFullYear().toString() + (Today.getMonth() + 1).toString() + Today.getDate().toString();
+                Url += "&end_date=" + Tomorrow.getFullYear().toString() + (Tomorrow.getMonth() + 1).toString() + Tomorrow.getDate().toString();
+                Url += "&datum=MLLW&station=" + StationId;
+                Url += "&time_zone=lst_ldt&units=english&interval=hilo&format=json";
+
+                if (WeatherParameters.WeatherTides == null) {
+                    WeatherParameters.WeatherTides = [];
+                }
+
+                var WeatherTide = {
+                    StationId: StationId,
+                };
+                WeatherTide.StationName = StationName;
+                WeatherParameters.WeatherTides.push(WeatherTide);
+
+                // Load the xml file using ajax 
+                $.ajaxCORS({
+                    type: "GET",
+                    url: Url,
+                    dataType: "json",
+                    crossDomain: true,
+                    cache: false,
+                    success: function (json) {
+                        var TideTypes = [];
+                        var TideTimes = [];
+                        var TideDays = [];
+
+                        var Predictions = json.predictions;
+
+                        $(Predictions).each(function (Index) {
+                            if (Index > 3) {
+                                return false;
+                            }
+
+                            var TideHeight = this.v;
+
+                            switch (this.type)
+                            {
+                                case "H":
+                                    TideTypes.push("high");
+                                    break;
+                                default:
+                                    TideTypes.push("low");
+                                    break;
+                            }
+
+                            var date = new Date(this.t);
+                            TideTimes.push(date.toTimeAMPM());
+                            TideDays.push(date.getDayShortName());
+                        });
+
+                        $(TideTimes).each(function (Index) {
+                            var TideTime = this.toString();
+                            TideTime = TideTime.replaceAll(" AM", "am");
+                            TideTime = TideTime.replaceAll(" PM", "pm");
+
+                            if (TideTime.startsWith("0") == true) {
+                                TideTime = TideTime.substr(1);
+                            }
+
+                            TideTimes[Index] = TideTime;
+                        });
+
+                        WeatherTide.TideTypes = TideTypes;
+                        WeatherTide.TideTimes = TideTimes;
+                        WeatherTide.TideDays = TideDays;
+
+                        TideInfoCount++;
+                        if (TideInfoCount >= MaxStationCount) {
+                            PopulateTideInfo(WeatherParameters);
+
+                            PopulateAlmanacInfo(_WeatherParameters);
+                            GetCurrentWeather(WeatherParameters);
+                            ShowRegionalMap(_WeatherParameters);
+                            //GetMarineForecast(_WeatherParameters);
+                        }
+                    },
+                    error: function (xhr, error, errorThrown) {
+                        console.error("GetTideInfo failed: " + errorThrown);
+                    }
+                });
+
+                StationCount++;
+                if (StationCount >= MaxStationCount) {
+                    return false;
+                }
+            });
+
+            //WeatherParameters.WeatherTideParser = new WeatherTideParser($html);
+            //console.log(WeatherParameters.WeatherTideParser);
+
+            //PopulateTideInfo(WeatherParameters);
+
+        },
+        error: function (xhr, error, errorThrown) {
+            console.error("GetTideInfo failed: " + errorThrown);
+        }
+    });
+};
+
 var PopulateTideInfo = function (WeatherParameters)
 {
     if (WeatherParameters == null || (_DontLoadGifs == true && WeatherParameters.Progress.Almanac != LoadStatuses.Loaded))
@@ -918,7 +1060,7 @@ var GetOutlook = function (WeatherParameters)
     // No current support for HI and AK.
     if (WeatherParameters.State == "HI" || WeatherParameters.State == "AK")
     {
-        GetTideInfo(WeatherParameters);
+        GetTideInfo2(WeatherParameters);
         return;
     }
 
@@ -927,7 +1069,7 @@ var GetOutlook = function (WeatherParameters)
 
     var ImageOnError = function ()
     {
-        GetTideInfo(WeatherParameters);
+        GetTideInfo2(WeatherParameters);
     };
 
     var ImageOnLoad = function ()
@@ -996,7 +1138,7 @@ var GetOutlook = function (WeatherParameters)
 
         PopulateOutlook(WeatherParameters);
 
-        GetTideInfo(WeatherParameters);
+        GetTideInfo2(WeatherParameters);
     };
 
     var TempUrl = "http://www.cpc.ncep.noaa.gov/products/predictions/30day/off14_temp.gif";
@@ -1345,7 +1487,7 @@ var GetMarineForecast = function (WeatherParameters)
                     fontForecast.each(function (DayIndex)
                     {
                         var Day = $(this);
-                        var ForecastText = $(Day.parent()[0].nextSibling).text().trim();
+                        var ForecastText = $(Day.parent()[0].nextSibling).text().trim().toUpperCase();
                         ForecastText = ForecastText.replaceAll("\n", "").replaceAll(String.fromCharCode(160), " ");
 
                         var DayName = Day.text().trim().capitalize();
@@ -8278,6 +8420,19 @@ Date.prototype.getFormattedTime = function ()
     return formattedTime;
 }
 
+Date.prototype.toTimeAMPM = function ()
+{
+    var date = this;
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    var ampm = hours >= 12 ? 'pm' : 'am';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    var strTime = hours + ':' + minutes + ' ' + ampm;
+    return strTime;
+}
+
 var GetTravelWeather = function (WeatherParameters)
 {
     var TravelCities = WeatherParameters.TravelCities;
@@ -8408,7 +8563,7 @@ var WeatherTravelForecast = function (WeatherDwmlParser, ForceToday, ForceTonigh
 
                 if (ForceTonight)
                 {
-                    if (this.period_name == "Tonight" || this.period_name == "Rest of Tonight" || this.period_name == "This Evening")
+                    if (this.period_name == "Overnight" || this.period_name == "Tonight" || this.period_name == "Rest of Tonight" || this.period_name == "This Evening")
                     {
                         _PeriodIndex[_LayoutKey] = Index;
                         return false;
@@ -8446,7 +8601,14 @@ var WeatherTravelForecast = function (WeatherDwmlParser, ForceToday, ForceTonigh
     this.MinimumTemperatureC = ConvertFahrenheitToCelsius(this.MinimumTemperature);
 
     _LayoutKey = WeatherDwmlParser.data_forecast.parameters.weather.time_layout;
-    this.Conditions = WeatherDwmlParser.data_forecast.parameters.weather.weather_conditions[_PeriodIndex[_LayoutKey]].weather_summary.trim();
+    try
+    {
+        this.Conditions = WeatherDwmlParser.data_forecast.parameters.weather.weather_conditions[_PeriodIndex[_LayoutKey]].weather_summary.trim();
+    }
+    catch (ex)
+    {
+        var _db = 0;
+    }
 
     _LayoutKey = WeatherDwmlParser.data_forecast.parameters.conditions_icon.time_layout;
     this.Icon = WeatherDwmlParser.data_forecast.parameters.conditions_icon.icon_link[_PeriodIndex[_LayoutKey]];
@@ -11029,7 +11191,7 @@ var Progress = function (e)
             ////DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "Conditions", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 55, "WeatherStar", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "4000+", 3);
-            DrawTitleText(context, "WeatherStar", "4000+ 1.34");
+            DrawTitleText(context, "WeatherStar", "4000+ 1.35");
 
             // Draw a box for the progress.
             //context.fillStyle = "#000000";

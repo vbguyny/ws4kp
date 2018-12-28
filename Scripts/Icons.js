@@ -571,6 +571,17 @@ var GetWeatherIconFromIconLink = function (WeatherIconLink, WeatherConditions, W
         //    Icon = "cc_windy.gif";
         //    break;
 
+        case "nsn_ip.png":
+        case "nsn_ip10.png":
+        case "nsn_ip20.png":
+        case "nsn_ip30.png":
+        case "nsn_ip40.png":
+        case "nsn_ip50.png":
+        case "nsn_ip60.png":
+        case "nsn_ip70.png":
+        case "nsn_ip80.png":
+        case "nsn_ip90.png":
+        case "nsn_ip100.png":
         case "ip.png":
         case "ip10.png":
         case "ip20.png":
