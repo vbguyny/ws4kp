@@ -1440,8 +1440,10 @@ var btnGetGps_click = function ()
             console.log(data);
 
             var ZipCode = data.address.Postal;
+            var City = data.address.City;
+            var State = getStateTwoDigitCode(data.address.Region);
             var Country = data.address.CountryCode;
-            var TwcQuery = ZipCode + ", " + Country;
+            var TwcQuery = ZipCode + ", " + City + ", " + State + ", " + Country;
             //var Url = "http://forecast.weather.gov/MapClick.php?lat=" + Latitude + "&lon=" + Longitude;
 
             txtAddress.val(TwcQuery);

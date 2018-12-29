@@ -29,7 +29,7 @@ var GetWeatherIconFromSummary = function (WeatherParameters, WeatherSummary, Ove
         }
     }
 
-    if (OverrideIsDay != undefined)
+    if (OverrideIsDay !== undefined)
     {
         IsDay = OverrideIsDay;
     }
@@ -44,15 +44,15 @@ var GetWeatherIconFromSummary = function (WeatherParameters, WeatherSummary, Ove
         case "Hot":
         case "Cold":
         case "Few Clouds":
-            Icon = (IsDay == true ? "cc_clear1.gif" : "cc_clear0.gif");
+            Icon = IsDay === true ? "cc_clear1.gif" : "cc_clear0.gif";
             break;
 
         case "Mostly Cloudy":
         case "Partly Sunny":
-        case "Partly Sunny":
+        case "Partly Clear":
         case "Increasing Clouds":
         case "Becoming Cloudy":
-            Icon = (IsDay == true ? "cc_mostlycloudy1.gif" : "cc_mostlycloudy0.gif");
+            Icon = IsDay === true ? "cc_mostlycloudy1.gif" : "cc_mostlycloudy0.gif";
             break;
 
         case "Mostly Sunny":
@@ -67,7 +67,7 @@ var GetWeatherIconFromSummary = function (WeatherParameters, WeatherSummary, Ove
         case "Patchy Haze":
         case "Areas Haze":
         case "Haze":
-            Icon = (IsDay == true ? "cc_partlycloudy1.gif" : "cc_partlycloudy0.gif");
+            Icon = IsDay === true ? "cc_partlycloudy1.gif" : "cc_partlycloudy0.gif";
             break;
 
         case "Cloudy":
@@ -102,9 +102,9 @@ var GetWeatherIconFromSummary = function (WeatherParameters, WeatherSummary, Ove
             Icon = "cc_windy.gif";
             break;
 
-        case "Blowing Sand":
-            Icon = "cc_windy.gif";
-            break;
+        //case "Blowing Sand":
+        //    Icon = "cc_windy.gif";
+        //    break;
 
         case "Ice Crystals":
         case "Areas Ice Crystals":
@@ -207,10 +207,6 @@ var GetWeatherIconFromSummary = function (WeatherParameters, WeatherSummary, Ove
         case "Chance Wintry Mix":
         case "Wintry Mix Likely":
         case "Wintry Mix":
-        case "Slight Chance Wintry Mix":
-        case "Chance Wintry Mix":
-        case "Wintry Mix Likely":
-        case "Wintry Mix":
             Icon = "cc_mix.gif";
             break;
 
@@ -257,13 +253,13 @@ var GetWeatherIconFromSummary = function (WeatherParameters, WeatherSummary, Ove
 
     Icon = "images/" + Icon;
     return Icon;
-}
+};
 
 var GetWeatherIconFromIconLink = function (WeatherIconLink, WeatherConditions, WeatherParameters, OverrideIsDay)
 {
     //http://forecast.weather.gov/newimages/medium/few.png
     var Icon = "";
-    
+
     if (WeatherConditions)
     {
         var SummaryIcon = GetWeatherIconFromSummary(WeatherParameters, WeatherConditions, OverrideIsDay);
@@ -277,7 +273,7 @@ var GetWeatherIconFromIconLink = function (WeatherIconLink, WeatherConditions, W
     {
         return "";
     }
-    else if (WeatherIconLink == 'images/')
+    else if (WeatherIconLink === 'images/')
     {
         return "";
     }
@@ -285,7 +281,7 @@ var GetWeatherIconFromIconLink = function (WeatherIconLink, WeatherConditions, W
     var IconLinkName = GetFileNameFromUrl(WeatherIconLink.toLowerCase());
 
     //DualImage.php?i=few&j=hi_tsra&jp=20
-    if (IconLinkName.indexOf("dualimage.php") != -1)
+    if (IconLinkName.indexOf("dualimage.php") !== -1)
     {
         var ImageParts = IconLinkName.split('&');
         IconLinkName = ImageParts[1].split('=')[1];
@@ -299,7 +295,7 @@ var GetWeatherIconFromIconLink = function (WeatherIconLink, WeatherConditions, W
 
     switch (IconLinkName)
     {
-        
+
         case "hot.png":
         case "cold.png":
         case "skc.png":
@@ -327,12 +323,12 @@ var GetWeatherIconFromIconLink = function (WeatherIconLink, WeatherConditions, W
         case "few100.png":
         case "m_few.png":
             //case "Sunny":
-        //case "Clear":
-        //case "Patchy Frost":
-        //case "Areas Frost":
-        //case "Frost":
-        //case "Hot":
-        //case "Cold":
+            //case "Clear":
+            //case "Patchy Frost":
+            //case "Areas Frost":
+            //case "Frost":
+            //case "Hot":
+            //case "Cold":
             Icon = "cc_clear1.gif";
             break;
 
@@ -372,11 +368,11 @@ var GetWeatherIconFromIconLink = function (WeatherIconLink, WeatherConditions, W
         case "bkn80.png":
         case "bkn90.png":
         case "bkn100.png":
-        //case "Mostly Cloudy":
-        //case "Partly Sunny":
-        //case "Partly Sunny":
-        //case "Increasing Clouds":
-        //case "Becoming Cloudy":
+            //case "Mostly Cloudy":
+            //case "Partly Sunny":
+            //case "Partly Sunny":
+            //case "Increasing Clouds":
+            //case "Becoming Cloudy":
             Icon = "cc_mostlycloudy1.gif";
             break;
 
@@ -412,17 +408,17 @@ var GetWeatherIconFromIconLink = function (WeatherIconLink, WeatherConditions, W
         case "sct100.png":
         case "m_sct.png":
             //case "Mostly Sunny":
-        //case "Mostly Clear":
-        //case "Partly Cloudy":
-        //case "Fair":
-        //case "Decreasing Clouds":
-        //case "Clearing":
-        //case "Gradual Clearing":
-        //case "Clearing Late":
-        //case "Becoming Sunny":
-        //case "Patchy Haze":
-        //case "Areas Haze":
-        //case "Haze":
+            //case "Mostly Clear":
+            //case "Partly Cloudy":
+            //case "Fair":
+            //case "Decreasing Clouds":
+            //case "Clearing":
+            //case "Gradual Clearing":
+            //case "Clearing Late":
+            //case "Becoming Sunny":
+            //case "Patchy Haze":
+            //case "Areas Haze":
+            //case "Haze":
             Icon = "cc_partlycloudy1.gif";
             break;
 
@@ -593,13 +589,13 @@ var GetWeatherIconFromIconLink = function (WeatherIconLink, WeatherConditions, W
         case "ip80.png":
         case "ip90.png":
         case "ip100.png":
-        //case "Ice Crystals":
-        //case "Areas Ice Crystals":
-        //case "Patchy Ice Crystals":
-        //case "Sleet":
-        //case "Slight Chance Sleet":
-        //case "Chance Sleet":
-        //case "Sleet Likely ":
+            //case "Ice Crystals":
+            //case "Areas Ice Crystals":
+            //case "Patchy Ice Crystals":
+            //case "Sleet":
+            //case "Slight Chance Sleet":
+            //case "Chance Sleet":
+            //case "Sleet Likely ":
             Icon = "sleet.gif";
             break;
 
@@ -607,7 +603,6 @@ var GetWeatherIconFromIconLink = function (WeatherIconLink, WeatherConditions, W
         //    Icon = "cc_freezingrain.gif";
         //    break;
 
-        //case "hi_shwrs.png":
         case "hi_shwrs10.png":
         case "hi_shwrs20.png":
         case "hi_shwrs30.png":
@@ -618,53 +613,46 @@ var GetWeatherIconFromIconLink = function (WeatherIconLink, WeatherConditions, W
         case "hi_nshwrs30.png":
         case "hi_nshwrs40.png":
         case "hi_nshwrs50.png":
-        //case "shra.png":
         case "shra10.png":
         case "shra20.png":
         case "shra30.png":
         case "shra40.png":
         case "shra50.png":
-        //case "nshra.png":
         case "nshra10.png":
         case "nshra20.png":
         case "nshra30.png":
         case "nshra40.png":
         case "nshra50.png":
-        //case "ra.png":
         case "ra10.png":
         case "ra20.png":
         case "ra30.png":
         case "ra40.png":
         case "ra50.png":
-        //case "nra.png":
         case "nra10.png":
         case "nra20.png":
         case "nra30.png":
         case "nra40.png":
         case "nra50.png":
-        //case "Slight Chance Rain Showers":
-        //case "Chance Rain Showers":
-        //case "Slight Chance Rain":
-        //case "Chance Rain":
+            //case "Slight Chance Rain Showers":
+            //case "Chance Rain Showers":
+            //case "Slight Chance Rain":
+            //case "Chance Rain":
             Icon = "ef_scatshowers.gif";
             break;
 
-        case "hi_shwrs.png":
-        case "hi_nshwrs.png":
+        //case "hi_shwrs.png":
+        //case "hi_nshwrs.png":
         case "m_shra.png":
         case "m_nshra.png":
-        case "shra.png":
-        case "nshra.png":
+            //case "shra.png":
+            //case "nshra.png":
             Icon = "CC_Showers.gif";
             break;
 
-        //case "hi_shwrs.png":
-        //case "shra.png":
-        //case "nshra.png":
         case "m_ra.png":
         case "m_nra.png":
-        case "ra.png":
-        case "nra.png":
+            //case "ra.png":
+            //case "nra.png":
             Icon = "CC_Rain.gif";
             break;
 
@@ -694,12 +682,12 @@ var GetWeatherIconFromIconLink = function (WeatherIconLink, WeatherConditions, W
         case "nshra80.png":
         case "nshra90.png":
         case "nshra100.png":
-        //case "Rain Showers Likely":
-        //case "Rain Showers":
-        //case "Slight Chance Drizzle":
-        //case "Chance Drizzle":
-        //case "Drizzle Likely":
-        //case "Drizzle":
+            //case "Rain Showers Likely":
+            //case "Rain Showers":
+            //case "Slight Chance Drizzle":
+            //case "Chance Drizzle":
+            //case "Drizzle Likely":
+            //case "Drizzle":
             Icon = "cc_showers.gif";
             break;
 
@@ -715,9 +703,9 @@ var GetWeatherIconFromIconLink = function (WeatherIconLink, WeatherConditions, W
         case "ra80.png":
         case "ra90.png":
         case "ra100.png":
-        //case "Rain Likely":
-        //case "Rain":
-        //case "Heavy Rain":
+            //case "Rain Likely":
+            //case "Rain":
+            //case "Heavy Rain":
             Icon = "cc_rain.gif";
             break;
 
@@ -732,11 +720,11 @@ var GetWeatherIconFromIconLink = function (WeatherIconLink, WeatherConditions, W
         case "sn40.png":
         case "sn50.png":
             //case "Slight Chance Snow Showers":
-        //case "Chance Snow Showers":
-        //case "Slight Chance Flurries":
-        //case "Flurries Likely":
-        //case "Flurries":
-        //case "Slight Chance Snow":
+            //case "Chance Snow Showers":
+            //case "Slight Chance Flurries":
+            //case "Flurries Likely":
+            //case "Flurries":
+            //case "Slight Chance Snow":
             Icon = "ef_scatsnowshowers.gif";
             break;
 
@@ -751,9 +739,9 @@ var GetWeatherIconFromIconLink = function (WeatherIconLink, WeatherConditions, W
         case "nblizzard40.png":
         case "nblizzard50.png":
             //case "Snow Showers Likely":
-        //case "Snow Showers":
-        //case "Chance Flurries":
-        //case "Chance Snow":
+            //case "Snow Showers":
+            //case "Chance Flurries":
+            //case "Chance Snow":
             Icon = "cc_snowshowers.gif";
             break;
 
@@ -831,9 +819,9 @@ var GetWeatherIconFromIconLink = function (WeatherIconLink, WeatherConditions, W
         case "nra_sn90.png":
         case "nra_sn100.png":
             //case "Rain/Snow":
-        //case "Slight Chance Rain/Snow":
-        //case "Chance Rain/Snow":
-        //case "Rain/Snow Likely":
+            //case "Slight Chance Rain/Snow":
+            //case "Chance Rain/Snow":
+            //case "Rain/Snow Likely":
             Icon = "cc_rainsnow.gif";
             break;
 
@@ -882,17 +870,17 @@ var GetWeatherIconFromIconLink = function (WeatherIconLink, WeatherConditions, W
         case "nra_fzra90.png":
         case "nra_fzra100.png":
             //case "Freezing Rain":
-        //case "Slight Chance Freezing Rain":
-        //case "Chance Freezing Rain":
-        //case "Freezing Rain Likely":
-        //case "Freezing Drizzle":
-        //case "Freezing Drizzle Likely":
-        //case "Chance Freezing Drizzle":
-        //case "Slight Chance Freezing Drizzle":
-        //case "Slight Chance Rain/Freezing Rain":
-        //case "Chance Rain/Freezing Rain":
-        //case "Rain/Freezing Rain Likely":
-        //case "Rain/Freezing Rain":
+            //case "Slight Chance Freezing Rain":
+            //case "Chance Freezing Rain":
+            //case "Freezing Rain Likely":
+            //case "Freezing Drizzle":
+            //case "Freezing Drizzle Likely":
+            //case "Chance Freezing Drizzle":
+            //case "Slight Chance Freezing Drizzle":
+            //case "Slight Chance Rain/Freezing Rain":
+            //case "Chance Rain/Freezing Rain":
+            //case "Rain/Freezing Rain Likely":
+            //case "Rain/Freezing Rain":
             Icon = "cc_freezingrain.gif";
             break;
 
@@ -940,14 +928,14 @@ var GetWeatherIconFromIconLink = function (WeatherIconLink, WeatherConditions, W
         case "nfzra_sn80.png":
         case "nfzra_sn90.png":
         case "nfzra_sn100.png":
-        //case "Slight Chance Wintry Mix":
-        //case "Chance Wintry Mix":
-        //case "Wintry Mix Likely":
-        //case "Wintry Mix":
-        //case "Slight Chance Wintry Mix":
-        //case "Chance Wintry Mix":
-        //case "Wintry Mix Likely":
-        //case "Wintry Mix":
+            //case "Slight Chance Wintry Mix":
+            //case "Chance Wintry Mix":
+            //case "Wintry Mix Likely":
+            //case "Wintry Mix":
+            //case "Slight Chance Wintry Mix":
+            //case "Chance Wintry Mix":
+            //case "Wintry Mix Likely":
+            //case "Wintry Mix":
             Icon = "cc_mix.gif";
             break;
 
@@ -971,14 +959,14 @@ var GetWeatherIconFromIconLink = function (WeatherIconLink, WeatherConditions, W
         case "nraip70.png":
         case "nraip80.png":
         case "nraip100.png":
-        //case "Slight Chance Rain/Sleet":
-        //case "Chance Rain/Sleet":
-        //case "Rain/Sleet Likely":
-        //case "Rain/Sleet":
-        //case "Slight Chance Snow/Sleet":
-        //case "Chance Snow/Sleet":
-        //case "Snow/Sleet Likely":
-        //case "Snow/Sleet":
+            //case "Slight Chance Rain/Sleet":
+            //case "Chance Rain/Sleet":
+            //case "Rain/Sleet Likely":
+            //case "Rain/Sleet":
+            //case "Slight Chance Snow/Sleet":
+            //case "Chance Snow/Sleet":
+            //case "Snow/Sleet Likely":
+            //case "Snow/Sleet":
             Icon = "freezing-rain-sleet.gif";
             break;
 
@@ -1022,8 +1010,8 @@ var GetWeatherIconFromIconLink = function (WeatherIconLink, WeatherConditions, W
         case "nscttsra80.png":
         case "nscttsra90.png":
         case "nscttsra100.png":
-        //case "Slight Chance Thunderstorms":
-        //case "Chance Thunderstorms":
+            //case "Slight Chance Thunderstorms":
+            //case "Chance Thunderstorms":
             Icon = "ef_scattstorms.gif";
             break;
 
@@ -1073,8 +1061,8 @@ var GetWeatherIconFromIconLink = function (WeatherIconLink, WeatherConditions, W
         case "hi_ntsra100.png":
         case "m_tsra.png":
             //case "Thunderstorms Likely":
-        //case "Thunderstorms":
-        //case "Severe Tstms":
+            //case "Thunderstorms":
+            //case "Severe Tstms":
             Icon = "cc_tstorm.gif";
             break;
 
@@ -1109,9 +1097,9 @@ var GetWeatherIconFromIconLink = function (WeatherIconLink, WeatherConditions, W
         case "ts_hur_flags90.png":
         case "ts_hur_flags100.png":
             //case "Windy":
-        //case "Breezy":
-        //case "Blustery":
-        //case "Water Spouts":
+            //case "Breezy":
+            //case "Blustery":
+            //case "Water Spouts":
             Icon = "cc_windy.gif";
             break;
 
@@ -1128,9 +1116,9 @@ var GetWeatherIconFromIconLink = function (WeatherIconLink, WeatherConditions, W
 
     Icon = "images/" + Icon;
     return Icon;
-}
+};
 
-var GetFileNameFromUrl = function(Url)
+var GetFileNameFromUrl = function (Url)
 {
     var UrlParts;
 
@@ -1142,7 +1130,7 @@ var GetFileNameFromUrl = function(Url)
     UrlParts = Url.split('/');
 
     return UrlParts[UrlParts.length - 1];
-}
+};
 
 //var GetWeatherRegionalIconFromIconLink = function (WeatherIconLink)
 //var GetWeatherRegionalIconFromIconLink = function (WeatherIconLink, WeatherConditions, WeatherParameters)
@@ -1151,7 +1139,7 @@ var GetWeatherRegionalIconFromIconLink = function (WeatherIconLink, WeatherCondi
     var Icon = "";
     var WeatherIcon = WeatherIconLink;
 
-    if (WeatherIconLink.indexOf(".gif") == -1)
+    if (WeatherIconLink.indexOf(".gif") === -1)
     {
         if (IsNightTime)
         {
@@ -1186,12 +1174,12 @@ var GetWeatherRegionalIconFromIconLink = function (WeatherIconLink, WeatherCondi
 
         case "cc_mostlycloudy1.gif":
         case "mostly-cloudy.gif":
-            Icon = "Mostly-Cloudy.gif";
+            Icon = "Mostly-Cloudy-1994-2.gif";
             break;
 
         case "cc_mostlycloudy0.gif":
         case "partly-clear.gif":
-            Icon = "Partly-Clear.gif";
+            Icon = "Partly-Clear-1994-2.gif";
             break;
 
         case "cc_partlycloudy1.gif":
@@ -1222,11 +1210,11 @@ var GetWeatherRegionalIconFromIconLink = function (WeatherIconLink, WeatherCondi
         case "scattered-showers.gif":
             if (IsNightTime)
             {
-                Icon = "Scattered-Showers-Night.gif";
+                Icon = "Scattered-Showers-Night-1994-2.gif";
             }
             else
             {
-                Icon = "Scattered-Showers.gif";
+                Icon = "Scattered-Showers-1994-2.gif";
             }
             break;
 
@@ -1248,13 +1236,13 @@ var GetWeatherRegionalIconFromIconLink = function (WeatherIconLink, WeatherCondi
             break;
 
         case "cc_snowshowers.gif":
-        case "heavy-snow.gif":
+            //case "heavy-snow.gif":
             Icon = "AM-Snow-1994.gif";
             break;
 
         case "cc_snow.gif":
         case "heavy-snow.gif":
-            Icon = "Heavy-Snow.gif";
+            Icon = "Heavy-Snow-1994-2.gif";
             break;
 
         case "cc_rainsnow.gif":
@@ -1287,11 +1275,11 @@ var GetWeatherRegionalIconFromIconLink = function (WeatherIconLink, WeatherCondi
         case "scattered-tstorms.gif":
             if (IsNightTime)
             {
-                Icon = "Scattered-Tstorms-Night.gif";
+                Icon = "Scattered-Tstorms-Night-1994-2.gif";
             }
             else
             {
-                Icon = "Scattered-Tstorms-1992.gif";
+                Icon = "Scattered-Tstorms-1994-2.gif";
             }
             break;
 
@@ -1302,7 +1290,15 @@ var GetWeatherRegionalIconFromIconLink = function (WeatherIconLink, WeatherCondi
 
         case "cc_windy.gif":
         case "windy.gif":
-            Icon = "Wind.gif";
+            //Icon = "Wind.gif";
+            if (IsNightTime)
+            {
+                Icon = "Clear-Wind-1994.gif";
+            }
+            else
+            {
+                Icon = "Sunny-Wind-1994.gif";
+            }
             break;
 
         case "blowing-snow.gif":
@@ -1312,11 +1308,11 @@ var GetWeatherRegionalIconFromIconLink = function (WeatherIconLink, WeatherCondi
         case "ef_scatsnowshowers.gif":
             if (IsNightTime)
             {
-                Icon = "Scattered-Snow-Showers-Night.gif";
+                Icon = "Scattered-Snow-Showers-Night-1994-2.gif";
             }
             else
             {
-                Icon = "Scattered-Snow-Showers.gif";
+                Icon = "Scattered-Snow-Showers-1994-2.gif";
             }
             break;
 
@@ -1333,7 +1329,7 @@ var GetWeatherRegionalIconFromIconLink = function (WeatherIconLink, WeatherCondi
 
     Icon = "images/r/" + Icon;
     return Icon;
-}
+};
 
 var GetWeatherIcon2FromIconLink = function (WeatherIconLink, WeatherConditions, WeatherParameters, OverrideIsDay)
 {
@@ -1454,4 +1450,4 @@ var GetWeatherIcon2FromIconLink = function (WeatherIconLink, WeatherConditions, 
 
     Icon = "images/2/" + Icon;
     return Icon;
-}
+};
