@@ -385,6 +385,7 @@ var ExitFullscreen = function ()
 
     if (document.exitFullscreen)
     {
+        // Chrome 71 broke this if the user pressed F11 to enter full screen mode.
         document.exitFullscreen();
     }
     else if (document.webkitExitFullscreen)

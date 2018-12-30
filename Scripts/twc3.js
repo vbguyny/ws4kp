@@ -6690,6 +6690,9 @@ var ConvertConditionsToMetric = function (Condition)
                 else if (Words[Index + 1] == "NEAR" || Words[Index + 1] == "AROUND") {
                     var TempF = parseInt(Words[Index + 2]);
                     var TempC = TempF;
+                    if (Words[Index + 3].indexOf("BELOW") == 0) {
+                        TempC *= -1;
+                    }
                     TempC += 1;
                     TempC = Math.round(ConvertFahrenheitToCelsius(TempC));
 
@@ -6719,6 +6722,9 @@ var ConvertConditionsToMetric = function (Condition)
             else if (Words[Index] == "LOW" || Words[Index] == "HIGH" || Words[Index + 1] == "AS") {
                 var TempF = parseInt(Words[Index + 2]);
                 var TempC = TempF;
+                if (Words[Index + 3].indexOf("BELOW") == 0) {
+                    TempC *= -1;
+                }
                 TempC += 1;
                 TempC = Math.round(ConvertFahrenheitToCelsius(TempC));
 
@@ -6752,6 +6758,9 @@ var ConvertConditionsToMetric = function (Condition)
                 if (Words[Index - 1] == "TEMPERATURES") {
                     var TempF = parseInt(Words[Index + 1]);
                     var TempC = TempF;
+                    if (Words[Index + 3].indexOf("BELOW") == 0) {
+                        TempC *= -1;
+                    }
                     TempC += 1;
                     TempC = Math.round(ConvertFahrenheitToCelsius(TempC));
 
@@ -8613,14 +8622,7 @@ var WeatherTravelForecast = function (WeatherDwmlParser, ForceToday, ForceTonigh
     this.MinimumTemperatureC = ConvertFahrenheitToCelsius(this.MinimumTemperature);
 
     _LayoutKey = WeatherDwmlParser.data_forecast.parameters.weather.time_layout;
-    try
-    {
-        this.Conditions = WeatherDwmlParser.data_forecast.parameters.weather.weather_conditions[_PeriodIndex[_LayoutKey]].weather_summary.trim();
-    }
-    catch (ex)
-    {
-        var _db = 0;
-    }
+    this.Conditions = WeatherDwmlParser.data_forecast.parameters.weather.weather_conditions[_PeriodIndex[_LayoutKey]].weather_summary.trim();
 
     _LayoutKey = WeatherDwmlParser.data_forecast.parameters.conditions_icon.time_layout;
     this.Icon = WeatherDwmlParser.data_forecast.parameters.conditions_icon.icon_link[_PeriodIndex[_LayoutKey]];
@@ -9045,6 +9047,13 @@ var WeatherCurrentRegionalConditions = function ()
     this.LatLons = [];
     this.StationNames = [];
     this.SkipStationIds = [];
+
+    // Always skip these stations.
+    this.SkipStationIds.push("KANE"); // "Minneapls"
+    this.SkipStationIds.push("KMIC"); // "Mnpls"
+    this.SkipStationIds.push("KLVN"); // "Mnpls"
+    this.SkipStationIds.push("KFCM"); // "Mnpls"
+
 };
 //var WeatherCurrentRegionalCondition = function (MetarData)
 //{
@@ -9124,10 +9133,11 @@ var GetDwmlRegionalStations = function (WeatherParameters, Distance)
                     (WeatherParameters.WeatherCurrentRegionalConditions.WeatherCurrentConditions[StationId].Conditions.trim() == "Unknown Precip") ||
                     (WeatherParameters.WeatherCurrentRegionalConditions.WeatherCurrentConditions[StationId].Temperature == "NA"))
                 {
-                    WeatherParameters.WeatherCurrentRegionalConditions.StationNames = [];
+                    //WeatherParameters.WeatherCurrentRegionalConditions.StationNames = [];
                     WeatherParameters.WeatherCurrentRegionalConditions.SkipStationIds.push(StationId);
                     WeatherParameters.WeatherCurrentRegionalConditions.StationIds.splice(WeatherParameters.WeatherCurrentRegionalConditions.StationIds.indexOf(StationId), 1);
-                    //delete WeatherParameters.WeatherCurrentRegionalConditions.WeatherCurrentConditions[StationId];
+                    delete WeatherParameters.WeatherCurrentRegionalConditions.WeatherCurrentConditions[StationId];
+                    delete WeatherParameters.WeatherCurrentRegionalConditions.WeatherDwmlParser[StationId];
                     //GetRegionalStations(WeatherParameters, Distance);
                     NeedToGetRegionalStations = true;
                 }
@@ -9141,6 +9151,7 @@ var GetDwmlRegionalStations = function (WeatherParameters, Distance)
                 {
                     if (NeedToGetRegionalStations == true)
                     {
+                        WeatherParameters.WeatherCurrentRegionalConditions.StationNames = [];
                         GetRegionalStations(WeatherParameters, Distance);
                     }
                     else
@@ -9155,7 +9166,7 @@ var GetDwmlRegionalStations = function (WeatherParameters, Distance)
             {
                 console.error("GetDwmlRegionalStations failed: " + errorThrown);
 
-                WeatherParameters.WeatherCurrentRegionalConditions.StationNames = [];
+                //WeatherParameters.WeatherCurrentRegionalConditions.StationNames = [];
                 WeatherParameters.WeatherCurrentRegionalConditions.SkipStationIds.push(StationId);
                 WeatherParameters.WeatherCurrentRegionalConditions.StationIds.splice(WeatherParameters.WeatherCurrentRegionalConditions.StationIds.indexOf(StationId), 1);
                 NeedToGetRegionalStations = true;
@@ -9165,6 +9176,7 @@ var GetDwmlRegionalStations = function (WeatherParameters, Distance)
                 {
                     if (NeedToGetRegionalStations == true)
                     {
+                        WeatherParameters.WeatherCurrentRegionalConditions.StationNames = [];
                         GetRegionalStations(WeatherParameters, Distance);
                     }
                 }
@@ -9864,11 +9876,32 @@ var ShowRegionalMap = function (WeatherParameters, TomorrowForecast1, TomorrowFo
                     $(RegionalCities).each(function ()
                     {
                         var Distance = GetDistance(RegionalCity.Longitude, RegionalCity.Latitude, this.Longitude, this.Latitude);
-                        if (Distance < 2.5)
+
+                        if (WeatherParameters.State == "HI")
                         {
-                            OkToAddCity = false;
-                            return false;
+                            if (Distance < 1)
+                            {
+                                OkToAddCity = false;
+                                return false;
+                            }
                         }
+                        else if (WeatherParameters.State == "AK")
+                        {
+                            if (Distance < 2.5)
+                            {
+                                OkToAddCity = false;
+                                return false;
+                            }
+                        }
+                        else
+                        {
+                            if (Distance < 2.5)
+                            {
+                                OkToAddCity = false;
+                                return false;
+                            }
+                        }
+
                     });
 
                     if (OkToAddCity == false)
@@ -11203,7 +11236,7 @@ var Progress = function (e)
             ////DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "Conditions", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 55, "WeatherStar", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "4000+", 3);
-            DrawTitleText(context, "WeatherStar", "4000+ 1.36");
+            DrawTitleText(context, "WeatherStar", "4000+ 1.37");
 
             // Draw a box for the progress.
             //context.fillStyle = "#000000";
@@ -12581,7 +12614,9 @@ var SpeakUtterance = function ()
         console.log("Speaking '" + Sentence + "'");
         _IsSpeaking = true;
     };
-    SpeakNextSentence();
+
+    //SpeakNextSentence();
+    setTimeout(function () { SpeakNextSentence(); }, 500);
 
 };
 
