@@ -567,7 +567,7 @@ var GetMonthPrecipitation = function (WeatherParameters) {
 
             // Check to see if we need to also parse the Almanac information
             if (WeatherParameters.Progress.Almanac != LoadStatuses.Loaded) {
-                if (WeatherParameters.WeatherMonthlyTotalsParser.Precipitation == "") {
+                if (WeatherParameters.WeatherMonthlyTotalsParser.Precipitation === "") {
                     WeatherParameters.Progress.Almanac = LoadStatuses.NoData;
                     GetCurrentWeather(WeatherParameters);
                     ShowRegionalMap(_WeatherParameters);
@@ -834,8 +834,8 @@ var GetTideInfo2 = function (WeatherParameters) {
 
                 //https://tidesandcurrents.noaa.gov/api/datagetter?product=predictions&application=NOS.COOPS.TAC.WL&begin_date=20181228&end_date=20181229&datum=MLLW&station=9410840&time_zone=lst_ldt&units=english&interval=hilo&format=json
                 var Url = "https://tidesandcurrents.noaa.gov/api/datagetter?product=predictions&application=NOS.COOPS.TAC.WL";
-                Url += "&begin_date=" + Today.getFullYear().toString() + (Today.getMonth() + 1).toString() + Today.getDate().toString();
-                Url += "&end_date=" + Tomorrow.getFullYear().toString() + (Tomorrow.getMonth() + 1).toString() + Tomorrow.getDate().toString();
+                Url += "&begin_date=" + Today.getFullYear().pad() + (Today.getMonth() + 1).pad(2) + Today.getDate().pad(2);
+                Url += "&end_date=" + Tomorrow.getFullYear().pad() + (Tomorrow.getMonth() + 1).pad(2) + Tomorrow.getDate().pad(2);
                 Url += "&datum=MLLW&station=" + StationId;
                 Url += "&time_zone=lst_ldt&units=english&interval=hilo&format=json";
 
@@ -857,6 +857,12 @@ var GetTideInfo2 = function (WeatherParameters) {
                     crossDomain: true,
                     cache: false,
                     success: function (json) {
+
+                        if (json.error)
+                        {
+                            console.error(json.error);
+                        }
+
                         var TideTypes = [];
                         var TideTimes = [];
                         var TideDays = [];
@@ -11236,7 +11242,7 @@ var Progress = function (e)
             ////DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "Conditions", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 55, "WeatherStar", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "4000+", 3);
-            DrawTitleText(context, "WeatherStar", "4000+ 1.37");
+            DrawTitleText(context, "WeatherStar", "4000+ 1.38");
 
             // Draw a box for the progress.
             //context.fillStyle = "#000000";
