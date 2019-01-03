@@ -269,6 +269,46 @@ var GetCurrentWeather = function(WeatherParameters)
     Url += "&lon=" + WeatherParameters.Longitude.toString();
     //Url = "cors/?u=" + encodeURIComponent(Url);
 
+    var success = function (xml)
+    {
+        var $xml = $(xml);
+        console.log(xml);
+        //console.log($xml);
+
+        WeatherParameters.WeatherDwmlParser = new WeatherDwmlParser($xml);
+        console.log(WeatherParameters.WeatherDwmlParser);
+
+        if (WeatherParameters.WeatherDwmlParser.data_current_observations.parameters.conditions_icon.icon_link.length == 0
+            || WeatherParameters.WeatherDwmlParser.data_current_observations.parameters.conditions_icon.icon_link[0] == "NULL"
+            || WeatherParameters.WeatherDwmlParser.data_current_observations.parameters.temperature_apparent.value[0] == "NA")
+        {
+            console.error("No current conditions data for '" + WeatherParameters.WeatherDwmlParser.data_current_observations.location.area_description + "'");
+
+            GetClosestCurrentWeather(WeatherParameters);
+            return;
+        }
+
+        //WeatherParameters.WeatherCurrentConditions = new WeatherCurrentConditions(WeatherParameters.WeatherDwmlParser);
+        //console.log(wco);
+        //PopulateCurrentConditions(wco);
+
+        WeatherParameters.WeatherExtendedForecast = new WeatherExtendedForecast(WeatherParameters.WeatherDwmlParser);
+        console.log(WeatherParameters.WeatherExtendedForecast);
+        //PopulateExtendedForecast(WeatherParameters);
+        PopulateExtendedForecast(WeatherParameters, 1);
+        PopulateExtendedForecast(WeatherParameters, 2);
+
+        //WeatherParameters.Progress.FourDayForecast = LoadStatuses.Loaded;
+
+        //WeatherParameters.WeatherLocalForecast = new WeatherLocalForecast(WeatherParameters.WeatherDwmlParser);
+        //console.log(WeatherParameters.WeatherLocalForecast);
+        //PopulateLocalForecast(WeatherParameters.WeatherLocalForecast);
+
+        GetWeatherMetar(WeatherParameters);
+
+        //GetWeatherHazards(WeatherParameters);
+    };
+
     // Load the xml file using ajax 
     $.ajaxCORS({
         type: "GET",
@@ -276,48 +316,22 @@ var GetCurrentWeather = function(WeatherParameters)
         dataType: "xml",
         crossDomain: true,
         cache: false,
-        success: function (xml)
-        {
-            var $xml = $(xml);
-            console.log(xml);
-            //console.log($xml);
-
-            WeatherParameters.WeatherDwmlParser = new WeatherDwmlParser($xml);
-            console.log(WeatherParameters.WeatherDwmlParser);
-
-            if (WeatherParameters.WeatherDwmlParser.data_current_observations.parameters.conditions_icon.icon_link.length == 0
-                || WeatherParameters.WeatherDwmlParser.data_current_observations.parameters.conditions_icon.icon_link[0] == "NULL"
-                || WeatherParameters.WeatherDwmlParser.data_current_observations.parameters.temperature_apparent.value[0] == "NA")
-            {
-                console.error("No current conditions data for '" + WeatherParameters.WeatherDwmlParser.data_current_observations.location.area_description + "'");
-
-                GetClosestCurrentWeather(WeatherParameters);
-                return;
-            }
-
-            //WeatherParameters.WeatherCurrentConditions = new WeatherCurrentConditions(WeatherParameters.WeatherDwmlParser);
-            //console.log(wco);
-            //PopulateCurrentConditions(wco);
-
-            WeatherParameters.WeatherExtendedForecast = new WeatherExtendedForecast(WeatherParameters.WeatherDwmlParser);
-            console.log(WeatherParameters.WeatherExtendedForecast);
-            //PopulateExtendedForecast(WeatherParameters);
-            PopulateExtendedForecast(WeatherParameters, 1);
-            PopulateExtendedForecast(WeatherParameters, 2);
-
-            //WeatherParameters.Progress.FourDayForecast = LoadStatuses.Loaded;
-
-            //WeatherParameters.WeatherLocalForecast = new WeatherLocalForecast(WeatherParameters.WeatherDwmlParser);
-            //console.log(WeatherParameters.WeatherLocalForecast);
-            //PopulateLocalForecast(WeatherParameters.WeatherLocalForecast);
-
-            GetWeatherMetar(WeatherParameters);
-
-            //GetWeatherHazards(WeatherParameters);
-
-        },
+        success: success,
         error: function (xhr, error, errorThrown)
         {
+            if (xhr.readyState == 4 && xhr.status == 200)
+            {
+                if (error == "parsererror")
+                {
+                    var source = xhr.responseText;
+                    source = source.replaceAll(" & ", " &amp; ");
+                    var parser = new DOMParser();
+                    var xml = parser.parseFromString(source, "application/xml");
+                    success(xml);
+                    return;
+                }
+            }
+
             console.error("GetCurrentWeather failed: " + errorThrown);
             WeatherParameters.Progress.FourDayForecast = LoadStatuses.Failed;
         }
@@ -11242,7 +11256,7 @@ var Progress = function (e)
             ////DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "Conditions", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 55, "WeatherStar", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "4000+", 3);
-            DrawTitleText(context, "WeatherStar", "4000+ 1.38");
+            DrawTitleText(context, "WeatherStar", "4000+ 1.39");
 
             // Draw a box for the progress.
             //context.fillStyle = "#000000";
