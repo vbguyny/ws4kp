@@ -6926,7 +6926,8 @@ var PopulateLocalForecast = function (WeatherParameters)
         //AlertText = "WIND ADVISORY IN EFFECT FROM 2 PM THIS AFTERNOON TO 6 AM EDT SUNDAY. THE RED HOUR IS UPON US!  SEEK SHELTER IF YOU DO NOT WANT TO PARTAKE IN THE PARTY. WE RECOMMEND THAT YOU DRESS ACCORDINGLY.  IF YOU DO NOT PARTAKE THEN YOU WILL BE ABSORBED";
         if (AlertText != "")
         {
-            var Text = AlertText.wordWrap(MaxCols - 4, "\n");
+            var NumberOfRevChars = 5;
+            var Text = AlertText.wordWrap(MaxCols - NumberOfRevChars, "\n");
             var Lines = Text.split("\n");
             var LineCount = Lines.length;
             var ScreenText = "";
@@ -6939,7 +6940,8 @@ var PopulateLocalForecast = function (WeatherParameters)
                     ScreenText = "";
                 }
                 //var Line = Lines[Index].trim();
-                var Line = Lines[Index].centerText((MaxCols - 4));
+                //var Line = Lines[Index].centerText((MaxCols - 4));
+                var Line = Lines[Index].centerText((MaxCols - NumberOfRevChars));
 
                 //var l = Line.length;
                 //var w2 = Math.floor((MaxCols - 4) / 2);
@@ -6951,7 +6953,8 @@ var PopulateLocalForecast = function (WeatherParameters)
                 //    Line += new Array((MaxCols - 4) - Line.length + 1).join(" ");
                 //}
 
-                ScreenText += "*  " + Line + "*\n";
+                //ScreenText += "*  " + Line + "*\n";
+                ScreenText += "*  " + Line + " *\n";
             }
             ScreenText += "\n";
             LocalForecastScreenTexts.push(ScreenText);
@@ -7127,6 +7130,10 @@ String.prototype.centerText = function(numberOfSpaces)
 {
     var text = this;
     text = text.trim();
+    if (text.length > numberOfSpaces)
+    {
+        return text;
+    }
     var l = text.length;
     var w2 = Math.floor(numberOfSpaces / 2);
     var l2 = Math.floor(l / 2);
@@ -9687,7 +9694,7 @@ var ShowRegionalMap = function (WeatherParameters, TomorrowForecast1, TomorrowFo
                     {
                         // Conditions Icon
                         var Gif = new SuperGif({
-                            src: GetWeatherRegionalIconFromIconLink(weatherCurrentConditions.Icon),
+                            src: GetWeatherRegionalIconFromIconLink(weatherCurrentConditions.Icon, undefined, undefined, IsNightTime),
                             max_width: 42,
                             loop_delay: 100,
                             auto_play: true,
@@ -11256,7 +11263,7 @@ var Progress = function (e)
             ////DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "Conditions", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 55, "WeatherStar", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "4000+", 3);
-            DrawTitleText(context, "WeatherStar", "4000+ 1.39");
+            DrawTitleText(context, "WeatherStar", "4000+ 1.40");
 
             // Draw a box for the progress.
             //context.fillStyle = "#000000";
