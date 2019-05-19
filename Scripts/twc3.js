@@ -1418,10 +1418,16 @@ var GetOutlookDescription = function (OutlookIndicator)
 
 var GetMarineForecast = function (WeatherParameters)
 {
-    var Url = "https://www.wunderground.com/cgi-bin/findweather/getForecast?query="; //Montauk%2C+NY
-    Url += encodeURIComponent(WeatherParameters.City) + "%2C";
-    Url += WeatherParameters.State;
-    Url += "&hdf=1"; // mjb 08/15/18
+    // mjb 05/19/19 Begin
+    //var Url = "https://www.wunderground.com/cgi-bin/findweather/getForecast?query="; //Montauk%2C+NY
+    //Url += encodeURIComponent(WeatherParameters.City) + "%2C";
+    //Url += WeatherParameters.State;
+    //Url += "&hdf=1"; // mjb 08/15/18
+
+    var Url = "https://www.wunderground.com/weather/us/"; //ny/shirley
+    Url += WeatherParameters.State + "/";
+    Url += encodeURIComponent(WeatherParameters.City);
+    // mjb 05/19/19 End
 
     WeatherParameters.MarineForecast = null;
 
@@ -11263,7 +11269,7 @@ var Progress = function (e)
             ////DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "Conditions", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 55, "WeatherStar", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "4000+", 3);
-            DrawTitleText(context, "WeatherStar", "4000+ 1.40");
+            DrawTitleText(context, "WeatherStar", "4000+ 1.41");
 
             // Draw a box for the progress.
             //context.fillStyle = "#000000";
