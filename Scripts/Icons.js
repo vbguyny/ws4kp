@@ -1072,20 +1072,11 @@ var GetWeatherIconFromIconLink = function (WeatherIconLink, WeatherConditions, W
         case "wind_few.png":
         case "wind_bkn.png":
         case "wind_ovc.png":
-        case "nwind.png":
-        case "nwind_skc.png":
-        case "nwind_sct.png":
-        case "nwind_few.png":
-        case "nwind_bkn.png":
-        case "nwind_ovc.png":
         case "tropstorm.png":
-        case "ntropstorm.png":
         case "tropstorm-noh.png":
-        case "ntropstorm-noh.png":
         case "hurr-noh.png":
         case "nhurr-noh.png":
         case "hurr.png":
-        case "nhurr.png":
         case "ts_hur_flags10.png":
         case "ts_hur_flags20.png":
         case "ts_hur_flags30.png":
@@ -1101,6 +1092,19 @@ var GetWeatherIconFromIconLink = function (WeatherIconLink, WeatherConditions, W
             //case "Blustery":
             //case "Water Spouts":
             Icon = "cc_windy.gif";
+            break;
+
+        case "nwind.png":
+        case "nwind_skc.png":
+        case "nwind_sct.png":
+        case "nwind_few.png":
+        case "nwind_bkn.png":
+        case "nwind_ovc.png":
+        case "ntropstorm.png":
+        case "ntropstorm-noh.png":
+        case "nhurr-noh.png":
+        case "nhurr.png":
+            Icon = "cc_windy2.gif";
             break;
 
         case "null":
@@ -1288,17 +1292,16 @@ var GetWeatherRegionalIconFromIconLink = function (WeatherIconLink, WeatherCondi
             Icon = "Thunderstorm.gif";
             break;
 
-        case "cc_windy.gif":
         case "windy.gif":
-            //Icon = "Wind.gif";
-            if (IsNightTime)
-            {
-                Icon = "Clear-Wind-1994.gif";
-            }
-            else
-            {
-                Icon = "Sunny-Wind-1994.gif";
-            }
+            Icon = "Wind.gif";
+            break;
+
+        case "cc_windy.gif":
+            Icon = "Sunny-Wind-1994.gif";
+            break;
+
+        case "cc_windy2.gif":
+            Icon = "Clear-Wind-1994.gif";
             break;
 
         case "blowing-snow.gif":

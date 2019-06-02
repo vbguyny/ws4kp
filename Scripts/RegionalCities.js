@@ -597,5 +597,10 @@ var _RegionalCities = [
         Latitude: "34.2257",
         Longitude: "-77.9447",
     },
+    {
+        Name: "Tuscan",
+        Latitude: "32.2216",
+        Longitude: "-110.9698",
+    },
 ];
 

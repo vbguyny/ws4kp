@@ -8317,32 +8317,51 @@ var GetTimeZoneOffsetFromUTC = function (timezone)
         case "EST":
             Offset = -5;
             break;
+        case "EDT":
+            Offset = -4;
+            break;
         case "CST":
             Offset = -6;
+            break;
+        case "CDT":
+            Offset = -5;
             break;
         case "MST":
             Offset = -7;
             break;
+        case "MDT":
+            Offset = -6;
+            break;
         case "PST":
             Offset = -8;
+            break;
+        case "PDT":
+            Offset = -7;
             break;
         case "AST":
         case "AKST":
             Offset = -9;
             break;
+        case "ADT":
+        case "AKDT":
+            Offset = -8;
+            break;
         case "HST":
             Offset = -10;
             break;
+        case "HDT":
+            Offset = -9;
+            break;
     }
 
-    if (Offset != null)
-    {
-        var dt = new Date();
-        if (dt.dst() == true)
-        {
-            Offset++;
-        }
-    }
+    //if (Offset != null)
+    //{
+    //    var dt = new Date();
+    //    if (dt.dst() == true)
+    //    {
+    //        Offset++;
+    //    }
+    //}
 
     return Offset;
 };
@@ -11269,7 +11288,7 @@ var Progress = function (e)
             ////DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "Conditions", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 55, "WeatherStar", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "4000+", 3);
-            DrawTitleText(context, "WeatherStar", "4000+ 1.41");
+            DrawTitleText(context, "WeatherStar", "4000+ 1.42");
 
             // Draw a box for the progress.
             //context.fillStyle = "#000000";
@@ -11812,7 +11831,8 @@ var DrawCurrentConditions = function (WeatherParameters, context)
     switch(_UpdateWeatherCurrentConditionType)
     {
         case CurrentConditionTypes.Title:
-            text = "Conditions at " + WeatherCurrentConditions.StationName;
+            // mjb 06/01/19 text = "Conditions at " + WeatherCurrentConditions.StationName;
+            text = "Conditions at " + WeatherCurrentConditions.StationName.substr(0, 20); // mjb 06/01/19
             break;
         case CurrentConditionTypes.Conditions:
             text = WeatherCurrentConditions.Conditions;
