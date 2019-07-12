@@ -558,13 +558,11 @@ var GetMonthPrecipitation = function (WeatherParameters) {
     var FirstOfMonth = new Date(Now.getFullYear(), Now.getMonth(), 01);
     var LastOfMonth = new Date(Now.getFullYear(), Now.getMonth() + 1, 01).addDays(-1);
 
-    //https://api-ak.wunderground.com/api/d8585d80376a429e/history_2018120120181231/lang:EN/units:english/bestfct:1/v:2.0/q/KHWV.json?showObs=0&ttl=120
-    var Url = "https://api-ak.wunderground.com/api/d8585d80376a429e/history_";
-    Url += FirstOfMonth.getFullYear().pad() + (FirstOfMonth.getMonth() + 1).pad(2) + FirstOfMonth.getDate().pad(2);
-    Url += LastOfMonth.getFullYear().pad() + (LastOfMonth.getMonth() + 1).pad(2) + LastOfMonth.getDate().pad(2);
-    Url += "/lang:EN/units:english/bestfct:1/v:2.0/q/" + WeatherParameters.ZipCode + ".json?showObs=0&ttl=120";
-
-    // Load the xml file using ajax 
+    //https://api.weather.com/v3/location/near?apiKey=6532d6454b8aa370768e63d6ba5a832e&geocode=40.83%2C-73.02&product=airport&subproduct=major&format=json
+    var Url = "https://api.weather.com/v3/location/near?apiKey=6532d6454b8aa370768e63d6ba5a832e&geocode=";
+    Url += WeatherParameters.Latitude.toString() + "%2C";
+    Url += WeatherParameters.Longitude.toString();
+    Url += "&product=airport&subproduct=major&format=json";
     $.ajaxCORS({
         type: "GET",
         url: Url,
@@ -572,50 +570,46 @@ var GetMonthPrecipitation = function (WeatherParameters) {
         crossDomain: true,
         cache: false,
         success: function (json) {
-            WeatherParameters.WeatherMonthlyTotalsParser = new WeatherMonthlyTotalsParser(json);
-            console.log(WeatherParameters.WeatherMonthlyTotalsParser);
+            var AirportName = json.location.airportName[0];
+            var AirportCode = json.location.iataCode[0];
+            WeatherParameters.AirportCode = AirportCode;
 
-            WeatherParameters.WeatherMonthlyTotals = new WeatherMonthlyTotals(WeatherParameters.WeatherMonthlyTotalsParser);
-            console.log(WeatherParameters.WeatherMonthlyTotals);
-            //PopulateCurrentConditions(WeatherParameters.WeatherMonthlyTotals);
+            //https://forecast.weather.gov/product.php?site=NWS&issuedby=ISP&product=CLI&format=txt&version=1&glossary=1&highlight=off
+            var Url = "https://forecast.weather.gov/product.php?site=NWS&issuedby=";
+            Url += AirportCode;
+            Url += "&product=CLI&format=txt&version=1&glossary=1&highlight=off";
+            $.ajaxCORS({
+                type: "GET",
+                url: Url,
+                dataType: "text",
+                crossDomain: true,
+                cache: false,
+                success: function (text) {
 
-            // Check to see if we need to also parse the Almanac information
-            if (WeatherParameters.Progress.Almanac != LoadStatuses.Loaded) {
-                if (WeatherParameters.WeatherMonthlyTotalsParser.Precipitation === "") {
-                    WeatherParameters.Progress.Almanac = LoadStatuses.NoData;
-                    GetCurrentWeather(WeatherParameters);
-                    ShowRegionalMap(_WeatherParameters);
-                    return;
-                }
+                    WeatherParameters.WeatherMonthlyTotalsParser = new WeatherMonthlyTotalsParser(text);
+                    console.log(WeatherParameters.WeatherMonthlyTotalsParser);
 
-                //https://api.weather.com/v2/astro?apiKey=6532d6454b8aa370768e63d6ba5a832e&geocode=40.81999969%2C-73&days=1&date=20181223&format=json
-                var Url = "https://api.weather.com/v2/astro?apiKey=6532d6454b8aa370768e63d6ba5a832e&geocode=";
-                Url += WeatherParameters.Latitude.toString() + "%2C";
-                Url += WeatherParameters.Longitude.toString();
-                Url += "&days=1&date=" + Now.getFullYear().pad() + (Now.getMonth() + 1).pad(2) + Now.getDate().pad(2) + "&format=json";
+                    WeatherParameters.WeatherMonthlyTotals = new WeatherMonthlyTotals(WeatherParameters.WeatherMonthlyTotalsParser);
+                    console.log(WeatherParameters.WeatherMonthlyTotals);
+                    //PopulateCurrentConditions(WeatherParameters.WeatherMonthlyTotals);
 
-                // Load the xml file using ajax 
-                $.ajaxCORS({
-                    type: "GET",
-                    url: Url,
-                    dataType: "json",
-                    crossDomain: true,
-                    cache: false,
-                    success: function (json) {
-                        WeatherParameters.MoonPhasesParser = new MoonPhasesParser3(json);
-                        console.log(WeatherParameters.MoonPhasesParser);
+                    // Check to see if we need to also parse the Almanac information
+                    if (WeatherParameters.Progress.Almanac != LoadStatuses.Loaded) {
+                        if (WeatherParameters.WeatherMonthlyTotalsParser.Precipitation === "") {
+                            WeatherParameters.Progress.Almanac = LoadStatuses.NoData;
+                            GetCurrentWeather(WeatherParameters);
+                            ShowRegionalMap(_WeatherParameters);
+                            return;
+                        }
 
-                        WeatherParameters.SunRiseSetParserToday = new SunRiseSetParser3(json);
-                        console.log(WeatherParameters.SunRiseSetParserToday);
-
-                        var Now = new Date();
-                        Now = Now.addDays(1);
                         //https://api.weather.com/v2/astro?apiKey=6532d6454b8aa370768e63d6ba5a832e&geocode=40.81999969%2C-73&days=1&date=20181223&format=json
+                        //This also has the moon and sun data: https://api.weather.com/v3/wx/forecast/daily/3day?language=en-US&apiKey=6532d6454b8aa370768e63d6ba5a832e&geocode=40.83%2C-73.02&units=e&format=json
                         var Url = "https://api.weather.com/v2/astro?apiKey=6532d6454b8aa370768e63d6ba5a832e&geocode=";
                         Url += WeatherParameters.Latitude.toString() + "%2C";
                         Url += WeatherParameters.Longitude.toString();
                         Url += "&days=1&date=" + Now.getFullYear().pad() + (Now.getMonth() + 1).pad(2) + Now.getDate().pad(2) + "&format=json";
 
+                        // Load the xml file using ajax 
                         $.ajaxCORS({
                             type: "GET",
                             url: Url,
@@ -623,31 +617,148 @@ var GetMonthPrecipitation = function (WeatherParameters) {
                             crossDomain: true,
                             cache: false,
                             success: function (json) {
-                                WeatherParameters.SunRiseSetParserTomorrow = new SunRiseSetParser3(json);
-                                console.log(WeatherParameters.SunRiseSetParserTomorrow);
+                                WeatherParameters.MoonPhasesParser = new MoonPhasesParser3(json);
+                                console.log(WeatherParameters.MoonPhasesParser);
 
-                                WeatherParameters.AlmanacInfo = new AlmanacInfo(WeatherParameters.MoonPhasesParser, WeatherParameters.SunRiseSetParserToday, WeatherParameters.SunRiseSetParserTomorrow);
-                                console.log(WeatherParameters.AlmanacInfo);
+                                WeatherParameters.SunRiseSetParserToday = new SunRiseSetParser3(json);
+                                console.log(WeatherParameters.SunRiseSetParserToday);
 
-                                GetOutlook(WeatherParameters);
+                                var Now = new Date();
+                                Now = Now.addDays(1);
+                                //https://api.weather.com/v2/astro?apiKey=6532d6454b8aa370768e63d6ba5a832e&geocode=40.81999969%2C-73&days=1&date=20181223&format=json
+                                var Url = "https://api.weather.com/v2/astro?apiKey=6532d6454b8aa370768e63d6ba5a832e&geocode=";
+                                Url += WeatherParameters.Latitude.toString() + "%2C";
+                                Url += WeatherParameters.Longitude.toString();
+                                Url += "&days=1&date=" + Now.getFullYear().pad() + (Now.getMonth() + 1).pad(2) + Now.getDate().pad(2) + "&format=json";
+
+                                $.ajaxCORS({
+                                    type: "GET",
+                                    url: Url,
+                                    dataType: "json",
+                                    crossDomain: true,
+                                    cache: false,
+                                    success: function (json) {
+                                        WeatherParameters.SunRiseSetParserTomorrow = new SunRiseSetParser3(json);
+                                        console.log(WeatherParameters.SunRiseSetParserTomorrow);
+
+                                        WeatherParameters.AlmanacInfo = new AlmanacInfo(WeatherParameters.MoonPhasesParser, WeatherParameters.SunRiseSetParserToday, WeatherParameters.SunRiseSetParserTomorrow);
+                                        console.log(WeatherParameters.AlmanacInfo);
+
+                                        GetOutlook(WeatherParameters);
+                                    },
+                                    error: function (xhr, error, errorThrown) {
+                                        console.error("Getting SunRiseSetParserTomorrow failed: " + errorThrown);
+                                    }
+                                });
                             },
                             error: function (xhr, error, errorThrown) {
                                 console.error("Getting SunRiseSetParserTomorrow failed: " + errorThrown);
                             }
                         });
-                    },
-                    error: function (xhr, error, errorThrown) {
-                        console.error("Getting SunRiseSetParserTomorrow failed: " + errorThrown);
                     }
-                });
-
-            }
+                },
+                error: function (xhr, error, errorThrown) {
+                    console.error("GetMonthPrecipitation failed: " + errorThrown);
+                }
+            });
 
         },
         error: function (xhr, error, errorThrown) {
             console.error("GetMonthPrecipitation failed: " + errorThrown);
         }
     });
+
+    ////https://api-ak.wunderground.com/api/d8585d80376a429e/history_2018120120181231/lang:EN/units:english/bestfct:1/v:2.0/q/KHWV.json?showObs=0&ttl=120
+    //var Url = "https://api-ak.wunderground.com/api/d8585d80376a429e/history_";
+    //Url += FirstOfMonth.getFullYear().pad() + (FirstOfMonth.getMonth() + 1).pad(2) + FirstOfMonth.getDate().pad(2);
+    //Url += LastOfMonth.getFullYear().pad() + (LastOfMonth.getMonth() + 1).pad(2) + LastOfMonth.getDate().pad(2);
+    //Url += "/lang:EN/units:english/bestfct:1/v:2.0/q/" + WeatherParameters.ZipCode + ".json?showObs=0&ttl=120";
+
+    //// Load the xml file using ajax 
+    //$.ajaxCORS({
+    //    type: "GET",
+    //    url: Url,
+    //    dataType: "json",
+    //    crossDomain: true,
+    //    cache: false,
+    //    success: function (json) {
+    //        WeatherParameters.WeatherMonthlyTotalsParser = new WeatherMonthlyTotalsParser(json);
+    //        console.log(WeatherParameters.WeatherMonthlyTotalsParser);
+
+    //        WeatherParameters.WeatherMonthlyTotals = new WeatherMonthlyTotals(WeatherParameters.WeatherMonthlyTotalsParser);
+    //        console.log(WeatherParameters.WeatherMonthlyTotals);
+    //        //PopulateCurrentConditions(WeatherParameters.WeatherMonthlyTotals);
+
+    //        // Check to see if we need to also parse the Almanac information
+    //        if (WeatherParameters.Progress.Almanac != LoadStatuses.Loaded) {
+    //            if (WeatherParameters.WeatherMonthlyTotalsParser.Precipitation === "") {
+    //                WeatherParameters.Progress.Almanac = LoadStatuses.NoData;
+    //                GetCurrentWeather(WeatherParameters);
+    //                ShowRegionalMap(_WeatherParameters);
+    //                return;
+    //            }
+
+    //            //https://api.weather.com/v2/astro?apiKey=6532d6454b8aa370768e63d6ba5a832e&geocode=40.81999969%2C-73&days=1&date=20181223&format=json
+    //            //This also has the moon and sun data: https://api.weather.com/v3/wx/forecast/daily/3day?language=en-US&apiKey=6532d6454b8aa370768e63d6ba5a832e&geocode=40.83%2C-73.02&units=e&format=json
+    //            var Url = "https://api.weather.com/v2/astro?apiKey=6532d6454b8aa370768e63d6ba5a832e&geocode=";
+    //            Url += WeatherParameters.Latitude.toString() + "%2C";
+    //            Url += WeatherParameters.Longitude.toString();
+    //            Url += "&days=1&date=" + Now.getFullYear().pad() + (Now.getMonth() + 1).pad(2) + Now.getDate().pad(2) + "&format=json";
+
+    //            // Load the xml file using ajax 
+    //            $.ajaxCORS({
+    //                type: "GET",
+    //                url: Url,
+    //                dataType: "json",
+    //                crossDomain: true,
+    //                cache: false,
+    //                success: function (json) {
+    //                    WeatherParameters.MoonPhasesParser = new MoonPhasesParser3(json);
+    //                    console.log(WeatherParameters.MoonPhasesParser);
+
+    //                    WeatherParameters.SunRiseSetParserToday = new SunRiseSetParser3(json);
+    //                    console.log(WeatherParameters.SunRiseSetParserToday);
+
+    //                    var Now = new Date();
+    //                    Now = Now.addDays(1);
+    //                    //https://api.weather.com/v2/astro?apiKey=6532d6454b8aa370768e63d6ba5a832e&geocode=40.81999969%2C-73&days=1&date=20181223&format=json
+    //                    var Url = "https://api.weather.com/v2/astro?apiKey=6532d6454b8aa370768e63d6ba5a832e&geocode=";
+    //                    Url += WeatherParameters.Latitude.toString() + "%2C";
+    //                    Url += WeatherParameters.Longitude.toString();
+    //                    Url += "&days=1&date=" + Now.getFullYear().pad() + (Now.getMonth() + 1).pad(2) + Now.getDate().pad(2) + "&format=json";
+
+    //                    $.ajaxCORS({
+    //                        type: "GET",
+    //                        url: Url,
+    //                        dataType: "json",
+    //                        crossDomain: true,
+    //                        cache: false,
+    //                        success: function (json) {
+    //                            WeatherParameters.SunRiseSetParserTomorrow = new SunRiseSetParser3(json);
+    //                            console.log(WeatherParameters.SunRiseSetParserTomorrow);
+
+    //                            WeatherParameters.AlmanacInfo = new AlmanacInfo(WeatherParameters.MoonPhasesParser, WeatherParameters.SunRiseSetParserToday, WeatherParameters.SunRiseSetParserTomorrow);
+    //                            console.log(WeatherParameters.AlmanacInfo);
+
+    //                            GetOutlook(WeatherParameters);
+    //                        },
+    //                        error: function (xhr, error, errorThrown) {
+    //                            console.error("Getting SunRiseSetParserTomorrow failed: " + errorThrown);
+    //                        }
+    //                    });
+    //                },
+    //                error: function (xhr, error, errorThrown) {
+    //                    console.error("Getting SunRiseSetParserTomorrow failed: " + errorThrown);
+    //                }
+    //            });
+
+    //        }
+
+    //    },
+    //    error: function (xhr, error, errorThrown) {
+    //        console.error("GetMonthPrecipitation failed: " + errorThrown);
+    //    }
+    //});
 };
 
 var GetTideInfo = function (WeatherParameters)
@@ -7783,12 +7894,32 @@ var GetLatLng = function (Url)
 //{
 //    this.Precipitation = html.find("span:contains(Precipitation)").parent().parent().children().eq(4).find(".wx-value").text();
 //};
-var WeatherMonthlyTotalsParser = function (json) {
+//var WeatherMonthlyTotalsParser = function (json) {
+var WeatherMonthlyTotalsParser = function (text) {
     this.Precipitation = "";
 
-    try {
-        this.Precipitation = json.history.summary.precip_sum;
-    } catch (ex) { }
+    //try {
+    //    this.Precipitation = json.history.summary.precip_sum;
+    //} catch (ex) { }
+
+    var PrecipitationIndex = text.indexOf("PRECIPITATION (IN)");
+    var SubText = text.substr(PrecipitationIndex);
+    var MonthIndex = SubText.indexOf("MONTH TO DATE");
+    var MonthText = SubText.substr(MonthIndex + 13);
+    var MonthArray = MonthText.split(" ");
+    var self = this;
+
+    $(MonthArray).each(function () {
+        var item = this.toString();
+        if (item == "") {
+            return true;
+        }
+        else {
+            self.Precipitation = item;
+            return false;
+        }
+    });
+
 };
 
 var WeatherMonthlyTotals = function (WeatherMonthlyTotalsParser)
@@ -11288,7 +11419,7 @@ var Progress = function (e)
             ////DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "Conditions", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 55, "WeatherStar", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "4000+", 3);
-            DrawTitleText(context, "WeatherStar", "4000+ 1.42");
+            DrawTitleText(context, "WeatherStar", "4000+ 1.43");
 
             // Draw a box for the progress.
             //context.fillStyle = "#000000";
