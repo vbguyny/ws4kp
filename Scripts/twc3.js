@@ -11419,7 +11419,7 @@ var Progress = function (e)
             ////DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "Conditions", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 55, "WeatherStar", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "4000+", 3);
-            DrawTitleText(context, "WeatherStar", "4000+ 1.43");
+            DrawTitleText(context, "WeatherStar", "4000+ 1.44");
 
             // Draw a box for the progress.
             //context.fillStyle = "#000000";
@@ -12493,6 +12493,39 @@ var PopulateMusicUrls = function ()
     _MusicUrls.push("Audio/The Rippingtons - Life In The Tropics.mp3");
     _MusicUrls.push("Audio/Chris Camozzi - Hangin Out.mp3");
     _MusicUrls.push("Audio/Bryan Savage - Two Cool.mp3");
+    _MusicUrls.push("Audio/Trammell Starks - 50 Below.mp3");
+    _MusicUrls.push("Audio/Trammell Starks - After Midnight.mp3");
+    _MusicUrls.push("Audio/Trammell Starks - After The Rain.mp3");
+    _MusicUrls.push("Audio/Trammell Starks - All I Need To Know.mp3");
+    _MusicUrls.push("Audio/Trammell Starks - All That Jazz.mp3");
+    _MusicUrls.push("Audio/Trammell Starks - Autumn Blue.mp3");
+    _MusicUrls.push("Audio/Trammell Starks - Better Than Nothing.mp3");
+    _MusicUrls.push("Audio/Trammell Starks - Bobbys Theme.mp3");
+    _MusicUrls.push("Audio/Trammell Starks - Broken Record.mp3");
+    _MusicUrls.push("Audio/Trammell Starks - Crazy Pianos.mp3");
+    _MusicUrls.push("Audio/Trammell Starks - Desert Nights.mp3");
+    _MusicUrls.push("Audio/Trammell Starks - Here Comes The Rain.mp3");
+    _MusicUrls.push("Audio/Trammell Starks - Im So Dizzy.mp3");
+    _MusicUrls.push("Audio/Trammell Starks - If You Only Knew.mp3");
+    _MusicUrls.push("Audio/Trammell Starks - Island Groove.mp3");
+    _MusicUrls.push("Audio/Trammell Starks - Just For The Moment.mp3");
+    _MusicUrls.push("Audio/Trammell Starks - Midnight Rain.mp3");
+    _MusicUrls.push("Audio/Trammell Starks - Pier 32.mp3");
+    _MusicUrls.push("Audio/Trammell Starks - Rainbeat.mp3");
+    _MusicUrls.push("Audio/Trammell Starks - Road Trip.mp3");
+    _MusicUrls.push("Audio/Trammell Starks - Rollercoaster Ride.mp3");
+    _MusicUrls.push("Audio/Trammell Starks - Round And Round.mp3");
+    _MusicUrls.push("Audio/Trammell Starks - Season On Edge.mp3");
+    _MusicUrls.push("Audio/Trammell Starks - Slightly Blued.mp3");
+    _MusicUrls.push("Audio/Trammell Starks - Someday.mp3");
+    _MusicUrls.push("Audio/Trammell Starks - Something About You.mp3");
+    _MusicUrls.push("Audio/Trammell Starks - The End.mp3");
+    _MusicUrls.push("Audio/Trammell Starks - The Last Song.mp3");
+    _MusicUrls.push("Audio/Trammell Starks - The Mist.mp3");
+    _MusicUrls.push("Audio/Trammell Starks - The Only One For Me.mp3");
+    _MusicUrls.push("Audio/Trammell Starks - Under The Influence.mp3");
+    _MusicUrls.push("Audio/Trammell Starks - Ups And Downs.mp3");
+    _MusicUrls.push("Audio/Trammell Starks - Water Colors.mp3");
     //_MusicUrls.push("Audio/.mp3");
 
     _MusicUrlsTemp = _MusicUrls.slice(0);
