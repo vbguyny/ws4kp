@@ -351,7 +351,8 @@ var EnterFullScreen = function ()
     if (requestMethod)
     {
         // Native full screen.
-        requestMethod.call(element);
+        //requestMethod.call(element);
+        requestMethod.call(element, { navigationUI: "hide" }); // https://bugs.chromium.org/p/chromium/issues/detail?id=933436#c7
     } 
     else if (typeof window.ActiveXObject !== "undefined")
     {
@@ -422,6 +423,8 @@ var LoadTwcData = function (Url)
 
     console.log("Url: " + Url);
     _TwcDataUrl = Url;
+
+    iframeTwc.off("load");
 
     iframeTwc.on("load", function (e)
     {
