@@ -1530,21 +1530,26 @@ var GetOutlookDescription = function (OutlookIndicator)
 var GetMarineForecast = function (WeatherParameters)
 {
 
-    // mjb 08/02/19 Begin
-    //// mjb 05/19/19 Begin
-    ////var Url = "https://www.wunderground.com/cgi-bin/findweather/getForecast?query="; //Montauk%2C+NY
-    ////Url += encodeURIComponent(WeatherParameters.City) + "%2C";
-    ////Url += WeatherParameters.State;
-    ////Url += "&hdf=1"; // mjb 08/15/18
+    // mjb 08/28/19 Begin
+    //// mjb 08/02/19 Begin
+    ////// mjb 05/19/19 Begin
+    //////var Url = "https://www.wunderground.com/cgi-bin/findweather/getForecast?query="; //Montauk%2C+NY
+    //////Url += encodeURIComponent(WeatherParameters.City) + "%2C";
+    //////Url += WeatherParameters.State;
+    //////Url += "&hdf=1"; // mjb 08/15/18
 
-    //var Url = "https://www.wunderground.com/weather/us/"; //ny/shirley
-    //Url += WeatherParameters.State + "/";
-    //Url += encodeURIComponent(WeatherParameters.City);
-    //// mjb 05/19/19 End
+    ////var Url = "https://www.wunderground.com/weather/us/"; //ny/shirley
+    ////Url += WeatherParameters.State + "/";
+    ////Url += encodeURIComponent(WeatherParameters.City);
+    ////// mjb 05/19/19 End
 
-    var Url = "https://www.wunderground.com/cgi-bin/marineRedirect?zip=";
-    Url += WeatherParameters.ZipCode;
-    // mjb 08/02/19 End
+    //var Url = "https://www.wunderground.com/cgi-bin/marineRedirect?zip=";
+    //Url += WeatherParameters.ZipCode;
+    //// mjb 08/02/19 End
+
+    var Url = "https://l-36.com/weather_marine_cg.php?lat_long2=";
+    Url += encodeURIComponent(WeatherParameters.Latitude) + "," + encodeURIComponent(WeatherParameters.Longitude);
+    // mjb 08/28/19 End
 
     WeatherParameters.MarineForecast = null;
 
@@ -1552,38 +1557,55 @@ var GetMarineForecast = function (WeatherParameters)
     $.ajaxCORS({
         type: "GET",
         url: Url,
-        dataType: "text",
+        dataType: "html",
         crossDomain: true,
         cache: false,
-        success: function (text)
+        success: function (html)
         {
-            //var $html = $(html);
-            //$html.find("[src]").attr("src", ""); // Prevents the browser from loading any images on this page.
+            ////var $html = $(html);
+            ////$html.find("[src]").attr("src", ""); // Prevents the browser from loading any images on this page.
 
-            ////<a href="/marine-weather/AN/350.html" id="water-link">Marine Forecast</a>
-            //var aWaterLink = $html.find("#water-link");
+            //////<a href="/marine-weather/AN/350.html" id="water-link">Marine Forecast</a>
+            ////var aWaterLink = $html.find("#water-link");
 
-            //if (aWaterLink.length == 0)
-            //{
-            //    // Marine forecast available for this location.
+            ////if (aWaterLink.length == 0)
+            ////{
+            ////    // Marine forecast available for this location.
 
-            //    //PopulateAlmanacInfo(_WeatherParameters);
-            //    //GetCurrentWeather(WeatherParameters);
-            //    //ShowRegionalMap(_WeatherParameters);
+            ////    //PopulateAlmanacInfo(_WeatherParameters);
+            ////    //GetCurrentWeather(WeatherParameters);
+            ////    //ShowRegionalMap(_WeatherParameters);
 
-            //    GetWeatherForecast(_WeatherParameters);
+            ////    GetWeatherForecast(_WeatherParameters);
 
-            //    return;
-            //}
+            ////    return;
+            ////}
 
-            //var href = aWaterLink.attr("href");
-            //var MarineZoneId = href.replaceAll("/marine-weather/", "").replaceAll(".html", "").replaceAll("/", "Z");
+            ////var href = aWaterLink.attr("href");
+            ////var MarineZoneId = href.replaceAll("/marine-weather/", "").replaceAll(".html", "").replaceAll("/", "Z");
 
-            var index1 = text.indexOf("https://www.wunderground.com/MAR/")
-            var href = text.substr(index1, "https://www.wunderground.com/MAR/XY/123.html".length);
-            var MarineZoneId = href.replaceAll("https://www.wunderground.com/MAR/", "").replaceAll(".html", "").replaceAll("/", "Z");
+            //var index1 = text.indexOf("https://www.wunderground.com/MAR/")
+            //var href = text.substr(index1, "https://www.wunderground.com/MAR/XY/123.html".length);
+            //var MarineZoneId = href.replaceAll("https://www.wunderground.com/MAR/", "").replaceAll(".html", "").replaceAll("/", "Z");
+
+            var $html = $(html);
+            $html.find("[src]").attr("src", ""); // Prevents the browser from loading any images on this page.
+            var MarineZoneId = null;
+
+            var select = $html.find("select[name=zone1]");
+            var options = select.find("option");
+            if (options.length != 0)
+            {
+                MarineZoneId = options.val();
+            }
 
             WeatherParameters.MarineZoneId = MarineZoneId;
+
+            if (MarineZoneId == null)
+            {
+                GetWeatherForecast(_WeatherParameters);
+                return;
+            }
 
             var Url = "http://forecast.weather.gov/shmrn.php?mz=";
             Url += MarineZoneId;
@@ -11430,7 +11452,7 @@ var Progress = function (e)
             ////DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "Conditions", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 55, "WeatherStar", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "4000+", 3);
-            DrawTitleText(context, "WeatherStar", "4000+ 1.46");
+            DrawTitleText(context, "WeatherStar", "4000+ 1.47");
 
             // Draw a box for the progress.
             //context.fillStyle = "#000000";
