@@ -71,6 +71,7 @@ var GetWeatherIconFromSummary = function (WeatherParameters, WeatherSummary, Ove
             break;
 
         case "Cloudy":
+        case "Overcast": // mjb 10/02/19
             Icon = "cc_cloudy.gif";
             break;
 
@@ -259,15 +260,30 @@ var GetWeatherIconFromIconLink = function (WeatherIconLink, WeatherConditions, W
 {
     //http://forecast.weather.gov/newimages/medium/few.png
     var Icon = "";
+    var SummaryIcon = "";
 
     if (WeatherConditions)
     {
-        var SummaryIcon = GetWeatherIconFromSummary(WeatherParameters, WeatherConditions, OverrideIsDay);
+        SummaryIcon = GetWeatherIconFromSummary(WeatherParameters, WeatherConditions, OverrideIsDay);
         if (SummaryIcon)
         {
             return SummaryIcon;
         }
     }
+
+    // mjb 10/02/19 Begin
+    if (WeatherParameters)
+    {
+        if (WeatherParameters.WeatherCurrentConditions)
+        {
+            SummaryIcon = GetWeatherIconFromSummary(WeatherParameters, WeatherParameters.WeatherCurrentConditions.Conditions, OverrideIsDay);
+            if (SummaryIcon)
+            {
+                return SummaryIcon;
+            }
+        }
+    }
+    // mjb 10/02/19 End
 
     if (!WeatherIconLink)
     {

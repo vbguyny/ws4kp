@@ -11452,7 +11452,7 @@ var Progress = function (e)
             ////DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "Conditions", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 55, "WeatherStar", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "4000+", 3);
-            DrawTitleText(context, "WeatherStar", "4000+ 1.47");
+            DrawTitleText(context, "WeatherStar", "4000+ 1.48");
 
             // Draw a box for the progress.
             //context.fillStyle = "#000000";
@@ -12053,7 +12053,20 @@ var DrawCurrentConditions = function (WeatherParameters, context)
                 DrawCurrentConditions(WeatherParameters, context);
                 return;
             }
-            text = WeatherMonthlyTotals.MonthName + " Precipitation: " + PrecipitationTotal.toString() + PrecipitationTotalUnit;
+
+            // mjb 10/02/19 Begin
+            //text = WeatherMonthlyTotals.MonthName + " Precipitation: " + PrecipitationTotal.toString() + PrecipitationTotalUnit;
+
+            if (PrecipitationTotal.toString() == "T")
+            {
+                text = WeatherMonthlyTotals.MonthName + " Precipitation: Trace";
+            }
+            else
+            {
+                text = WeatherMonthlyTotals.MonthName + " Precipitation: " + PrecipitationTotal.toString() + PrecipitationTotalUnit;
+            }
+
+            // mjb 10/02/19 End
             break;
     }
 
