@@ -1454,6 +1454,7 @@ var GetWeatherIcon2FromIconLink = function (WeatherIconLink, WeatherConditions, 
             break;
 
         case "cc_windy.gif":
+        case "cc_windy2.gif":
             Icon = "Windy.gif";
             break;
 

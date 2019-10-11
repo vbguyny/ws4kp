@@ -7426,7 +7426,6 @@ var PopulateHazardConditions = function (WeatherParameters)
         divHazards.html(divHazards.html() + "<br/><br/>");
     });
 
-
     var DrawHazards = function ()
     {
         // Draw canvas
@@ -7527,6 +7526,11 @@ var PopulateHazardConditions = function (WeatherParameters)
         cnvHazardsScrollId = "cnvHazardsScroll";
 
         var HazardsWrappedLines = HazardsWrapped.split("\n");
+        var MaxHazardsWrappedLines = 365;
+        if (HazardsWrappedLines.length > MaxHazardsWrappedLines)
+        {
+            HazardsWrappedLines = HazardsWrappedLines.splice(0, MaxHazardsWrappedLines - 1);
+        }
         var height = 0 + (HazardsWrappedLines.length * 45);
 
         if (DontLoadGifs == false)
@@ -11452,7 +11456,7 @@ var Progress = function (e)
             ////DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "Conditions", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 55, "WeatherStar", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "4000+", 3);
-            DrawTitleText(context, "WeatherStar", "4000+ 1.48");
+            DrawTitleText(context, "WeatherStar", "4000+ 1.49");
 
             // Draw a box for the progress.
             //context.fillStyle = "#000000";
