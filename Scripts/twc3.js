@@ -246,7 +246,7 @@ if (_UserAgent.indexOf("Linux") != -1) _OperatingSystem = OperatingSystems.Linux
 if (_UserAgent.indexOf("iPad") != -1) _OperatingSystem = OperatingSystems.iOS;
 if (_UserAgent.indexOf("iPhone") != -1) _OperatingSystem = OperatingSystems.iOS;
 if (_UserAgent.indexOf("iPod") != -1) _OperatingSystem = OperatingSystems.iOS;
-if (_UserAgent.indexOf("android") != -1) _OperatingSystem = OperatingSystems.Andriod;
+if (_UserAgent.toLowerCase().indexOf("android") != -1) _OperatingSystem = OperatingSystems.Andriod;
 if (_UserAgent.indexOf("Windows Phone") != -1) _OperatingSystem = OperatingSystems.WindowsPhone;
 //alert(_UserAgent);
 
@@ -1056,6 +1056,11 @@ var GetTideInfo2 = function (WeatherParameters) {
                     },
                     error: function (xhr, error, errorThrown) {
                         console.error("GetTideInfo failed: " + errorThrown);
+
+                        PopulateAlmanacInfo(_WeatherParameters);
+                        GetCurrentWeather(WeatherParameters);
+                        ShowRegionalMap(_WeatherParameters);
+                            //GetMarineForecast(_WeatherParameters);
                     }
                 });
 
@@ -1073,6 +1078,11 @@ var GetTideInfo2 = function (WeatherParameters) {
         },
         error: function (xhr, error, errorThrown) {
             console.error("GetTideInfo failed: " + errorThrown);
+
+            PopulateAlmanacInfo(_WeatherParameters);
+            GetCurrentWeather(WeatherParameters);
+            ShowRegionalMap(_WeatherParameters);
+                            //GetMarineForecast(_WeatherParameters);
         }
     });
 };
@@ -7527,6 +7537,11 @@ var PopulateHazardConditions = function (WeatherParameters)
 
         var HazardsWrappedLines = HazardsWrapped.split("\n");
         var MaxHazardsWrappedLines = 365;
+        if (_OperatingSystem == OperatingSystems.Andriod)
+        {
+            MaxHazardsWrappedLines = 92;
+        }
+
         if (HazardsWrappedLines.length > MaxHazardsWrappedLines)
         {
             HazardsWrappedLines = HazardsWrappedLines.splice(0, MaxHazardsWrappedLines - 1);
@@ -8165,27 +8180,27 @@ var SunRiseSetParser3 = function (json) {
     //    _self.SunSet = setUtcTime[0] + ":" + setUtcTime[1];
     //}
 
-    if (riseSet.rise == "Sun rise doesn't exist")
+    if (riseSet.rise == "Sun rise doesn't exist" || riseSet.rise == undefined)
     {
         _self.SunRise = "";
     }
     else
     {
-        var riseTime = riseSet.riseLocal.split("T")[1].split(":");
+        var riseTime = riseSet.rise.split("T")[1].split(":");
         _self.SunRise = riseTime[0] + ":" + riseTime[1];
     }
 
-    if (riseSet.set == "Sun set doesn't exist")
+    if (riseSet.set == "Sun set doesn't exist" || riseSet.set == undefined)
     {    
         _self.SunSet = "";
     }
     else 
     {
-        var setTime = riseSet.setLocal.split("T")[1].split(":");
+        var setTime = riseSet.set.split("T")[1].split(":");
         _self.SunSet = setTime[0] + ":" + setTime[1];
     }
 
-    if (riseSet.riseLocal == "Sun rise doesn't exist")
+    if (riseSet.riseLocal == "Sun rise doesn't exist" || riseSet.riseLocal == undefined)
     {
         _self.SunRiseLocal = "";
     }
@@ -8195,7 +8210,7 @@ var SunRiseSetParser3 = function (json) {
         _self.SunRiseLocal = riseLocalTime.getHours().pad(2) + ":" + riseLocalTime.getMinutes().pad(2);
     }
 
-    if (riseSet.setLocal == "Sun set doesn't exist")
+    if (riseSet.setLocal == "Sun set doesn't exist" || riseSet.setLocal == undefined)
     {
         _self.SunSetLocal = "";
     }
@@ -8280,11 +8295,11 @@ var AlmanacInfo = function (MoonPhasesParser, SunRiseSetParserToday, SunRiseSetP
     //this.TomorrowSunRise = GetDateFromUTC((new Date()).addDays(1), SunRiseSetParserTomorrow.SunRiseUTC);
     //this.TomorrowSunSet = GetDateFromUTC((new Date()).addDays(1), SunRiseSetParserTomorrow.SunSetUTC);
 
-    this.TodaySunRise = GetDateFromTime(new Date(), SunRiseSetParserToday.SunRise);
-    this.TodaySunSet = GetDateFromTime(new Date(), SunRiseSetParserToday.SunSet);
+    this.TodaySunRise = GetDateFromTime(new Date(), SunRiseSetParserToday.SunRiseLocal);
+    this.TodaySunSet = GetDateFromTime(new Date(), SunRiseSetParserToday.SunSetLocal);
 
-    this.TomorrowSunRise = GetDateFromTime((new Date()).addDays(1), SunRiseSetParserTomorrow.SunRise);
-    this.TomorrowSunSet = GetDateFromTime((new Date()).addDays(1), SunRiseSetParserTomorrow.SunSet);
+    this.TomorrowSunRise = GetDateFromTime((new Date()).addDays(1), SunRiseSetParserTomorrow.SunRiseLocal);
+    this.TomorrowSunSet = GetDateFromTime((new Date()).addDays(1), SunRiseSetParserTomorrow.SunSetLocal);
 
     this.TodaySunRiseLocal = GetDateFromTime(new Date(), SunRiseSetParserToday.SunRiseLocal);//, SunRiseSetParserToday.TimeZone);
     this.TodaySunSetLocal = GetDateFromTime(new Date(), SunRiseSetParserToday.SunSetLocal);///, SunRiseSetParserToday.TimeZone);
@@ -11456,7 +11471,7 @@ var Progress = function (e)
             ////DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "Conditions", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 55, "WeatherStar", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "4000+", 3);
-            DrawTitleText(context, "WeatherStar", "4000+ 1.49");
+            DrawTitleText(context, "WeatherStar", "4000+ 1.50");
 
             // Draw a box for the progress.
             //context.fillStyle = "#000000";
