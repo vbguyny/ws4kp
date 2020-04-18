@@ -2547,7 +2547,7 @@ var GetTravelWeather = function (TravelCities)
     {
         var TravelCity = this;
 
-        var Url = "http://forecast.weather.gov/MapClick.php?FcstType=dwml";
+        var Url = "https://forecast.weather.gov/MapClick.php?FcstType=dwml";
         Url += "&lat=" + TravelCity.Latitude.toString();
         Url += "&lon=" + TravelCity.Longitude.toString();
         Url = "cors/?u=" + encodeURIComponent(Url);
@@ -2852,7 +2852,7 @@ var GetDwmlRegionalStations = function (WeatherParameters, Distance)
             return true;
         }
 
-        var Url = "http://forecast.weather.gov/MapClick.php?FcstType=dwml";
+        var Url = "https://forecast.weather.gov/MapClick.php?FcstType=dwml";
         Url += "&lat=" + _WeatherMetarsParser.data_METAR.latitude.toString();
         Url += "&lon=" + _WeatherMetarsParser.data_METAR.longitude.toString();
         Url = "cors/?u=" + encodeURIComponent(Url);
@@ -3187,7 +3187,7 @@ var ShowRegionalMap = function (WeatherParameters, TomorrowForecast)
             });
             SkipCities.push(RegionalCity);
 
-            var Url = "http://forecast.weather.gov/MapClick.php?FcstType=dwml";
+            var Url = "https://forecast.weather.gov/MapClick.php?FcstType=dwml";
             Url += "&lat=" + RegionalCity.Latitude.toString();
             Url += "&lon=" + RegionalCity.Longitude.toString();
             Url = "cors/?u=" + encodeURIComponent(Url);
