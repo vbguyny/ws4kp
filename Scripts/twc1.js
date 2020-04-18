@@ -149,7 +149,7 @@ var GetNoaaLatLng = function ()
 {
     //http://forecast.weather.gov/zipcity.php?inputstring=
     var Address = txtAddress.val();
-    var Url = "http://forecast.weather.gov/zipcity.php?inputstring=" + Address;
+    var Url = "https://forecast.weather.gov/zipcity.php?inputstring=" + Address;
 
     var xhr;
     var _orgAjax = jQuery.ajaxSettings.xhr;
@@ -172,7 +172,7 @@ var GetNoaaLatLng = function ()
 
             var ResponseURL = xhr.responseURL;
 
-            if (ResponseURL.startsWith("http://forecast.weather.gov/zipcity.php?inputstring=") == true)
+            if (ResponseURL.startsWith("https://forecast.weather.gov/zipcity.php?inputstring=") == true)
             {
                 alert("Invalid query");
                 return;
@@ -259,7 +259,7 @@ var getParameterByName = function (name, url)
 
 var GetCurrentWeather = function(WeatherParameters)
 {
-    var Url = "http://forecast.weather.gov/MapClick.php?FcstType=dwml";
+    var Url = "https://forecast.weather.gov/MapClick.php?FcstType=dwml";
     Url += "&lat=" + WeatherParameters.Latitude.toString();
     Url += "&lon=" + WeatherParameters.Longitude.toString();
     Url = "cors/?u=" + encodeURIComponent(Url);
@@ -698,7 +698,7 @@ var GetWeatherMetar = function (WeatherParameters)
 
 var GetWeatherForecast = function (WeatherParameters)
 {
-    var Url = "http://tgftp.nws.noaa.gov/data/forecasts/zone/";
+    var Url = "https://tgftp.nws.noaa.gov/data/forecasts/zone/";
     Url += WeatherParameters.ZoneId.substr(0, 2).toLowerCase() + "/";
     Url += WeatherParameters.ZoneId.toLowerCase() + ".txt";
     //Url += "," + (new Date().getTime()); // Prevents caching

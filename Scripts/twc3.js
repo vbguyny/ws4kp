@@ -3070,7 +3070,7 @@ var GetWeatherMetar = function (WeatherParameters)
 
 var GetWeatherForecast = function (WeatherParameters)
 {
-    var Url = "http://tgftp.nws.noaa.gov/data/forecasts/zone/";
+    var Url = "https://tgftp.nws.noaa.gov/data/forecasts/zone/";
     Url += WeatherParameters.ZoneId.substr(0, 2).toLowerCase() + "/";
     Url += WeatherParameters.ZoneId.toLowerCase() + ".txt";
     //Url += "," + (new Date().getTime()); // Prevents caching
