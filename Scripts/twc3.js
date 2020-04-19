@@ -1294,14 +1294,14 @@ var GetOutlook = function (WeatherParameters)
         GetTideInfo2(WeatherParameters);
     };
 
-    var TempUrl = "http://www.cpc.ncep.noaa.gov/products/predictions/30day/off14_temp.gif";
+    var TempUrl = "https://www.cpc.ncep.noaa.gov/products/predictions/30day/off14_temp.gif";
     TempUrl = "cors/?u=" + encodeURIComponent(TempUrl);
     var TempImage = new Image();
     TempImage.onload = ImageOnLoad;
     TempImage.onerror = ImageOnError;
     TempImage.src = TempUrl;
 
-    var PrcpUrl = "http://www.cpc.ncep.noaa.gov/products/predictions/30day/off14_prcp.gif";
+    var PrcpUrl = "https://www.cpc.ncep.noaa.gov/products/predictions/30day/off14_prcp.gif";
     PrcpUrl = "cors/?u=" + encodeURIComponent(PrcpUrl);
     var PrcpImage = new Image();
     PrcpImage.onload = ImageOnLoad;
