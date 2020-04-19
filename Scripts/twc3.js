@@ -353,7 +353,7 @@ var GetClosestCurrentWeather = function (WeatherParameters, Distance)
     }
 
     // Get the current weather from the next closest station.
-    var Url = "http://www.aviationweather.gov/adds/dataserver_current/httpparam?datasource=metars&requesttype=retrieve&format=xml&hoursBeforeNow=1";
+    var Url = "https://www.aviationweather.gov/adds/dataserver_current/httpparam?datasource=metars&requesttype=retrieve&format=xml&hoursBeforeNow=1";
     Url += "&radialDistance=" + Distance.toString();
     Url += ";" + WeatherParameters.Longitude;
     Url += "," + WeatherParameters.Latitude;
@@ -3013,7 +3013,7 @@ var GetWeatherHazards3 = function (WeatherParameters)
 
 var GetWeatherMetar = function (WeatherParameters)
 {
-    var Url = "http://www.aviationweather.gov/adds/dataserver_current/httpparam?datasource=metars&requesttype=retrieve&format=xml&hoursBeforeNow=3";
+    var Url = "https://www.aviationweather.gov/adds/dataserver_current/httpparam?datasource=metars&requesttype=retrieve&format=xml&hoursBeforeNow=3";
     Url += "&stationString=" + WeatherParameters.StationId;
     //Url += "," + (new Date().getTime()); // Prevents caching
     //Url = "https://crossorigin.me/" + Url; // Need to do this for Chrome and CORS
@@ -9188,7 +9188,7 @@ var GetRegionalStations = function (WeatherParameters, Distance)
         WeatherParameters.WeatherCurrentRegionalConditions = new WeatherCurrentRegionalConditions();
     }
 
-    var Url = "http://www.aviationweather.gov/adds/dataserver_current/httpparam?datasource=metars&requesttype=retrieve&format=xml&hoursBeforeNow=1";
+    var Url = "https://www.aviationweather.gov/adds/dataserver_current/httpparam?datasource=metars&requesttype=retrieve&format=xml&hoursBeforeNow=1";
     Url += "&radialDistance=" + Distance.toString();
     Url += ";" + WeatherParameters.Longitude;
     Url += "," + WeatherParameters.Latitude;
@@ -10025,7 +10025,7 @@ var ShowRegionalMap = function (WeatherParameters, TomorrowForecast1, TomorrowFo
             var maxLon = MinMaxLatLon.MaxLongitude - 1; // Prevent cities from being cut off on the right side.
             var minLon = MinMaxLatLon.MinLongitude;
 
-            var Url = "http://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource=metars&requestType=retrieve&format=xml&hoursBeforeNow=1&minLon=" + minLon + "&minLat=" + minLat + "&maxLon=" + maxLon + "&maxLat=" + maxLat;
+            var Url = "https://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource=metars&requestType=retrieve&format=xml&hoursBeforeNow=1&minLon=" + minLon + "&minLat=" + minLat + "&maxLon=" + maxLon + "&maxLat=" + maxLat;
 
             if (DontLoadGifs == true)
             {
@@ -10282,7 +10282,7 @@ var ShowRegionalMap = function (WeatherParameters, TomorrowForecast1, TomorrowFo
                         return;
                     }
 
-                    var Url = "http://www.aviationweather.gov/adds/dataserver_current/httpparam?datasource=metars&requesttype=retrieve&format=xml&hoursBeforeNow=3";
+                    var Url = "https://www.aviationweather.gov/adds/dataserver_current/httpparam?datasource=metars&requesttype=retrieve&format=xml&hoursBeforeNow=3";
                     Url += "&stationString=" + GetStationIdFromUrl(weatherDwmlParser.data_current_observations.moreWeatherInformation.value);
                     //Url = "cors/?u=" + encodeURIComponent(Url);
 
@@ -10755,7 +10755,7 @@ var ShowDopplerMap = function (WeatherParameters)
 
         // Find the most current doppler radar image.
         //var Url = "http://radar.weather.gov/Conus/RadarImg/mosaic_times.txt";
-        var Url = "http://radar.weather.gov/Conus/RadarImg";
+        var Url = "https://radar.weather.gov/Conus/RadarImg";
         //Url = "cors/?u=" + encodeURIComponent(Url);
 
         //var TimesMax = 6;
@@ -10807,7 +10807,7 @@ var ShowDopplerMap = function (WeatherParameters)
                 for (var Index = UrlsUnd; Index > UrlsUnd - _DopplerRadarImageMax; Index--)
                 {
                     //http://radar.weather.gov/Conus/RadarImg/Conus_20161004_0028_N0Ronly.gif
-                    var Url = "http://radar.weather.gov/Conus/RadarImg/";
+                    var Url = "https://radar.weather.gov/Conus/RadarImg/";
                     Url += $(Urls[Index]).attr("href");
                     Url = "cors/?u=" + encodeURIComponent(Url);
 
