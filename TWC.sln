@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.168
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29519.87
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4C09BEDF-4156-4DEE-AB45-BAE0AF4FA9F1}"
 	ProjectSection(SolutionItems) = preProject
@@ -17,6 +17,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Scripts\jquery.touchSwipe.min.js = Scripts\jquery.touchSwipe.min.js
 		Scripts\libgif.js = Scripts\libgif.js
 		manifest.json = manifest.json
+		README.md = README.md
 		Scripts\RegionalCities.js = Scripts\RegionalCities.js
 		Scripts\States.js = Scripts\States.js
 		Scripts\stations.js = Scripts\stations.js

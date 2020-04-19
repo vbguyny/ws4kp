@@ -60,12 +60,7 @@ In order to setup CORS on your server you will need IIS 7.5 or later which is ab
 
 The live site uses itself as the CORS server however there are a few free third-party CORS servers that can be used if you are not able/willing to set one up yourself.
 
-Below is a list that work with the site:
-* https://crossorigin.me/
-* http://anyorigin.com/go?url=
-* http://www.whateverorigin.org/get?url=
-
-They are disabled by default and if you want to use them you will need to update the code in the routine `$.ajaxCORS` in the file `twc3.js`.
+If you want to use them you will need to update the code in the routine `$.ajaxCORS` in the file `twc3.js`.
 
 ## Disclaimer
 
