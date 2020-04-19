@@ -1065,7 +1065,7 @@ $(function ()
 		        }
 		        //window.location = location.protocol + '//' + domain + '/MapClick.php' + query;
 		        //Url = location.protocol + '//' + domain + '/MapClick.php' + query;
-		        Url =  'http://' + domain + '/MapClick.php' + query;
+		        Url =  'https://' + domain + '/MapClick.php' + query;
 		    }
 		    Url = "cors/?u=" + encodeURIComponent(Url);
 

@@ -149,7 +149,7 @@ var GetNoaaLatLng = function ()
 {
     //http://forecast.weather.gov/zipcity.php?inputstring=
     var Address = txtAddress.val();
-    var Url = "http://forecast.weather.gov/zipcity.php?inputstring=" + Address;
+    var Url = "https://forecast.weather.gov/zipcity.php?inputstring=" + Address;
 
     var xhr;
     var _orgAjax = jQuery.ajaxSettings.xhr;
@@ -172,7 +172,7 @@ var GetNoaaLatLng = function ()
 
             var ResponseURL = xhr.responseURL;
 
-            if (ResponseURL.startsWith("http://forecast.weather.gov/zipcity.php?inputstring=") == true)
+            if (ResponseURL.startsWith("https://forecast.weather.gov/zipcity.php?inputstring=") == true)
             {
                 alert("Invalid query");
                 return;
@@ -259,7 +259,7 @@ var getParameterByName = function (name, url)
 
 var GetCurrentWeather = function(WeatherParameters)
 {
-    var Url = "http://forecast.weather.gov/MapClick.php?FcstType=dwml";
+    var Url = "https://forecast.weather.gov/MapClick.php?FcstType=dwml";
     Url += "&lat=" + WeatherParameters.Latitude.toString();
     Url += "&lon=" + WeatherParameters.Longitude.toString();
     Url = "cors/?u=" + encodeURIComponent(Url);
@@ -330,7 +330,7 @@ var GetClosestCurrentWeather = function (WeatherParameters, Distance)
     }
 
     // Get the current weather from the next closest station.
-    var Url = "http://www.aviationweather.gov/adds/dataserver_current/httpparam?datasource=metars&requesttype=retrieve&format=xml&hoursBeforeNow=1";
+    var Url = "https://www.aviationweather.gov/adds/dataserver_current/httpparam?datasource=metars&requesttype=retrieve&format=xml&hoursBeforeNow=1";
     Url += "&radialDistance=" + Distance.toString();
     Url += ";" + WeatherParameters.Longitude;
     Url += "," + WeatherParameters.Latitude;
@@ -636,7 +636,7 @@ var GetWeatherHazards = function (WeatherParameters)
 
 var GetWeatherMetar = function (WeatherParameters)
 {
-    var Url = "http://www.aviationweather.gov/adds/dataserver_current/httpparam?datasource=metars&requesttype=retrieve&format=xml&hoursBeforeNow=3";
+    var Url = "https://www.aviationweather.gov/adds/dataserver_current/httpparam?datasource=metars&requesttype=retrieve&format=xml&hoursBeforeNow=3";
     Url += "&stationString=" + WeatherParameters.StationId;
     //Url += "," + (new Date().getTime()); // Prevents caching
     //Url = "https://crossorigin.me/" + Url; // Need to do this for Chrome and CORS
@@ -698,7 +698,7 @@ var GetWeatherMetar = function (WeatherParameters)
 
 var GetWeatherForecast = function (WeatherParameters)
 {
-    var Url = "http://tgftp.nws.noaa.gov/data/forecasts/zone/";
+    var Url = "https://tgftp.nws.noaa.gov/data/forecasts/zone/";
     Url += WeatherParameters.ZoneId.substr(0, 2).toLowerCase() + "/";
     Url += WeatherParameters.ZoneId.toLowerCase() + ".txt";
     //Url += "," + (new Date().getTime()); // Prevents caching
@@ -2547,7 +2547,7 @@ var GetTravelWeather = function (TravelCities)
     {
         var TravelCity = this;
 
-        var Url = "http://forecast.weather.gov/MapClick.php?FcstType=dwml";
+        var Url = "https://forecast.weather.gov/MapClick.php?FcstType=dwml";
         Url += "&lat=" + TravelCity.Latitude.toString();
         Url += "&lon=" + TravelCity.Longitude.toString();
         Url = "cors/?u=" + encodeURIComponent(Url);
@@ -2702,7 +2702,7 @@ var GetRegionalStations = function (WeatherParameters, Distance)
         WeatherParameters.WeatherCurrentRegionalConditions = new WeatherCurrentRegionalConditions();
     }
 
-    var Url = "http://www.aviationweather.gov/adds/dataserver_current/httpparam?datasource=metars&requesttype=retrieve&format=xml&hoursBeforeNow=1";
+    var Url = "https://www.aviationweather.gov/adds/dataserver_current/httpparam?datasource=metars&requesttype=retrieve&format=xml&hoursBeforeNow=1";
     Url += "&radialDistance=" + Distance.toString();
     Url += ";" + WeatherParameters.Longitude;
     Url += "," + WeatherParameters.Latitude;
@@ -2852,7 +2852,7 @@ var GetDwmlRegionalStations = function (WeatherParameters, Distance)
             return true;
         }
 
-        var Url = "http://forecast.weather.gov/MapClick.php?FcstType=dwml";
+        var Url = "https://forecast.weather.gov/MapClick.php?FcstType=dwml";
         Url += "&lat=" + _WeatherMetarsParser.data_METAR.latitude.toString();
         Url += "&lon=" + _WeatherMetarsParser.data_METAR.longitude.toString();
         Url = "cors/?u=" + encodeURIComponent(Url);
@@ -3064,7 +3064,7 @@ var ShowRegionalMap = function (WeatherParameters, TomorrowForecast)
             var maxLon = MinMaxLatLon.MaxLongitude;
             var minLon = MinMaxLatLon.MinLongitude;
 
-            var Url = "http://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource=metars&requestType=retrieve&format=xml&hoursBeforeNow=1&minLon=" + minLon + "&minLat=" + minLat + "&maxLon=" + maxLon + "&maxLat=" + maxLat;
+            var Url = "https://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource=metars&requestType=retrieve&format=xml&hoursBeforeNow=1&minLon=" + minLon + "&minLat=" + minLat + "&maxLon=" + maxLon + "&maxLat=" + maxLat;
 
             //var Gif = new SuperGif({
             //    src: 'images/sunny.gif',
@@ -3187,7 +3187,7 @@ var ShowRegionalMap = function (WeatherParameters, TomorrowForecast)
             });
             SkipCities.push(RegionalCity);
 
-            var Url = "http://forecast.weather.gov/MapClick.php?FcstType=dwml";
+            var Url = "https://forecast.weather.gov/MapClick.php?FcstType=dwml";
             Url += "&lat=" + RegionalCity.Latitude.toString();
             Url += "&lon=" + RegionalCity.Longitude.toString();
             Url = "cors/?u=" + encodeURIComponent(Url);
@@ -3273,7 +3273,7 @@ var ShowRegionalMap = function (WeatherParameters, TomorrowForecast)
                         return;
                     }
 
-                    var Url = "http://www.aviationweather.gov/adds/dataserver_current/httpparam?datasource=metars&requesttype=retrieve&format=xml&hoursBeforeNow=3";
+                    var Url = "https://www.aviationweather.gov/adds/dataserver_current/httpparam?datasource=metars&requesttype=retrieve&format=xml&hoursBeforeNow=3";
                     Url += "&stationString=" + GetStationIdFromUrl(weatherDwmlParser.data_current_observations.moreWeatherInformation.value);
                     Url = "cors/?u=" + encodeURIComponent(Url);
 
