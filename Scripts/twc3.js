@@ -444,6 +444,12 @@ var GetClosestCurrentWeather = function (WeatherParameters, Distance)
             }
             else
             {
+                // Stop if the distance is at 100 miles.
+                if (Distance == 100)
+                {
+                    throw "GetClosestCurrentWeather unable to find weather upto 100 miles";
+                }
+
                 // Increase distance by 5 miles.
                 GetClosestCurrentWeather(WeatherParameters, Distance + 5);
             }
@@ -11471,7 +11477,7 @@ var Progress = function (e)
             ////DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "Conditions", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 55, "WeatherStar", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "4000+", 3);
-            DrawTitleText(context, "WeatherStar", "4000+ 1.50");
+            DrawTitleText(context, "WeatherStar", "4000+ 1.51");
 
             // Draw a box for the progress.
             //context.fillStyle = "#000000";
