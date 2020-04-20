@@ -264,7 +264,7 @@ var getParameterByName = function (name, url)
 
 var GetCurrentWeather = function(WeatherParameters)
 {
-    var Url = "http://forecast.weather.gov/MapClick.php?FcstType=dwml";
+    var Url = "https://forecast.weather.gov/MapClick.php?FcstType=dwml";
     Url += "&lat=" + WeatherParameters.Latitude.toString();
     Url += "&lon=" + WeatherParameters.Longitude.toString();
     //Url = "cors/?u=" + encodeURIComponent(Url);
@@ -1623,7 +1623,7 @@ var GetMarineForecast = function (WeatherParameters)
                 return;
             }
 
-            var Url = "http://forecast.weather.gov/shmrn.php?mz=";
+            var Url = "https://forecast.weather.gov/shmrn.php?mz=";
             Url += MarineZoneId;
 
             // Load the xml file using ajax 
@@ -8705,7 +8705,7 @@ var GetTravelWeather = function (WeatherParameters)
     {
         var TravelCity = this;
 
-        var Url = "http://forecast.weather.gov/MapClick.php?FcstType=dwml";
+        var Url = "https://forecast.weather.gov/MapClick.php?FcstType=dwml";
         Url += "&lat=" + TravelCity.Latitude.toString();
         Url += "&lon=" + TravelCity.Longitude.toString();
         //Url = "cors/?u=" + encodeURIComponent(Url);
@@ -9345,7 +9345,7 @@ var GetDwmlRegionalStations = function (WeatherParameters, Distance)
             return true;
         }
 
-        var Url = "http://forecast.weather.gov/MapClick.php?FcstType=dwml";
+        var Url = "https://forecast.weather.gov/MapClick.php?FcstType=dwml";
         Url += "&lat=" + _WeatherMetarsParser.data_METAR.latitude.toString();
         Url += "&lon=" + _WeatherMetarsParser.data_METAR.longitude.toString();
         //Url = "cors/?u=" + encodeURIComponent(Url);
@@ -10196,7 +10196,7 @@ var ShowRegionalMap = function (WeatherParameters, TomorrowForecast1, TomorrowFo
 
             SkipCities.push(RegionalCity);
 
-            var Url = "http://forecast.weather.gov/MapClick.php?FcstType=dwml";
+            var Url = "https://forecast.weather.gov/MapClick.php?FcstType=dwml";
             Url += "&lat=" + RegionalCity.Latitude.toString();
             Url += "&lon=" + RegionalCity.Longitude.toString();
             //Url = "cors/?u=" + encodeURIComponent(Url);
