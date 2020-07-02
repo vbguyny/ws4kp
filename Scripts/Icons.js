@@ -1110,6 +1110,7 @@ var GetWeatherIconFromIconLink = function (WeatherIconLink, WeatherConditions, W
             Icon = "cc_windy.gif";
             break;
 
+        //case "nhurr-noh.png":
         case "nwind.png":
         case "nwind_skc.png":
         case "nwind_sct.png":
@@ -1118,7 +1119,6 @@ var GetWeatherIconFromIconLink = function (WeatherIconLink, WeatherConditions, W
         case "nwind_ovc.png":
         case "ntropstorm.png":
         case "ntropstorm-noh.png":
-        case "nhurr-noh.png":
         case "nhurr.png":
             Icon = "cc_windy2.gif";
             break;

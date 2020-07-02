@@ -561,8 +561,8 @@ var GetClosestCurrentWeather = function (WeatherParameters, Distance)
 
 var GetMonthPrecipitation = function (WeatherParameters) {
     var Now = new Date();
-    var FirstOfMonth = new Date(Now.getFullYear(), Now.getMonth(), 01);
-    var LastOfMonth = new Date(Now.getFullYear(), Now.getMonth() + 1, 01).addDays(-1);
+    var FirstOfMonth = new Date(Now.getFullYear(), Now.getMonth(), 1);
+    var LastOfMonth = new Date(Now.getFullYear(), Now.getMonth() + 1, 1).addDays(-1);
 
     //https://api.weather.com/v3/location/near?apiKey=6532d6454b8aa370768e63d6ba5a832e&geocode=40.83%2C-73.02&product=airport&subproduct=major&format=json
     var Url = "https://api.weather.com/v3/location/near?apiKey=6532d6454b8aa370768e63d6ba5a832e&geocode=";
