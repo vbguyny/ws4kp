@@ -8708,6 +8708,7 @@ var GetTravelWeather = function (WeatherParameters)
         var Url = "https://forecast.weather.gov/MapClick.php?FcstType=dwml";
         Url += "&lat=" + TravelCity.Latitude.toString();
         Url += "&lon=" + TravelCity.Longitude.toString();
+
         //Url = "cors/?u=" + encodeURIComponent(Url);
 
         // Load the xml file using ajax 
@@ -8932,7 +8933,8 @@ var PopulateTravelCities = function (WeatherParameters)
             DrawHorizontalGradientSingle(context, 0, 30, 500, 90, _TopColor1, _TopColor2);
             DrawTriangle(context, "rgb(28, 10, 87)", 500, 30, 450, 90, 500, 90);
 
-            DrawTitleText(context, "Travel Forecast", "For " + TravelCities[0].WeatherTravelForecast.DayName);
+            //DrawTitleText(context, "Travel Forecast", "For " + TravelCities[0].WeatherTravelForecast.DayName);
+            DrawTitleText(context, "Travel Forecast", "For " + GetTravelCitiesDayName(TravelCities));
 
             DrawText(context, "Star4000 Small", "24pt", "#FFFF00", 455, 105, "LOW", 2);
             DrawText(context, "Star4000 Small", "24pt", "#FFFF00", 510, 105, "HIGH", 2);
@@ -11477,7 +11479,7 @@ var Progress = function (e)
             ////DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "Conditions", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 55, "WeatherStar", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "4000+", 3);
-            DrawTitleText(context, "WeatherStar", "4000+ 1.51");
+            DrawTitleText(context, "WeatherStar", "4000+ 1.52");
 
             // Draw a box for the progress.
             //context.fillStyle = "#000000";
@@ -13554,7 +13556,8 @@ var GetNarrationText = function ()
 
             if (UpdateTravelCitiesIndex == 0)
             {
-                Text += "Travel Forecast for " + TravelCities[0].WeatherTravelForecast.DayName + " for the following cities. ";
+                //Text += "Travel Forecast for " + TravelCities[0].WeatherTravelForecast.DayName + " for the following cities. ";
+                Text += "Travel Forecast for " + GetTravelCitiesDayName(TravelCities) + " for the following cities. ";
             }
 
             //for (var Index = (UpdateTravelCitiesIndex * 3) ; Index <= ((UpdateTravelCitiesIndex * 3) + 3) - 1; Index++)
@@ -13695,4 +13698,22 @@ var AssignScrollText = function (e)
     _UpdateCustomScrollTextMs = 0;
     _UpdateWeatherCurrentConditionType = CurrentConditionTypes.Title;
     _UpdateWeatherCurrentConditionCounterMs = 0;
+};
+
+var GetTravelCitiesDayName = function (TravelCities)
+{
+    var DayName = "";
+
+    $(TravelCities).each(function ()
+    {
+        var TravelCity = this;
+
+        if (TravelCity.WeatherTravelForecast)
+        {
+            DayName = TravelCity.WeatherTravelForecast.DayName;
+            return false;
+        }
+    });
+
+    return DayName;
 };
