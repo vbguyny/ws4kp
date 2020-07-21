@@ -30,6 +30,9 @@ var _TravelCities = [
         Name: "Atlanta",
         Latitude: "33.749",
         Longitude: "-84.388",
+        WFO: "FFC",
+        X: "50",
+        Y: "86",
     },
     {
         Name: "Boston",

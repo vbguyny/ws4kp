@@ -2417,6 +2417,80 @@ var GetAirQuality2 = function (WeatherParameters)
     });
 };
 
+var GetAirQuality3 = function (WeatherParameters)
+{
+    //http://www.airnowapi.org/aq/forecast/zipCode/?format=application/json&zipCode=11763&date=2020-07-21&distance=25&API_KEY=E0E326E6-E199-4ABC-B382-0F9F9522E143
+
+
+    if (!WeatherParameters.ZipCode)
+    {
+        GetMarineForecast(WeatherParameters);
+        return;
+    }
+
+    var ZipCode = WeatherParameters.ZipCode;
+    var date = new Date();
+    if (date.getHours() >= 12)
+    {
+        date = date.addDays(1);
+    }
+    var _Date = date.getYYYYMMDD();
+
+    var Url = "http://www.airnowapi.org/aq/forecast/zipCode/?format=application/json&distance=25&API_KEY=E0E326E6-E199-4ABC-B382-0F9F9522E143";
+    Url += "&zipCode=" + encodeURIComponent(ZipCode);
+    Url += "&date=" + encodeURIComponent(_Date);
+
+    WeatherParameters.AirQuality = null;
+
+    // Load the xml file using ajax 
+    $.ajaxCORS({
+        type: "GET",
+        url: Url,
+        dataType: "json",
+        crossDomain: true,
+        cache: false,
+        success: function (json)
+        {
+            var maxAQI = 0;
+            var City = "";
+
+            $(json).each(function ()
+            {
+                if (this.AQI > maxAQI)
+                {
+                    City = this.ReportingArea;
+                    maxAQI = this.AQI;
+                }
+            });
+
+            if (maxAQI == 0)
+            {
+                GetMarineForecast(WeatherParameters);
+                return;
+            }
+
+            var AirQuality = {};
+
+            AirQuality.City = City;
+            AirQuality.Date = date;
+            AirQuality.IndexValue = maxAQI;
+
+            WeatherParameters.AirQuality = AirQuality;
+
+            PopulateAirQuality(WeatherParameters);
+
+            GetMarineForecast(WeatherParameters);
+        },
+        error: function (xhr, error, errorThrown)
+        {
+            console.error("GetAirQuality failed: " + errorThrown);
+
+            GetMarineForecast(WeatherParameters);
+        }
+    });
+};
+
+
 var PopulateAirQuality = function (WeatherParameters)
 {
     if (WeatherParameters == null || (_DontLoadGifs == true && WeatherParameters.Progress.WordedForecast != LoadStatuses.Loaded))
@@ -3425,7 +3499,8 @@ $(function ()
 
                     GetMonthPrecipitation(_WeatherParameters);
                     GetTravelWeather(_WeatherParameters);
-                    GetAirQuality2(_WeatherParameters);
+                    //GetAirQuality2(_WeatherParameters);
+                    GetAirQuality3(_WeatherParameters);
                     ShowRegionalMap(_WeatherParameters, true);
                     ShowRegionalMap(_WeatherParameters, false, true);
                     ShowDopplerMap(_WeatherParameters);
@@ -8705,9 +8780,25 @@ var GetTravelWeather = function (WeatherParameters)
     {
         var TravelCity = this;
 
-        var Url = "https://forecast.weather.gov/MapClick.php?FcstType=dwml";
-        Url += "&lat=" + TravelCity.Latitude.toString();
-        Url += "&lon=" + TravelCity.Longitude.toString();
+        //var Url = "https://forecast.weather.gov/MapClick.php?FcstType=dwml";
+        var Url;
+
+        //if (TravelCity.WFO)
+        //{
+        //    Url = "https://api.weather.gov/gridpoints";
+        //    Url += "/" + TravelCity.WFO.toString();
+        //    Url += "/" + TravelCity.X.toString();
+        //    Url += "," + TravelCity.Y.toString();
+        //    Url += "/forecast";
+
+        //    //Url = "https://api.weather.gov/gridpoints/LWX/96,70/forecast";
+        //}
+        //else
+        {
+            Url = "https://forecast.weather.gov/MapClick.php?FcstType=dwml";
+            Url += "&lat=" + TravelCity.Latitude.toString();
+            Url += "&lon=" + TravelCity.Longitude.toString();
+        }
 
         //Url = "cors/?u=" + encodeURIComponent(Url);
 
@@ -11479,7 +11570,7 @@ var Progress = function (e)
             ////DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "Conditions", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 55, "WeatherStar", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "4000+", 3);
-            DrawTitleText(context, "WeatherStar", "4000+ 1.52");
+            DrawTitleText(context, "WeatherStar", "4000+ 1.53");
 
             // Draw a box for the progress.
             //context.fillStyle = "#000000";
