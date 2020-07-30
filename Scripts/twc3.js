@@ -3999,6 +3999,10 @@ $.fn.scrollIntoView = function ()
             UpdateWeatherCanvas(_WeatherParameters, WeatherCanvas);
         }
     });
+
+    _RefreshGifs = true;
+    window.setTimeout(function () { _RefreshGifs = false; }, 200);
+
 };
 
 
