@@ -10594,7 +10594,7 @@ var GetXYFromLatitudeLongitude = function (Latitude, Longitude, OffsetX, OffsetY
     }
 
     SourceX = ((-127.5 - Longitude) * 41.775) * -1;
-    SourceX -= OffsetX // Centers map.
+    SourceX -= OffsetX; // Centers map.
     // Do not allow the map to exceed the max/min coordinates.
     if (SourceX > (ImgWidth - (OffsetX * 2))) // The OffsetX * 2
     {
@@ -10606,6 +10606,44 @@ var GetXYFromLatitudeLongitude = function (Latitude, Longitude, OffsetX, OffsetY
     }
 
     return { X: SourceX, Y: SourceY };
+}
+
+var GetXYFromLatitudeLongitudeDoppler = function (Latitude, Longitude, OffsetX, OffsetY)
+{
+    var SourceY = 0;
+    var SourceX = 0;
+    //var ImgHeight = 1600;
+    //var ImgWidth = 2550;
+    var ImgHeight = 3200;
+    var ImgWidth = 5100;
+
+    //SourceY = (50.5 - Latitude) * 55.2;
+    SourceY = (51.75 - Latitude) * 55.2;
+    SourceY -= OffsetY; // Centers map.
+    // Do not allow the map to exceed the max/min coordinates.
+    if (SourceY > (ImgHeight - (OffsetY * 2))) // The OffsetY * 2
+    {
+        SourceY = ImgHeight - (OffsetY * 2);
+    }
+    else if (SourceY < 0)
+    {
+        SourceY = 0;
+    }
+
+    //SourceX = ((-127.5 - Longitude) * 41.775) * -1;
+    SourceX = ((-130.37 - Longitude) * 41.775) * -1;
+    SourceX -= OffsetX; // Centers map.
+    // Do not allow the map to exceed the max/min coordinates.
+    if (SourceX > (ImgWidth - (OffsetX * 2))) // The OffsetX * 2
+    {
+        SourceX = ImgWidth - (OffsetX * 2);
+    }
+    else if (SourceX < 0)
+    {
+        SourceX = 0;
+    }
+
+    return { X: SourceX * 2, Y: SourceY * 2 };
 }
 
 var GetMinMaxLatitudeLongitude = function (X, Y, OffsetX, OffsetY)
@@ -10845,8 +10883,15 @@ var ShowDopplerMap = function (WeatherParameters)
         {
             cnvRadarWorker.attr("width", "2550"); // For Chrome.
             cnvRadarWorker.attr("height", "1600"); // For Chrome.
+            //cnvRadarWorker.attr("width", "5100"); // For Chrome.
+            //cnvRadarWorker.attr("height", "3200"); // For Chrome.
 
-            var SourceXY = GetXYFromLatitudeLongitude(WeatherParameters.Latitude, WeatherParameters.Longitude, OffsetX, OffsetY);
+            //cnvDopplerMap.attr("width", "1280"); // For Chrome.
+            //cnvDopplerMap.attr("height", "734"); // For Chrome.
+            OffsetX *= 2;
+            OffsetY *= 2;
+
+            var SourceXY = GetXYFromLatitudeLongitudeDoppler(WeatherParameters.Latitude, WeatherParameters.Longitude, OffsetX, OffsetY);
         }
         cnvRadarWorker.css("display", "none");
         contextWorker = cnvRadarWorker[0].getContext("2d");
@@ -10951,6 +10996,7 @@ var ShowDopplerMap = function (WeatherParameters)
                                 else
                                 {
                                     contextWorker.drawImage(RadarImage, 0, 0, 2550, 1600);
+                                    //contextWorker.drawImage(RadarImage, 0, 0, 5100, 3200, 0, 0, 2550, 1600);
                                 }
                                 //context.drawImage(RadarImage, 0, 0);
 
@@ -10968,9 +11014,12 @@ var ShowDopplerMap = function (WeatherParameters)
                                     var RadarOffsetX = 120;
                                     var RadarOffsetY = 69;
                                     //var RadarSourceXY = GetRadarXYFromLatitudeLongitude(WeatherParameters.Latitude, WeatherParameters.Longitude, OffsetX, OffsetY);
-                                    var RadarSourceXY = GetXYFromLatitudeLongitude(WeatherParameters.Latitude, WeatherParameters.Longitude, OffsetX, OffsetY);
-                                    var RadarSourceX = RadarSourceXY.X;
-                                    var RadarSourceY = RadarSourceXY.Y;
+                                    //var RadarSourceXY = GetXYFromLatitudeLongitude(WeatherParameters.Latitude, WeatherParameters.Longitude, OffsetX, OffsetY);
+                                    //var RadarSourceX = RadarSourceXY.X;
+                                    //var RadarSourceY = RadarSourceXY.Y;
+                                    var RadarSourceXY = GetXYFromLatitudeLongitudeDoppler(WeatherParameters.Latitude, WeatherParameters.Longitude, OffsetX, OffsetY);
+                                    var RadarSourceX = RadarSourceXY.X / 2;
+                                    var RadarSourceY = RadarSourceXY.Y / 2;
                                 }
 
                                 // Draw them onto the map.
@@ -11107,6 +11156,7 @@ var ShowDopplerMap = function (WeatherParameters)
     else
     {
         img.src = "images/4000RadarMap2.jpg";
+        //img.src = "images/4000RadarMap2.png";
     }
 }
 
@@ -11574,7 +11624,7 @@ var Progress = function (e)
             ////DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "Conditions", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 55, "WeatherStar", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "4000+", 3);
-            DrawTitleText(context, "WeatherStar", "4000+ 1.53");
+            DrawTitleText(context, "WeatherStar", "4000+ 1.54");
 
             // Draw a box for the progress.
             //context.fillStyle = "#000000";
