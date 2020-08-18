@@ -11011,8 +11011,10 @@ var ShowDopplerMap = function (WeatherParameters)
                                 }
                                 else
                                 {
-                                    var RadarOffsetX = 120;
-                                    var RadarOffsetY = 69;
+                                    //var RadarOffsetX = 120;
+                                    //var RadarOffsetY = 69;
+                                    var RadarOffsetX = 117;
+                                    var RadarOffsetY = 60;
                                     //var RadarSourceXY = GetRadarXYFromLatitudeLongitude(WeatherParameters.Latitude, WeatherParameters.Longitude, OffsetX, OffsetY);
                                     //var RadarSourceXY = GetXYFromLatitudeLongitude(WeatherParameters.Latitude, WeatherParameters.Longitude, OffsetX, OffsetY);
                                     //var RadarSourceX = RadarSourceXY.X;
@@ -11036,7 +11038,7 @@ var ShowDopplerMap = function (WeatherParameters)
 
                                 //RadarImage.width = 2550;
 
-                                RadarContext.drawImage(contextWorker.canvas, RadarSourceX, RadarSourceY, (RadarOffsetX * 2), (RadarOffsetY * 2), 0, 0, 640, 367);
+                                RadarContext.drawImage(contextWorker.canvas, RadarSourceX, RadarSourceY, (RadarOffsetX * 2), (RadarOffsetY * 2.33), 0, 0, 640, 367);
                                 RemoveDopplerRadarImageNoise(RadarContext);
 
                             });
