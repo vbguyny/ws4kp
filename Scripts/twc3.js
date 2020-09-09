@@ -6263,7 +6263,8 @@ var WeatherExtendedForecast = function (WeatherParser)
         }
         else if ($.isNumeric(_Day.MaximumTemperature) == false)
         {
-            return true;
+            //return true;
+            _Day.MaximumTemperature = "?";
         }
 
         _LayoutKey = WeatherParser.data_forecast.parameters.temperature_minimum.time_layout;
@@ -6275,7 +6276,8 @@ var WeatherExtendedForecast = function (WeatherParser)
         }
         else if ($.isNumeric(_Day.MinimumTemperature) == false)
         {
-            return true;
+            //return true;
+            _Day.MinimumTemperature = "?";
         }
 
         _LayoutKey = WeatherParser.data_forecast.parameters.weather.time_layout;
@@ -10954,6 +10956,8 @@ var ShowDopplerMap = function (WeatherParameters)
                     var latest = "https://radar.weather.gov/Conus/RadarImg/latest_radaronly.gif";
                 }
 
+                // add the fixed named latest image
+                RadarUrls.push("cors/?u=" + encodeURIComponent(latest));
                 for (var Index = UrlsUnd; Index > UrlsUnd - _DopplerRadarImageMax + 1; Index--)
                 {
                     //http://radar.weather.gov/Conus/RadarImg/Conus_20161004_0028_N0Ronly.gif
@@ -10963,8 +10967,6 @@ var ShowDopplerMap = function (WeatherParameters)
 
                     RadarUrls.push(Url);
                 }
-                // add the fixed named latest image
-                RadarUrls.push("cors/?u=" + encodeURIComponent(latest));
 
                 // Load the most recent doppler radar images.
                 $(RadarUrls).each(function (Index, Value)
