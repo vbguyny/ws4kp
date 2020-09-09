@@ -10944,17 +10944,17 @@ var ShowDopplerMap = function (WeatherParameters)
                 if (WeatherParameters.State == "HI")
                 {
                     var Urls = $text.find("a[href*='hawaii_']");
-                    var UrlsUnd = Urls.length - 4;
+                    var UrlsUnd = Urls.length - 3;
                     var latest = "https://radar.weather.gov/Conus/RadarImg/hawaii_radaronly.gif";
                 }
                 else
                 {
                     var Urls = $text.find("a[href*='Conus_']");
-                    var UrlsUnd = Urls.length - 2;
+                    var UrlsUnd = Urls.length - 1;
                     var latest = "https://radar.weather.gov/Conus/RadarImg/latest_radaronly.gif";
                 }
 
-                for (var Index = UrlsUnd; Index > UrlsUnd - _DopplerRadarImageMax; Index--)
+                for (var Index = UrlsUnd; Index > UrlsUnd - _DopplerRadarImageMax + 1; Index--)
                 {
                     //http://radar.weather.gov/Conus/RadarImg/Conus_20161004_0028_N0Ronly.gif
                     var Url = "https://radar.weather.gov/Conus/RadarImg/";
@@ -11630,7 +11630,7 @@ var Progress = function (e)
             ////DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "Conditions", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 55, "WeatherStar", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "4000+", 3);
-            DrawTitleText(context, "WeatherStar", "4000+ 1.54");
+            DrawTitleText(context, "WeatherStar", "4000+ 1.55");
 
             // Draw a box for the progress.
             //context.fillStyle = "#000000";
