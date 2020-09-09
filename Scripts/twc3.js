@@ -10903,7 +10903,7 @@ var ShowDopplerMap = function (WeatherParameters)
 
         // Find the most current doppler radar image.
         //var Url = "http://radar.weather.gov/Conus/RadarImg/mosaic_times.txt";
-        var Url = "https://radar.weather.gov/Conus/RadarImg";
+        var Url = "https://radar.weather.gov/Conus/RadarImg/";
         //Url = "cors/?u=" + encodeURIComponent(Url);
 
         //var TimesMax = 6;
@@ -10944,12 +10944,14 @@ var ShowDopplerMap = function (WeatherParameters)
                 if (WeatherParameters.State == "HI")
                 {
                     var Urls = $text.find("a[href*='hawaii_']");
-                    var UrlsUnd = Urls.length - 3;
+                    var UrlsUnd = Urls.length - 4;
+                    var latest = "https://radar.weather.gov/Conus/RadarImg/hawaii_radaronly.gif";
                 }
                 else
                 {
                     var Urls = $text.find("a[href*='Conus_']");
-                    var UrlsUnd = Urls.length - 1;
+                    var UrlsUnd = Urls.length - 2;
+                    var latest = "https://radar.weather.gov/Conus/RadarImg/latest_radaronly.gif";
                 }
 
                 for (var Index = UrlsUnd; Index > UrlsUnd - _DopplerRadarImageMax; Index--)
@@ -10961,6 +10963,8 @@ var ShowDopplerMap = function (WeatherParameters)
 
                     RadarUrls.push(Url);
                 }
+                // add the fixed named latest image
+                RadarUrls.push("cors/?u=" + encodeURIComponent(latest));
 
                 // Load the most recent doppler radar images.
                 $(RadarUrls).each(function (Index, Value)
