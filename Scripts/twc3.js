@@ -3429,14 +3429,23 @@ $(function ()
                 var City = html.substr(Index6 + 19, (Index5 + Index4 - 3) - (Index6 + 19));
                 var State = html.substr(Index6 + 19 + City.length + 1, (Index5 + Index4) - (Index6 + 19 + City.length + 1));
 
+                ////<div class="fullRow">
+                ////    <div class="left"><a target="_blank" href="http://www.weather.gov/glossary/index.php?word=Last+update">Last Update</a>: </div>
+                ////    <div class="right">6:01 pm HST Dec 25, 2016</div>
+                ////</div>
+                //var Index7 = html.indexOf("Last Update</a>");
+                //var Index8 = html.substr(Index7).indexOf("<div class=\"right\">");
+                //var Index9 = html.substr(Index7 + Index8).indexOf("</div>");
+                //var TimeZone = html.substr(Index7 + Index8 + 19, (Index7 + Index8 + Index9) - (Index7 + Index8 + 19)).split(' ')[2];
+
                 //<div class="fullRow">
-                //    <div class="left"><a target="_blank" href="http://www.weather.gov/glossary/index.php?word=Last+update">Last Update</a>: </div>
-                //    <div class="right">6:01 pm HST Dec 25, 2016</div>
+                //    <div class="left"><a target="_blank" href="//www.weather.gov/glossary/index.php?word=forecast+valid+for">Forecast Valid</a>: </div>
+                //    <div class="right">8am EST Nov 1, 2020-6pm EST Nov 7, 2020</div>
                 //</div>
-                var Index7 = html.indexOf("Last Update</a>");
+                var Index7 = html.indexOf("Forecast Valid</a>: ");
                 var Index8 = html.substr(Index7).indexOf("<div class=\"right\">");
                 var Index9 = html.substr(Index7 + Index8).indexOf("</div>");
-                var TimeZone = html.substr(Index7 + Index8 + 19, (Index7 + Index8 + Index9) - (Index7 + Index8 + 19)).split(' ')[2];
+                var TimeZone = html.substr(Index7 + Index8 + 19, (Index7 + Index8 + Index9) - (Index7 + Index8 + 19)).split(' ')[1];
 
                 //_WeatherParameters = {
                 //    Latitude: Latitude,
@@ -11632,7 +11641,7 @@ var Progress = function (e)
             ////DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "Conditions", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 55, "WeatherStar", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "4000+", 3);
-            DrawTitleText(context, "WeatherStar", "4000+ 1.55");
+            DrawTitleText(context, "WeatherStar", "4000+ 1.56");
 
             // Draw a box for the progress.
             //context.fillStyle = "#000000";
