@@ -447,7 +447,16 @@ var GetClosestCurrentWeather = function (WeatherParameters, Distance)
                 // Stop if the distance is at 100 miles.
                 if (Distance == 100)
                 {
-                    throw "GetClosestCurrentWeather unable to find weather upto 100 miles";
+                    //throw "GetClosestCurrentWeather unable to find weather upto 100 miles";
+                    console.error("GetClosestCurrentWeather unable to find weather upto 100 miles");
+
+                    WeatherParameters.WeatherExtendedForecast = new WeatherExtendedForecast(WeatherParameters.WeatherDwmlParser);
+                    console.log(WeatherParameters.WeatherExtendedForecast);
+                    PopulateExtendedForecast(WeatherParameters, 1);
+                    PopulateExtendedForecast(WeatherParameters, 2);
+
+                    GetWeatherMetar(WeatherParameters);
+                    return;
                 }
 
                 // Increase distance by 5 miles.
@@ -3512,7 +3521,8 @@ $(function ()
                     GetAirQuality3(_WeatherParameters);
                     ShowRegionalMap(_WeatherParameters, true);
                     ShowRegionalMap(_WeatherParameters, false, true);
-                    ShowDopplerMap(_WeatherParameters);
+                    //ShowDopplerMap(_WeatherParameters);
+                    ShowDopplerMap2(_WeatherParameters);
                     GetWeatherHazards3(_WeatherParameters);
 
                     if (_UpdateWeatherCanvasInterval)
@@ -5569,8 +5579,17 @@ var WeatherCurrentConditions = function (WeatherDwmlParser, WeatherMetarsParser)
     this.TemperatureC = ConvertFahrenheitToCelsius(this.Temperature);
     this.DewPointC = ConvertFahrenheitToCelsius(this.DewPoint);
     this.HeatIndexC = ConvertFahrenheitToCelsius(this.HeatIndex);
-    
-    this.Conditions = CurrentObservations.parameters.weather.weather_conditions[0].weather_summary.trim();
+
+    this.Conditions = "";
+    if (CurrentObservations.parameters.weather.weather_conditions[0].weather_summary.trim() != "")
+    {
+        this.Conditions = CurrentObservations.parameters.weather.weather_conditions[0].weather_summary.trim();
+    }
+    else if (MetarData && MetarData.raw_text)
+    {
+        this.Conditions = ParseMetarCurrentObservations(MetarData.raw_text);
+    }
+
     this.Conditions = this.Conditions.replaceAll("A ", "");
     this.Conditions = this.Conditions.replaceAll(" and ", "/");
     //this.Conditions = this.Conditions.replaceAll("Light", "Lt");
@@ -5747,6 +5766,193 @@ var WeatherCurrentConditions = function (WeatherDwmlParser, WeatherMetarsParser)
     //this.WindChill = CalculateWindChill(CurrentObservations.parameters.temperature_apparent.value[0], ConvertKnotsToMph(CurrentObservations.parameters.wind_speed_sustained.value));
     this.WindChill = CalculateWindChill(this.Temperature, this.WindSpeed);
     this.WindChillC = ConvertFahrenheitToCelsius(this.WindChill);
+};
+
+var ParseMetarCurrentObservations = function (raw_text)
+{
+    // See: https://math.la.asu.edu/~eric/workshop/METAR.html
+    // "KSEM 272315Z AUTO 02006KT 3SM -TSRA FEW005 BKN018 OVC060 21/20 A3003 RMK AO2 LTG DSNT ALQDS"
+    // "KISP 272256Z 00000KT 10SM OVC070 11/08 A2997 RMK AO2 SLP148 T01060078"
+
+    var parsedMetar = parseMETAR(raw_text);
+    var result = "";
+
+    var intensity = "";
+    var descriptor = "";
+    var precipitation = "";
+    var obscuration = "";
+
+    var found_few = false;
+    var found_overcast = false;
+    var found_broken = false;
+    var found_scat = false;
+
+    if (parsedMetar.weather)
+    {
+        $(parsedMetar.weather).each(function ()
+        {
+            var info = this;
+
+            switch (info.abbreviation)
+            {
+                case "-":
+                    intensity = "Light";
+                    break;
+                case "+":
+                    intensity = "Heavy";
+                    break;
+
+                case "TS":
+                    descriptor = "Thunderstorm";
+                    break;
+                case "FZ":
+                    descriptor = "Freezing";
+                    break;
+                case "SH":
+                    descriptor = "Shower";
+                    break;
+
+                case "DZ":
+                    precipitation = "Drizzle";
+                    break;
+                case "RA":
+                    precipitation = "Rain";
+                    break;
+                case "SN":
+                    precipitation = "Snow";
+                    break;
+                case "SG":
+                    precipitation = "Snow";
+                    break;
+                case "IC":
+                    precipitation = "Ice Crystals";
+                    break;
+                case "PE":
+                    precipitation = "Ice Pellets";
+                    break;
+                case "GR":
+                    precipitation = "Hail";
+                    break;
+                case "GS":
+                    precipitation = "Hail";
+                    break;
+
+                case "BR":
+                    obscuration = "Mist";
+                    break;
+                case "FG":
+                    obscuration = "Fog";
+                    break;
+                case "FU":
+                    obscuration = "Smoke";
+                    break;
+                case "VA":
+                    obscuration = "Volcanic Ash";
+                    break;
+                case "DU":
+                    obscuration = "Dust";
+                    break;
+                case "SA":
+                    obscuration = "Sand";
+                    break;
+                case "HZ":
+                    obscuration = "Haze";
+                    break;
+                case "PY":
+                    obscuration = "Spray";
+                    break;
+            }
+        });
+
+
+        if (descriptor != "")
+        {
+            if (result != "")
+            {
+                result += " ";
+            }
+            result += descriptor;
+        }
+        if (intensity != "")
+        {
+            if (result != "")
+            {
+                result += " ";
+            }
+            result += intensity;
+        }
+        if (precipitation != "")
+        {
+            if (result != "")
+            {
+                result += " ";
+            }
+            result += precipitation;
+        }
+        if (obscuration != "")
+        {
+            if (result != "")
+            {
+                result += " / ";
+            }
+            result += obscuration;
+        }
+    }
+    else if (parsedMetar.clouds)
+    {
+        $(parsedMetar.clouds).each(function ()
+        {
+            var info = this;
+
+            switch (info.abbreviation)
+            {
+                case "CLR":
+                case "SKC":
+                    if (found_overcast == true || found_broken == true || found_scat == true || found_few == true)
+                    {
+                        return true;
+                    }
+                    result = "Clear";
+                    break;
+
+                case "FEW":
+                    if (found_overcast == true || found_broken == true || found_scat == true)
+                    {
+                        return true;
+                    }
+                    result = "Few Clouds";
+                    found_few = true;
+                    break;
+
+                case "SCT":
+                    if (found_overcast == true || found_broken == true)
+                    {
+                        return true;
+                    }
+                    result = "Partly Cloudy";
+                    found_scat = true;
+                    break;
+
+                case "BKN":
+                    if (found_overcast == true)
+                    {
+                        return true;
+                    }
+                    result = "Mostly Cloudy";
+                    found_broken = true;
+                    break;
+
+                case "OVC":
+                    result = "Overcast";
+                    found_overcast = true;
+                    break;
+
+            }
+        });
+
+    }
+
+    return result;
 };
 
 Math.round2 = function(value, decimals)
@@ -6119,7 +6325,7 @@ var PopulateCurrentConditions = function (WeatherParameters)
         //BackGroundImage.src = "images/BackGround1_" + _Themes.toString() + ".png";
     };
 
-    if (_DontLoadGifs == true)
+    if (_DontLoadGifs == true || WeatherCurrentConditions.Icon == "")
     {
         DrawCurrentConditions();
     }
@@ -6383,6 +6589,11 @@ Date.prototype.getDayShortName = function ()
 Date.prototype.getYYYYMMDD = function ()
 {
     return this.toISOString().split('T')[0];
+};
+Date.prototype.getYYYYMMDDSlashed = function ()
+{
+    //return this.toISOString().split('T')[0].replaceAll("-", "/");
+    return this.getFullYear() + "/" + (this.getMonth() + 1).pad(2) + "/" + this.getDate().pad(2);
 };
 
 var PopulateExtendedForecast = function (WeatherParameters, ScreenIndex)
@@ -8815,6 +9026,8 @@ var GetTravelWeather = function (WeatherParameters)
             Url += "&lon=" + TravelCity.Longitude.toString();
         }
 
+        //console.log("TravelCities: Url='" + Url + "'");
+
         //Url = "cors/?u=" + encodeURIComponent(Url);
 
         // Load the xml file using ajax 
@@ -9373,6 +9586,14 @@ var GetRegionalStations = function (WeatherParameters, Distance)
             }
             else
             {
+
+                if (Distance >= 500)
+                {
+                    console.error("GetRegionalStations unable to find weather upto 500 miles");
+                    WeatherParameters.Progress.NearbyConditions = LoadStatuses.Failed;
+                    return;
+                }
+
                 // Increase distance by 10 miles.
                 GetRegionalStations(WeatherParameters, Distance + 10);
             }
@@ -10657,6 +10878,50 @@ var GetXYFromLatitudeLongitudeDoppler = function (Latitude, Longitude, OffsetX, 
     return { X: SourceX * 2, Y: SourceY * 2 };
 }
 
+var GetXYFromLatitudeLongitudeDoppler2 = function (Latitude, Longitude, OffsetX, OffsetY)
+{
+    var SourceY = 0;
+    var SourceX = 0;
+    var ImgHeight = 6000;
+    var ImgWidth = 2800;
+
+    //SourceY = (51.75 - Latitude) * 56.5; (Org)
+    //SourceY = (53.05 - Latitude) * 55.2; //(Montgomery: 32.3802) 1140.97296
+    //SourceY = (51.95 - Latitude) * 55.2; //(Binghamton: 42.0987) 543.79176
+    SourceY = (51 - Latitude) * 61.4481; //
+    //SourceY = (50.7483 - Latitude) * 61.4481; //(New Orleans: 29.83) = 1285.38979023
+    SourceY -= OffsetY; // Centers map.
+
+    // Do not allow the map to exceed the max/min coordinates.
+    if (SourceY > (ImgHeight - (OffsetY * 2))) // The OffsetY * 2
+    {
+        SourceY = ImgHeight - (OffsetY * 2);
+    }
+    else if (SourceY < 0)
+    {
+        SourceY = 0;
+    }
+
+    //SourceX = ((-130.37 - Longitude) * 41.775) * -1; (Org)
+    //SourceX = ((-129.55 - Longitude) * 41.775) * -1; //(Montgomery: -86.3001) = -1,806.7645725
+    //SourceX = ((-129.65 - Longitude) * 41.775) * -1; //(Binghamton: -75.9112) = -2,244.93837
+    SourceX = ((-129.138 - Longitude) * 42.1768) * -1; //
+    //SourceX = ((-129.038 - Longitude) * 42.1768) * -1; //(New Orleans: -90.02) =  -1645.6543824
+    SourceX -= OffsetX; // Centers map.
+
+    // Do not allow the map to exceed the max/min coordinates.
+    if (SourceX > (ImgWidth - (OffsetX * 2))) // The OffsetX * 2
+    {
+        SourceX = ImgWidth - (OffsetX * 2);
+    }
+    else if (SourceX < 0)
+    {
+        SourceX = 0;
+    }
+
+    return { X: SourceX * 2, Y: SourceY * 2 };
+}
+
 var GetMinMaxLatitudeLongitude = function (X, Y, OffsetX, OffsetY)
 {
     var maxLat = ((Y / 55.2) - 50.5) * -1;
@@ -11177,6 +11442,331 @@ var ShowDopplerMap = function (WeatherParameters)
     }
 }
 
+var ShowDopplerMap2 = function (WeatherParameters)
+{
+
+    // ALASKA ISN'T SUPPORTED!
+    if (WeatherParameters.State == "AK")
+    {
+        WeatherParameters.Progress.DopplerRadar = LoadStatuses.NoData;
+        return;
+    }
+    // HAWAII ISN'T SUPPORTED!
+    if (WeatherParameters.State == "HI")
+    {
+        WeatherParameters.Progress.DopplerRadar = LoadStatuses.NoData;
+        return;
+    }
+
+    var img = new Image();
+    var cnvDopplerMap;
+    var cnvDopplerMapId;
+    var divDopplerMap;
+    var context;
+    var SourceX;
+    var SourceY;
+    var OffsetY;
+    var OffsetX;
+    var cnvRadarWorkerId;
+    var cnvRadarWorker;
+    var contextWorker;
+
+    divDopplerMap = divDopplerRadarMap;
+    cnvDopplerMapId = "cnvDopplerRadarMap";
+    cnvRadarWorkerId = "cnvRadarWorker";
+
+    // Clear the current image.
+    divDopplerMap.empty();
+
+    if (_DopplerRadarInterval != null)
+    {
+        window.clearTimeout(_DopplerRadarInterval);
+        _DopplerRadarInterval = null;
+    }
+
+    img.onload = function ()
+    {
+        console.log("Image Loaded");
+
+        divDopplerMap.html("<canvas id='" + cnvDopplerMapId + "' /><canvas id='" + cnvRadarWorkerId + "' />");
+        cnvDopplerMap = $("#" + cnvDopplerMapId);
+        cnvDopplerMap.attr("width", "640"); // For Chrome.
+        cnvDopplerMap.attr("height", "367"); // For Chrome.
+        context = cnvDopplerMap[0].getContext("2d");
+
+        var FolderName;
+
+        cnvRadarWorker = $("#" + cnvRadarWorkerId);
+        OffsetX = 120;
+        OffsetY = 69;
+        var SourceXY;
+
+        if (WeatherParameters.State == "HI")
+        {
+            FolderName = "hicomp";
+            cnvRadarWorker.attr("width", "600"); // For Chrome.
+            cnvRadarWorker.attr("height", "571"); // For Chrome.
+
+            SourceXY = GetXYFromLatitudeLongitudeHI(WeatherParameters.Latitude, WeatherParameters.Longitude, OffsetX, OffsetY);
+        }
+        else
+        {
+            FolderName = "uscomp";
+            cnvRadarWorker.attr("width", "2550"); // For Chrome.
+            cnvRadarWorker.attr("height", "1600"); // For Chrome.
+            OffsetX *= 2;
+            OffsetY *= 2;
+
+            SourceXY = GetXYFromLatitudeLongitudeDoppler(WeatherParameters.Latitude, WeatherParameters.Longitude, OffsetX, OffsetY);
+        }
+        cnvRadarWorker.css("display", "none");
+        contextWorker = cnvRadarWorker[0].getContext("2d");
+        SourceX = SourceXY.X;
+        SourceY = SourceXY.Y;
+
+        // Draw them onto the map.
+        context.drawImage(img, SourceX, SourceY, (OffsetX * 2), (OffsetY * 2), 0, 0, 640, 367);
+
+        // Find the most current doppler radar image.
+        //var Url = "https://radar.weather.gov/Conus/RadarImg/";
+        //https://mesonet.agron.iastate.edu/archive/data/2020/11/26/GIS/uscomp/
+        var Today = new Date();
+        var Tomorrow = Today.addDays(1);
+        var Yesterday = Today.addDays(-1);
+        var UrlLinks = [
+            "https://mesonet.agron.iastate.edu/archive/data/" + Yesterday.getYYYYMMDDSlashed() + "/GIS/" + FolderName + "/",
+            "https://mesonet.agron.iastate.edu/archive/data/" + Today.getYYYYMMDDSlashed() + "/GIS/" + FolderName + "/",
+            "https://mesonet.agron.iastate.edu/archive/data/" + Tomorrow.getYYYYMMDDSlashed() + "/GIS/" + FolderName + "/"
+        ];
+
+        var TimesCount = 0;
+        var RadarUrls = [];
+        var RadarImages = [];
+        var RadarContexts = [];
+
+        var UrlCounter = 0;
+        var UrlMax = 3;
+        var CheckFinishedRadarUrls = function ()
+        {
+            UrlCounter++;
+            if (UrlCounter == UrlMax)
+            {
+                FinishedRadarUrls();
+            }
+        };
+
+        $(UrlLinks).each(function ()
+        {
+            var UrlLink = this.toString();
+
+            $.ajaxCORS({
+                type: "GET",
+                url: UrlLink,
+                dataType: "text",
+                crossDomain: true,
+                cache: false,
+                success: function (text)
+                {
+                    var $text = $(text);
+                    $text.find("[src]").attr("src", "");
+
+                    var Urls = $text.find("a[href^='n0r_'][href$='.png']");
+                    var UrlsUnd = Urls.length - 1;
+
+                    // Get the 6 most recent images.
+                    for (var Index = UrlsUnd; Index > UrlsUnd - _DopplerRadarImageMax; Index--)
+                    {
+                        var Url = UrlLink;
+                        var href = $(Urls[Index]).attr("href");
+                        if (href == undefined)
+                        {
+                            break;
+                        }
+
+                        Url += href;
+                        Url = "cors/?u=" + encodeURIComponent(Url);
+
+                        RadarUrls.push(Url);
+                    }
+
+                    CheckFinishedRadarUrls();
+                },
+                error: function (xhr, error, errorThrown)
+                {
+                    CheckFinishedRadarUrls();
+                }
+            });
+        });
+
+        var FinishedRadarUrls = function ()
+        {
+            // Verify that we have at least the maximum number of images that can be used by frames
+            if (RadarUrls.length < _DopplerRadarImageMax)
+            {
+                console.error("No radar urls found!");
+                WeatherParameters.Progress.DopplerRadar = LoadStatuses.Failed;
+                return;
+            }
+
+            // Sort the images by newest first
+            RadarUrls.sort();
+            // Reverse the order of the array
+            RadarUrls.reverse();
+            // Remove all but the last max number of files
+            RadarUrls.splice(_DopplerRadarImageMax);
+
+            // Load the most recent doppler radar images.
+            $(RadarUrls).each(function (Index, Value)
+            {
+                var Url = this.toString();
+                var RadarImage = new Image();
+
+                RadarImage.onload = function ()
+                {
+                    TimesCount++;
+
+                    if (TimesCount == _DopplerRadarImageMax)
+                    {
+                        $(RadarImages).each(function (Index, Value)
+                        {
+                            var RadarImage = this;
+                            var RadarContext = RadarContexts[Index][0].getContext("2d");
+
+                            contextWorker.clearRect(0, 0, contextWorker.canvas.width, contextWorker.canvas.height);
+                            SmoothingEnabled(contextWorker, false);
+
+                            if (WeatherParameters.State == "HI")
+                            {
+                                contextWorker.drawImage(RadarImage, 0, 0, 571, 600);
+                            }
+                            else
+                            {
+                                contextWorker.drawImage(RadarImage, 0, 0, 2550, 1600);
+                            }
+
+                            var RadarOffsetX;
+                            var RadarOffsetY;
+                            var RadarSourceXY;
+                            var RadarSourceX;
+                            var RadarSourceY;
+
+                            if (WeatherParameters.State == "HI")
+                            {
+                                RadarOffsetX = 120;
+                                RadarOffsetY = 69;
+                                RadarSourceXY = GetXYFromLatitudeLongitudeHI(WeatherParameters.Latitude, WeatherParameters.Longitude, OffsetX, OffsetY);
+                                RadarSourceX = RadarSourceXY.X;
+                                RadarSourceY = RadarSourceXY.Y;
+                            }
+                            else
+                            {
+                                RadarOffsetX = 120;
+                                RadarOffsetY = 70;
+                                RadarSourceXY = GetXYFromLatitudeLongitudeDoppler2(WeatherParameters.Latitude, WeatherParameters.Longitude, OffsetX, OffsetY);
+                                RadarSourceX = RadarSourceXY.X / 2;
+                                RadarSourceY = RadarSourceXY.Y / 2;
+                            }
+
+                            // Draw them onto the map.
+                            RadarContext.clearRect(0, 0, RadarContext.canvas.width, RadarContext.canvas.height);
+
+                            // Disable Image Smoothing for the doppler radar!
+                            SmoothingEnabled(RadarContext, false);
+
+                            //RadarContext.drawImage(contextWorker.canvas, RadarSourceX * .986, RadarSourceY * 1.04, (RadarOffsetX * 2), (RadarOffsetY * 2.33), 0, 0, 640, 367);
+                            RadarContext.drawImage(contextWorker.canvas, RadarSourceX, RadarSourceY, (RadarOffsetX * 2), (RadarOffsetY * 2.33), 0, 0, 640, 367);
+                            RemoveDopplerRadarImageNoise2(RadarContext);
+
+                        });
+
+                        console.log("Doppler Radar Images Loaded");
+
+                        WeatherParameters.DopplerRadarInfo = {
+                            RadarContexts: RadarContexts,
+                            RadarImage: img,
+                            RadarMapContext: context,
+                            RadarSourceX: SourceX,
+                            RadarSourceY: SourceY,
+                            OffsetY: OffsetY,
+                            OffsetX: OffsetX,
+                        };
+
+                        var RadarContext = RadarContexts[0][0].getContext("2d");
+                        context.drawImage(img, SourceX, SourceY, (OffsetX * 2), (OffsetY * 2), 0, 0, 640, 367);
+                        MergeDopplerRadarImage(context, RadarContext);
+
+                        // Draw canvas
+                        var BackGroundImage = new Image();
+                        BackGroundImage.onload = function ()
+                        {
+                            var canvas = canvasLocalRadar[0];
+                            var context = canvas.getContext("2d");
+                            context.drawImage(BackGroundImage, 0, 0);
+
+                            // Title
+                            DrawText(context, "Arial", "bold 28pt", "#ffffff", 175, 65, "Local", 2);
+                            DrawText(context, "Arial", "bold 28pt", "#ffffff", 175, 100, "Radar", 2);
+
+                            DrawText(context, "Arial", "bold 18pt", "#ffffff", 390, 49, "PRECIP", 2);
+                            DrawText(context, "Arial", "bold 18pt", "#ffffff", 298, 73, "Light", 2);
+                            DrawText(context, "Arial", "bold 18pt", "#ffffff", 517, 73, "Heavy", 2);
+
+                            var x = 362;
+                            var y = 52;
+                            DrawBox(context, "#000000", x - 2, y - 2, 154, 28);
+                            DrawBox(context, "rgb(49, 210, 22)", x, y, 17, 24); x += 19;
+                            DrawBox(context, "rgb(28, 138, 18)", x, y, 17, 24); x += 19;
+                            DrawBox(context, "rgb(20, 90, 15)", x, y, 17, 24); x += 19;
+                            DrawBox(context, "rgb(10, 40, 10)", x, y, 17, 24); x += 19;
+                            DrawBox(context, "rgb(196, 179, 70)", x, y, 17, 24); x += 19;
+                            DrawBox(context, "rgb(190, 72, 19)", x, y, 17, 24); x += 19;
+                            DrawBox(context, "rgb(171, 14, 14)", x, y, 17, 24); x += 19;
+                            DrawBox(context, "rgb(115, 31, 4)", x, y, 17, 24); x += 19;
+
+                            DrawBox(context, "rgb(143, 73, 95)", 318, 83, 32, 24);
+                            DrawBox(context, "rgb(250, 122, 232)", 320, 85, 28, 20);
+                            DrawText(context, "Arial", "bold 18pt", "#ffffff", 355, 105, "= Incomplete Data", 2);
+
+                            window.setInterval(function ()
+                            {
+                                context.drawImage(cnvDopplerMap[0], 0, 0, 640, 367, 0, 113, 640, 367);
+                                UpdateWeatherCanvas(WeatherParameters, canvasLocalRadar);
+                            }, 100);
+
+                            WeatherParameters.Progress.DopplerRadar = LoadStatuses.Loaded;
+                        };
+                        BackGroundImage.src = "images/BackGround4_1.png";
+                    }
+                };
+                RadarImage.src = Url;
+                RadarImages.push(RadarImage);
+
+                var id = "cnvRadar" + Index.toString();
+                var RadarContext = $("#" + id);
+                if (RadarContext.length == 0)
+                {
+                    $("body").append("<canvas id='" + id + "' />");
+                    RadarContext = $("#" + id);
+                    RadarContext.attr("width", "640"); // For Chrome.
+                    RadarContext.attr("height", "367"); // For Chrome.
+                    RadarContext.css("display", "none");
+                }
+                RadarContexts.push(RadarContext);
+            });
+        }
+
+    };
+
+    if (WeatherParameters.State == "HI")
+    {
+        img.src = "images/HawaiiRadarMap2.png";
+    }
+    else
+    {
+        img.src = "images/4000RadarMap2.jpg";
+    }
+}
+
 var UpdateDopplarRadarImage = function (Offset)
 {
     switch (Offset)
@@ -11349,6 +11939,116 @@ var RemoveDopplerRadarImageNoise = function (RadarContext)
             A = 255;
         }
         else if (R == 188 && G == 0 && B == 0)
+        {
+            // Brown
+            R = 115;
+            G = 31;
+            B = 4;
+            A = 255;
+        }
+
+
+        RadarImageData.data[i] = R;
+        RadarImageData.data[i + 1] = G;
+        RadarImageData.data[i + 2] = B;
+        RadarImageData.data[i + 3] = A;
+    }
+
+    RadarContext.putImageData(RadarImageData, 0, 0);
+
+    //MapContext.drawImage(RadarContext.canvas, 0, 0);
+};
+
+var RemoveDopplerRadarImageNoise2 = function (RadarContext)
+{
+    var RadarImageData = RadarContext.getImageData(0, 0, RadarContext.canvas.width, RadarContext.canvas.height);
+
+    // examine every pixel, 
+    // change any old rgb to the new-rgb
+    for (var i = 0; i < RadarImageData.data.length; i += 4)
+    {
+        // i + 0 = red
+        // i + 1 = green
+        // i + 2 = blue
+        // i + 3 = alpha (0 = transparent, 255 = opaque)
+        var R = RadarImageData.data[i];
+        var G = RadarImageData.data[i + 1];
+        var B = RadarImageData.data[i + 2];
+        var A = RadarImageData.data[i + 3];
+
+        // is this pixel the old rgb?
+        if ((R == 0 && G == 0 && B == 0)
+            || (R == 0 && G == 236 && B == 236)
+            || (R == 1 && G == 160 && B == 246)
+            || (R == 0 && G == 0 && B == 246))
+        {
+            // change to your new rgb
+
+            // Transparent
+            R = 0;
+            G = 0;
+            B = 0;
+            A = 0;
+        }
+        else if ((R == 0 && G == 255 && B == 0))
+        {
+            // Light Green 1
+            R = 49;
+            G = 210;
+            B = 22;
+            A = 255;
+        }
+        else if ((R == 0 && G == 200 && B == 0))
+        {
+            // Light Green 2
+            R = 0;
+            G = 142;
+            B = 0;
+            A = 255;
+        }
+        else if ((R == 0 && G == 144 && B == 0))
+        {
+            // Dark Green 1
+            R = 20;
+            G = 90;
+            B = 15;
+            A = 255;
+        }
+        else if ((R == 255 && G == 255 && B == 0))
+        {
+            // Dark Green 2
+            R = 10;
+            G = 40;
+            B = 10;
+            A = 255;
+        }
+        else if ((R == 231 && G == 192 && B == 0))
+        {
+            // Yellow
+            R = 196;
+            G = 179;
+            B = 70;
+            A = 255;
+        }
+        else if ((R == 255 && G == 144 && B == 0))
+        {
+            // Orange
+            R = 190;
+            G = 72;
+            B = 19;
+            A = 255;
+        }
+        else if ((R == 214 && G == 0 && B == 0)
+            || (R == 255 && G == 0 && B == 0))
+        {
+            // Red
+            R = 171;
+            G = 14;
+            B = 14;
+            A = 255;
+        }
+        else if ((R == 192 && G == 0 && B == 0)
+            || (R == 255 && G == 0 && B == 255))
         {
             // Brown
             R = 115;
@@ -11641,7 +12341,7 @@ var Progress = function (e)
             ////DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "Conditions", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 55, "WeatherStar", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "4000+", 3);
-            DrawTitleText(context, "WeatherStar", "4000+ 1.56");
+            DrawTitleText(context, "WeatherStar", "4000+ 1.57");
 
             // Draw a box for the progress.
             //context.fillStyle = "#000000";

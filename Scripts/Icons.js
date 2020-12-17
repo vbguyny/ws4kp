@@ -1468,6 +1468,9 @@ var GetWeatherIcon2FromIconLink = function (WeatherIconLink, WeatherConditions, 
             break;
     }
 
-    Icon = "images/2/" + Icon;
+    if (Icon)
+    {
+        Icon = "images/2/" + Icon;
+    }
     return Icon;
 };
