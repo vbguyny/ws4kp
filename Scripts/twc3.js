@@ -13081,6 +13081,8 @@ var DrawCustomScrollText = function (WeatherParameters, context)
 
 $.ajaxCORS = function (e)
 {
+    // If error 403 is being returned from the server, you may need to update the switch block under HOST CHECK in the CORS codebase.
+
     var Type = e.type;
     var DataType = e.dataType;
     var CrossDomain = e.crossDomain;
@@ -13124,6 +13126,8 @@ $.ajaxCORS = function (e)
         {
             Url += e.url;
         }
+
+        //console.log("CORS: " + e.url);
 
         $.ajax({
             type: Type,

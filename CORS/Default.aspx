@@ -55,6 +55,38 @@
         }
 
         Uri Uri = new Uri(Url);
+
+        // HOST CHECK
+        switch (Uri.Host.ToLower())
+        {
+            case "forecast.weather.gov":
+            case "api.weather.gov":
+            case "api.weather.com":
+            case "www.aviationweather.gov":
+            case "www.wunderground.com":
+            case "api-ak.wunderground.com":
+            case "tidesandcurrents.noaa.gov":
+            case "l-36.com":
+            case "airquality.weather.gov":
+            case "airnow.gov":
+            case "www.airnowapi.org":
+            case "www2.ehs.niu.edu":
+            case "alerts.weather.gov":
+            case "mesonet.agron.iastate.edu":
+            case "tgftp.nws.noaa.gov":
+            case "www.cpc.ncep.noaa.gov":
+            case "api.usno.navy.mil":
+            case "radar.weather.gov":
+                // Allowed
+                break;
+            default:
+                // Not allowed
+                Page.Response.Clear();
+                Page.Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                Page.Response.End();
+                return;
+        }
+
         string Origin = Uri.Scheme + "://" + Uri.Host;
         //Response.Write(Origin + "<br />");
         //Response.Write(Uri.Scheme + "<br />");
