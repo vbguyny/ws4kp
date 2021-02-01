@@ -6892,6 +6892,30 @@ var WeatherForecastParser = function (text)
 
         if (Line.startsWith("...") == true)
         {
+
+            if (_self.Alert != "")
+            {
+                var skipAlert = false;
+                if (Line.indexOf("...COASTAL FLOOD ADVISORY") == 0)
+                {
+                    skipAlert = true;
+                }
+                else if (Line.indexOf("...COASTAL FLOOD WARNING") == 0)
+                {
+                    skipAlert = true;
+                }
+                else if (Line.indexOf("...COASTAL FLOOD WATCH") == 0)
+                {
+                    skipAlert = true;
+                }
+
+                if (skipAlert == true)
+                {
+                    InAlert = false;
+                    return true;
+                }
+            }
+
             // Line is an alert.
             InAlert = true;
             _self.Alert = Line;
@@ -12933,6 +12957,14 @@ var DrawCurrentConditions = function (WeatherParameters, context)
             break;
         case CurrentConditionTypes.Conditions:
             text = WeatherCurrentConditions.Conditions;
+            if (text.length > 37)
+            {
+                text = WeatherCurrentConditions.ShortConditions;
+                if (text.length > 37)
+                {
+                    text = text.substr(0, 37);
+                }
+            }
             break;
         case CurrentConditionTypes.Temperature:
             text = "Temp: " + Temperature + String.fromCharCode(176) + TemperatureUnit;
