@@ -6240,6 +6240,10 @@ var PopulateCurrentConditions = function (WeatherParameters)
             if (Conditions.length > 15)
             {
                 Conditions = WeatherCurrentConditions.ShortConditions;
+                if (Conditions.length > 15)
+                {
+                    Conditions = Conditions.substr(0, 15);
+                }
             }
             //DrawText(context, "Star4000 Extended", "24pt", "#FFFFFF", 190, 170, WeatherCurrentConditions.Conditions, 2, "center");
             //DrawText(context, "Star4000 Extended", "24pt", "#FFFFFF", 190, 170, WeatherCurrentConditions.ShortConditions, 2, "center");
@@ -7658,6 +7662,38 @@ var PopulateHazardConditions = function (WeatherParameters)
 
     divHazards.empty();
 
+    // Remove duplicate hazard texts
+    WeatherHazardConditions.Hazards = WeatherHazardConditions.Hazards.unique();
+
+    // Reorder hazard texts
+    if (WeatherHazardConditions.Hazards.length > 1)
+    {
+        for (var index = 0; index < WeatherHazardConditions.Hazards.length - 1; index++)
+        {
+            var text = WeatherHazardConditions.Hazards[index];
+            var needToReorder = false;
+
+            if (text.indexOf("...COASTAL FLOOD ADVISORY ") == 0)
+            {
+                needToReorder = true;
+            }
+            else if (text.indexOf("...COASTAL FLOOD WARNING ") == 0)
+            {
+                needToReorder = true;
+            }
+            else if (text.indexOf("...COASTAL FLOOD WATCH ") == 0)
+            {
+                needToReorder = true;
+            }
+
+            if (needToReorder == true)
+            {
+                WeatherHazardConditions.Hazards[index] = WeatherHazardConditions.Hazards[WeatherHazardConditions.Hazards.length - 1];
+                WeatherHazardConditions.Hazards[WeatherHazardConditions.Hazards.length - 1] = text;
+            }
+        }
+    }
+
     $(WeatherHazardConditions.Hazards).each(function ()
     {
         //Text = this.replaceAll("\n", "<br/>");
@@ -8092,6 +8128,14 @@ String.prototype.replaceAll = function (search, replacement)
 //    return res + str;
 //}
 
+Array.prototype.unique = function ()
+{
+    var seen = {};
+    return this.filter(function (item)
+    {
+        return seen.hasOwnProperty(item) ? false : (seen[item] = true);
+    });
+};
 
 var GetLatLng = function (Url)
 {
@@ -12341,7 +12385,7 @@ var Progress = function (e)
             ////DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "Conditions", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 55, "WeatherStar", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "4000+", 3);
-            DrawTitleText(context, "WeatherStar", "4000+ 1.57");
+            DrawTitleText(context, "WeatherStar", "4000+ 1.58");
 
             // Draw a box for the progress.
             //context.fillStyle = "#000000";
