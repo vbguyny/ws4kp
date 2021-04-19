@@ -143,7 +143,7 @@ var FullScreenResize = function ()
                 LeftWidth = 60;
             }
             divTwcLeft.find("div>div>a>img").css("width", "");
-            divTwcLeft.find(">div").css("padding-right", "12px").css("padding-left", "");
+            //divTwcLeft.find(">div").css("padding-right", "12px").css("padding-left", "");
             divTwcLeft.attr("style", "width:" + LeftWidth + "px; height:100%; border:none; margin:0; padding:0; overflow:hidden; z-index:999999;");
             divTwcLeft.css("visibility", "visible");
             divTwcLeft.css("position", "");
@@ -155,7 +155,7 @@ var FullScreenResize = function ()
                 RightWidth = 60;
             }
             divTwcRight.find("div>div>a>img").css("width", "");
-            divTwcRight.find(">div").css("padding-left", "12px").css("padding-right", "");
+            //divTwcRight.find(">div").css("padding-left", "12px").css("padding-right", "");
             divTwcRight.attr("style", "width:" + RightWidth + "px; height:100%; border:none; margin:0; padding:0; overflow:hidden; z-index:999999;");
             divTwcRight.css("visibility", "visible");
             divTwcRight.css("position", "");
@@ -216,11 +216,11 @@ var FullScreenResize = function ()
                 LeftWidth = 25;
             }
             divTwcLeft.find("div>div>a>img").css("width", "100%");
-            divTwcLeft.find(">div").css("padding-right", "0px").css("padding-left", "12px");
+            //divTwcLeft.find(">div").css("padding-right", "0px");
             divTwcLeft.attr("style", "width:" + LeftWidth + "px; height:" + IFrameHeight + "px; border:none; margin:0; padding:0; overflow:hidden; z-index:1000000;");
             divTwcLeft.css("visibility", "visible");
             divTwcLeft.css("position", "absolute");
-            divTwcLeft.css("left", "0px");
+            divTwcLeft.css("left", "12px");
 
             RightWidth = (WindowWidth / 13);
             if (RightWidth < 25)
@@ -228,11 +228,11 @@ var FullScreenResize = function ()
                 RightWidth = 25;
             }
             divTwcRight.find("div>div>a>img").css("width", "100%");
-            divTwcRight.find(">div").css("padding-left", "0px").css("padding-right", "12px");
+            //divTwcRight.find(">div").css("padding-left", "0px");
             divTwcRight.attr("style", "width:" + RightWidth + "px; height:" + IFrameHeight + "px; border:none; margin:0; padding:0; overflow:hidden; z-index:1000000;");
             divTwcRight.css("visibility", "visible");
             divTwcRight.css("position", "absolute");
-            divTwcRight.css("right", "0px");
+            divTwcRight.css("right", "12px");
         }
     }
 
@@ -321,7 +321,7 @@ var OnFullScreen = function ()
 
 var InFullScreen = function()
 {
-    return true;
+    //return true;
     //return (document.fullscreenEnabled || document.mozFullScreenEnabled || document.webkitFullscreenEnabled);
     //return (window.innerHeight == screen.height);
     //return (((document.fullScreenElement || document.mozFullScreenElement || document.webkitFullscreenElement) != null) || (window.innerHeight >= screen.height));
