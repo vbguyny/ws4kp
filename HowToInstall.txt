@@ -1,0 +1,23 @@
+
+Windows 10:
+
+1. Install Windows 10 Pro
+2. Install IIS
+	a. Programs and Features
+	b. Turn Windows Features on or off
+		i. Internet Information Services
+			1. World Wide Web Services > Application Development Features > ASP.NET 4.8
+	c. Click OK
+	d. Confirm IIS is installed properly "http://localhost"
+3. Download a zip file of the code from https://github.com/vbguyny/ws4kp
+	a. Extract the folder "ws4kp-master" to C:\
+4. Create a Virtual Directory that points to "C:\ws4kp-master"
+	a. In IIS, expand, your machine name > Sites > Default Web Site
+	b. Right click on Default Web Site and click Add Virtual Directory
+	c. Alias: ws4kp
+	d. Physical path: C:\ws4kp-master
+	e. Click OK
+5. Open browser and navigate to "http://localhost/ws4kp/"
+
+Note: If the site doesn't work when trying to enter a location, open a separate tab to "https://geocode.arcgis.com/" and ensure that you can visit that site first and then refresh the WS4KP site and try again
+Note: The option to get location from GPS only works if the site has an SSL certificate.  See https://certifytheweb.com/

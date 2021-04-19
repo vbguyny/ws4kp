@@ -27,6 +27,9 @@ var divTwcNavContainer;
 var divTwcNav;
 var iframeTwc;
 var btnFullScreen;
+var divTwcBottomLeft;
+var divTwcBottomMiddle;
+var divTwcBottomRight;
 
 var divRefresh;
 var spanLastRefresh;
@@ -141,6 +144,7 @@ var FullScreenResize = function ()
             }
             divTwcLeft.attr("style", "width:" + LeftWidth + "px; height:100%; border:none; margin:0; padding:0; overflow:hidden; z-index:999999;");
             divTwcLeft.css("visibility", "visible");
+            divTwcLeft.css("position", "");
 
             //RightWidth = ((((WindowHeight * 16) / 9) - (WindowHeight * 1.25)) / 2) + "px";
             RightWidth = ((WindowWidth - (WindowHeight * 1.33333333333333333333)) / 2);
@@ -150,6 +154,7 @@ var FullScreenResize = function ()
             }
             divTwcRight.attr("style", "width:" + RightWidth + "px; height:100%; border:none; margin:0; padding:0; overflow:hidden; z-index:999999;");
             divTwcRight.css("visibility", "visible");
+            divTwcRight.css("position", "");
 
             IFrameWidth = WindowWidth - LeftWidth - RightWidth;
             NewWidth = IFrameWidth + "px";
@@ -163,8 +168,8 @@ var FullScreenResize = function ()
             NewWidth = WindowWidth + "px";
             divTwcTop.show();
             divTwcBottom.show();
-            divTwcLeft.hide();
-            divTwcRight.hide();
+            //divTwcLeft.hide();
+            //divTwcRight.hide();
             //Offset = 400;
             Offset = 0;
 
@@ -182,7 +187,8 @@ var FullScreenResize = function ()
             BottomHeight = ((WindowHeight - ((WindowWidth - Offset) * 0.75)) / 2);
             if (BottomHeight < 30)
             {
-                BottomHeight = 30;
+                //BottomHeight = 30;
+                BottomHeight = 0;
             }
             divTwcBottom.attr("style", "width:100%; height:" + BottomHeight + "px; border:none; margin:0; padding:0; overflow:hidden; z-index:999999;");
             divTwcBottom.css("visibility", "visible");
@@ -191,6 +197,34 @@ var FullScreenResize = function ()
             NewHeight = IFrameHeight + "px";
             iframeTwc.attr("style", "width:100%; height:" + IFrameHeight + "px; border:none; margin:0; padding:0; overflow:hidden; z-index:999999;");
             divTwcMiddle.attr("style", "width:100%; height:" + IFrameHeight + "px; border:none; margin:0; padding:0; overflow:hidden; z-index:999999;");
+
+            divTwcBottomLeft.hide();
+            divTwcBottomMiddle.hide();
+            divTwcBottomRight.hide();
+
+
+            divTwcLeft.show();
+            divTwcRight.show();
+
+            LeftWidth = ((WindowWidth - (WindowHeight * 1.33333333333333333333)) / 2);
+            if (LeftWidth < 60)
+            {
+                LeftWidth = 60;
+            }
+            divTwcLeft.attr("style", "width:" + LeftWidth + "px; height:100%; border:none; margin:0; padding:0; overflow:hidden; z-index:1000000;");
+            divTwcLeft.css("visibility", "visible");
+            divTwcLeft.css("position", "absolute");
+            divTwcLeft.css("left", "0px");
+
+            RightWidth = ((WindowWidth - (WindowHeight * 1.33333333333333333333)) / 2);
+            if (RightWidth < 60)
+            {
+                RightWidth = 60;
+            }
+            divTwcRight.attr("style", "width:" + RightWidth + "px; height:100%; border:none; margin:0; padding:0; overflow:hidden; z-index:1000000;");
+            divTwcRight.css("visibility", "visible");
+            divTwcRight.css("position", "absolute");
+            divTwcRight.css("right", "0px");
         }
     }
 
@@ -206,6 +240,10 @@ var FullScreenResize = function ()
         divTwc.attr("style", "");
         divTwcMiddle.attr("style", "");
         iframeTwc.attr("style", "");
+
+        divTwcBottomLeft.show();
+        divTwcBottomMiddle.show();
+        divTwcBottomRight.show();
 
         $(window).off("resize", FullScreenResize);
     }
@@ -952,6 +990,9 @@ $(function ()
     divTwcRight = $("#divTwcRight");
     divTwcNav = $("#divTwcNav");
     divTwcNavContainer = $("#divTwcNavContainer");
+    divTwcBottomLeft = $("#divTwcBottomLeft");
+    divTwcBottomMiddle = $("#divTwcBottomMiddle");
+    divTwcBottomRight = $("#divTwcBottomRight");
 
     frmScrollText = $("#frmScrollText");
     chkScrollText = $("#chkScrollText");
