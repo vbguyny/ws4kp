@@ -3416,6 +3416,12 @@ $(function ()
                 var Index1 = html.indexOf("MapClick.php?zoneid=");
                 var ZoneId = html.substr(Index1 + 20, 6);
 
+                if (Index1 == -1)
+                {
+                    Index1 = html.indexOf("MapClick.php%3Fzoneid%3D");
+                    ZoneId = html.substr(Index1 + 24, 6);
+                }
+
                 ////obhistory/KHWV.html
                 //var Index2 = html.indexOf("obhistory/");
                 //var StationId = html.substr(Index2 + 10, 4);
@@ -9201,6 +9207,12 @@ var WeatherTravelForecast = function (WeatherDwmlParser, ForceToday, ForceTonigh
     //        }
     //    });
     //});
+
+    if (WeatherDwmlParser.data_forecast.location.description == "Boston, MA")
+    {
+        var debug = 1;
+    }
+
     $(WeatherDwmlParser.data_forecast.time_layout).each(function ()
     {
         _LayoutKey = this.layout_key;
@@ -9243,18 +9255,38 @@ var WeatherTravelForecast = function (WeatherDwmlParser, ForceToday, ForceTonigh
     });
 
     _LayoutKey = WeatherDwmlParser.data_forecast.parameters.temperature_maximum.time_layout;
-    this.MaximumTemperature = WeatherDwmlParser.data_forecast.parameters.temperature_maximum.value[_PeriodIndex[_LayoutKey]];
+    var index = _PeriodIndex[_LayoutKey];
+    if (index == undefined)
+    {
+        index = 0;
+    }
+    this.MaximumTemperature = WeatherDwmlParser.data_forecast.parameters.temperature_maximum.value[index];
     this.MaximumTemperatureC = ConvertFahrenheitToCelsius(this.MaximumTemperature);
 
     _LayoutKey = WeatherDwmlParser.data_forecast.parameters.temperature_minimum.time_layout;
-    this.MinimumTemperature = WeatherDwmlParser.data_forecast.parameters.temperature_minimum.value[_PeriodIndex[_LayoutKey]];
+    var index = _PeriodIndex[_LayoutKey];
+    if (index == undefined)
+    {
+        index = 0;
+    }
+    this.MinimumTemperature = WeatherDwmlParser.data_forecast.parameters.temperature_minimum.value[index];
     this.MinimumTemperatureC = ConvertFahrenheitToCelsius(this.MinimumTemperature);
 
     _LayoutKey = WeatherDwmlParser.data_forecast.parameters.weather.time_layout;
-    this.Conditions = WeatherDwmlParser.data_forecast.parameters.weather.weather_conditions[_PeriodIndex[_LayoutKey]].weather_summary.trim();
+    var index = _PeriodIndex[_LayoutKey];
+    if (index == undefined)
+    {
+        index = 0;
+    }
+    this.Conditions = WeatherDwmlParser.data_forecast.parameters.weather.weather_conditions[index].weather_summary.trim();
 
     _LayoutKey = WeatherDwmlParser.data_forecast.parameters.conditions_icon.time_layout;
-    this.Icon = WeatherDwmlParser.data_forecast.parameters.conditions_icon.icon_link[_PeriodIndex[_LayoutKey]];
+    var index = _PeriodIndex[_LayoutKey];
+    if (index == undefined)
+    {
+        index = 0;
+    }
+    this.Icon = WeatherDwmlParser.data_forecast.parameters.conditions_icon.icon_link[index];
     //this.Icon = GetWeatherIconFromIconLink(this.Icon);
     //this.Icon = GetWeatherRegionalIconFromIconLink(this.Icon);
     //this.Icon = GetWeatherRegionalIconFromIconLink(this.Icon, this.Conditions, _WeatherParameters);
@@ -12409,7 +12441,7 @@ var Progress = function (e)
             ////DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "Conditions", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 55, "WeatherStar", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "4000+", 3);
-            DrawTitleText(context, "WeatherStar", "4000+ 1.59");
+            DrawTitleText(context, "WeatherStar", "4000+ 1.60");
 
             // Draw a box for the progress.
             //context.fillStyle = "#000000";

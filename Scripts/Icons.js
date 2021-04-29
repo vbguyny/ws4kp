@@ -312,8 +312,6 @@ var GetWeatherIconFromIconLink = function (WeatherIconLink, WeatherConditions, W
     switch (IconLinkName)
     {
 
-        case "hot.png":
-        case "cold.png":
         case "skc.png":
         case "skc10.png":
         case "skc20.png":
@@ -346,6 +344,14 @@ var GetWeatherIconFromIconLink = function (WeatherIconLink, WeatherConditions, W
             //case "Hot":
             //case "Cold":
             Icon = "cc_clear1.gif";
+            break;
+
+        case "hot.png":
+            Icon = "cc_hot.gif";
+            break;
+
+        case "cold.png":
+            Icon = "cc_cold.gif";
             break;
 
         case "nskc.png":
@@ -479,6 +485,10 @@ var GetWeatherIconFromIconLink = function (WeatherIconLink, WeatherConditions, W
             Icon = "cc_cloudy.gif";
             break;
 
+        case "hz.png":
+            Icon = "cc_haze.gif";
+            break;
+
         case "fg.png":
         case "fg10.png":
         case "fg20.png":
@@ -545,6 +555,9 @@ var GetWeatherIconFromIconLink = function (WeatherIconLink, WeatherConditions, W
         case "ndu80.png":
         case "ndu90.png":
         case "ndu100.png":
+            Icon = "cc_fog.gif";
+            break;
+
         case "fu.png":
         case "fu10.png":
         case "fu20.png":
@@ -567,7 +580,7 @@ var GetWeatherIconFromIconLink = function (WeatherIconLink, WeatherConditions, W
         case "nfu80.png":
         case "nfu90.png":
         case "nfu100.png":
-            Icon = "cc_fog.gif";
+            Icon = "cc_smoke.gif";
             break;
 
         //case "Blowing Snow":
@@ -1084,10 +1097,6 @@ var GetWeatherIconFromIconLink = function (WeatherIconLink, WeatherConditions, W
 
         case "wind.png":
         case "wind_skc.png":
-        case "wind_sct.png":
-        case "wind_few.png":
-        case "wind_bkn.png":
-        case "wind_ovc.png":
         case "tropstorm.png":
         case "tropstorm-noh.png":
         case "hurr-noh.png":
@@ -1110,17 +1119,33 @@ var GetWeatherIconFromIconLink = function (WeatherIconLink, WeatherConditions, W
             Icon = "cc_windy.gif";
             break;
 
+        case "wind_sct.png":
+        case "wind_few.png":
+            Icon = "cc_partly_cloudy_windy.gif";
+            break;
+
+        case "wind_bkn.png":
+        case "wind_ovc.png":
+            Icon = "cc_mostly_cloudy_windy.gif";
+            break;
+
         //case "nhurr-noh.png":
         case "nwind.png":
         case "nwind_skc.png":
-        case "nwind_sct.png":
-        case "nwind_few.png":
-        case "nwind_bkn.png":
-        case "nwind_ovc.png":
         case "ntropstorm.png":
         case "ntropstorm-noh.png":
         case "nhurr.png":
             Icon = "cc_windy2.gif";
+            break;
+
+        case "nwind_few.png":
+        case "nwind_sct.png":
+            Icon = "cc_mostly_clear_windy.gif";
+            break;
+
+        case "nwind_bkn.png":
+        case "nwind_ovc.png":
+            Icon = "cc_partly_clear_windy.gif";
             break;
 
         case "null":
@@ -1339,6 +1364,38 @@ var GetWeatherRegionalIconFromIconLink = function (WeatherIconLink, WeatherCondi
             Icon = "Thunderstorm.gif";
             break;
 
+        case "cc_hot.gif":
+            Icon = "hot.gif";
+            break;
+
+        case "cc_cold.gif":
+            Icon = "cold.gif";
+            break;
+
+        case "cc_smoke.gif":
+            Icon = "smoke.gif";
+            break;
+
+        case "cc_haze.gif":
+            Icon = "haze.gif";
+            break;
+
+        case "cc_partly_cloudy_windy.gif":
+            Icon = "partly-cloudy-wind.gif";
+            break;
+
+        case "cc_mostly_cloudy_windy.gif":
+            Icon = "mostly-cloudy-wind.gif";
+            break;
+
+        case "cc_mostly_clear_windy.gif":
+            Icon = "mostly-clear-wind.gif";
+            break;
+
+        case "cc_partly_clear_windy.gif":
+            Icon = "partly-clear-wind.gif";
+            break;
+
         default:
             console.error("Unable to locate regional icon for '" + WeatherIcon + "'");
             Icon = "";
@@ -1358,6 +1415,8 @@ var GetWeatherIcon2FromIconLink = function (WeatherIconLink, WeatherConditions, 
     switch (WeatherIcon)
     {
         case "cc_clear1.gif":
+        case "cc_cold.gif":
+        case "cc_hot.gif":
             Icon = "Sunny.gif";
             break;
 
@@ -1382,10 +1441,12 @@ var GetWeatherIcon2FromIconLink = function (WeatherIconLink, WeatherConditions, 
             break;
 
         case "cc_cloudy.gif":
+        case "cc_haze.gif":
             Icon = "Cloudy.gif";
             break;
 
         case "cc_fog.gif":
+        case "cc_smoke.gif":
             Icon = "Fog.gif";
             break;
 
@@ -1455,6 +1516,10 @@ var GetWeatherIcon2FromIconLink = function (WeatherIconLink, WeatherConditions, 
 
         case "cc_windy.gif":
         case "cc_windy2.gif":
+        case "cc_partly_cloudy_windy.gif":
+        case "cc_mostly_cloudy_windy.gif":
+        case "cc_mostly_clear_windy.gif":
+        case "cc_partly_clear_windy.gif":
             Icon = "Windy.gif";
             break;
 
