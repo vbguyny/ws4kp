@@ -13207,6 +13207,7 @@ var Themes = {
     ThemeA: 1, // Classic
     ThemeB: 2, // Sea Foam
     ThemeC: 3, // Comsic
+    ThemeD: 4, // Dark
 };
 var _Themes = Themes.ThemeA;
 var _TopColor1 = "rgb(192, 91, 2)";
@@ -13274,6 +13275,13 @@ var AssignThemes = function (e)
             _TopColor2 = "rgb(73, 34, 66)";
             _SideColor1 = "rgb(46, 18, 81)";
             _SideColor2 = "rgb(115, 27, 201)";
+            break;
+        case "THEMED":
+            _Themes = Themes.ThemeD;
+            _TopColor1 = "rgb(96, 96, 96)";
+            _TopColor2 = "rgb(0, 0, 0)";
+            _SideColor1 = "rgb(0, 0, 0)";
+            _SideColor2 = "rgb(128, 128, 128)";
             break;
     }
 

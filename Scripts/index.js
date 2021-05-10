@@ -58,9 +58,9 @@ var _NoSleep = new NoSleep();
 var _LastUpdate = null;
 var _AutoRefreshIntervalId = null;
 var _AutoRefreshIntervalMs = 500;
-var _AutoRefreshTotalIntervalMs = 10000; // 10 sec.
+//var _AutoRefreshTotalIntervalMs = 10000; // 10 sec.
 //var _AutoRefreshTotalIntervalMs = 300000; // 5 min.
-//var _AutoRefreshTotalIntervalMs = 600000; // 10 min.
+var _AutoRefreshTotalIntervalMs = 600000; // 10 min.
 var _AutoRefreshCountMs = 0;
 
 var _IsAudioPlaying = false;
@@ -524,6 +524,7 @@ var LoadTwcData = function (Url, AutoRefresh)
                     iframeTwc[0].contentWindow.AssignScrollText({ ScrollText: txtScrollText.val() });
                 }
 
+                AssignThemes({ Themes: $("input[type='radio'][name='radThemes']:checked").val() });
                 iframeTwc[0].contentWindow.AssignThemes({ Themes: $("input[type='radio'][name='radThemes']:checked").val() });
 
                 iframeTwc[0].contentWindow.AssignUnits({ Units: $("input[type='radio'][name='radUnits']:checked").val() });
@@ -581,6 +582,63 @@ var LoadTwcData = function (Url, AutoRefresh)
         }
     });
     iframeTwc.attr("src", "about:blank");
+};
+
+var Themes = {
+    ThemeA: 1, // Classic
+    ThemeB: 2, // Sea Foam
+    ThemeC: 3, // Comsic
+    ThemeD: 4, // Dark
+};
+var _Themes = Themes.ThemeA;
+
+var AssignThemes = function (e)
+{
+    var forecolor;
+    var backcolor;
+    var butncolor;
+    var brdrcolor;
+    var invert;
+
+    switch (e.Themes)
+    {
+        case "THEMEA":
+            _Themes = Themes.ThemeA;
+            break;
+        case "THEMEB":
+            _Themes = Themes.ThemeB;
+            break;
+        case "THEMEC":
+            _Themes = Themes.ThemeC;
+            break;
+        case "THEMED":
+            _Themes = Themes.ThemeD;
+            break;
+    }
+
+    switch (_Themes)
+    {
+        case Themes.ThemeD:
+            forecolor = "rgb(255, 255, 255)";
+            backcolor = "rgb(0, 0, 0)";
+            butncolor = "rgb(96, 96, 96)";
+            brdrcolor = "rgb(255, 255, 255)";
+            invert = "100";
+            break;
+        default:
+            forecolor = "rgb(0, 0, 0)";
+            backcolor = "rgb(255, 255, 255)";
+            butncolor = "rgb(224, 224, 224)";
+            brdrcolor = "rgb(0, 0, 0)";
+            invert = "0";
+            break;
+    }
+
+    $("button, input").css("background-color", butncolor);
+    $("input, button").css("border", "solid 1px " + brdrcolor);
+    $("body, input, button").css("color", forecolor);
+    $("body, input[type='text']").css("background-color", backcolor);
+    $("#imgGetGps").css("filter", "invert(" + invert + "%)");
 };
 
 var AssignLastUpdate = function ()
@@ -1350,6 +1408,7 @@ $(function ()
         localStorage.removeItem("TwcUnits");
 
         $("#radThemeA").prop("checked", "checked");
+        AssignThemes({ Themes: "THEMEA" });
         localStorage.removeItem("TwcThemes");
 
         TwcCallBack({ Status: "ISNARRATIONPLAYING", Value: false });
@@ -1394,6 +1453,11 @@ $(function ()
     {
         $("#radThemeC").prop("checked", "checked");
     }
+    else if (TwcThemes == "THEMED")
+    {
+        $("#radThemeD").prop("checked", "checked");
+    }
+    AssignThemes({ Themes: TwcThemes });
 
     $("input[type='radio'][name='radUnits']").on("change", function ()
     {
@@ -1407,6 +1471,7 @@ $(function ()
     {
         var Themes = $(this).val();
         localStorage.setItem("TwcThemes", Themes);
+        AssignThemes({ Themes: Themes });
         iframeTwc[0].contentWindow.AssignThemes({ Themes: Themes });
     });
 

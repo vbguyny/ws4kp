@@ -38,11 +38,19 @@
 body
 {
     font-family: "Star4000";
+    color: #000000;
+    background-color: #ffffff;
 }
 
-input, button
-{
+input, button {
     font-family: "Star4000";
+    background-color: #e0e0e0;
+    border: solid 1px #000000;
+    color: #000000;
+}
+
+input[type=text] {
+    background-color: #ffffff;
 }
 
 #imgGetGps
