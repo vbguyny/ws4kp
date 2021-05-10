@@ -9208,10 +9208,10 @@ var WeatherTravelForecast = function (WeatherDwmlParser, ForceToday, ForceTonigh
     //    });
     //});
 
-    if (WeatherDwmlParser.data_forecast.location.description == "Boston, MA")
-    {
-        var debug = 1;
-    }
+    //if (WeatherDwmlParser.data_forecast.location.description == "Boston, MA")
+    //{
+    //    var debug = 1;
+    //}
 
     $(WeatherDwmlParser.data_forecast.time_layout).each(function ()
     {
@@ -12240,10 +12240,14 @@ var Progress = function (e)
 
         //context.drawImage(BackGroundImage, 0, 0);
         //console.log(gifProgress.get_canvas());
-        gifProgress.get_canvas().width = (Progress / 100) * 530 + 1;
+        var width = (Progress / 100) * 530 + 1;
+        gifProgress.get_canvas().width = width;
 
         if (Progress > 0)
         {
+            // Put white at the end of the progress incase it doesn't render properly
+            DrawBox(context, "#ffffff", 53 + width, 430, 530 - width, 18);
+
             gifProgress.setX(53);
             gifProgress.setY(430);
             //gifProgress.pause();

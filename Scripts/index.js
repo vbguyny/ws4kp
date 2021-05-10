@@ -58,9 +58,9 @@ var _NoSleep = new NoSleep();
 var _LastUpdate = null;
 var _AutoRefreshIntervalId = null;
 var _AutoRefreshIntervalMs = 500;
-//var _AutoRefreshTotalIntervalMs = 10000; // 10 sec.
+var _AutoRefreshTotalIntervalMs = 10000; // 10 sec.
 //var _AutoRefreshTotalIntervalMs = 300000; // 5 min.
-var _AutoRefreshTotalIntervalMs = 600000; // 10 min.
+//var _AutoRefreshTotalIntervalMs = 600000; // 10 min.
 var _AutoRefreshCountMs = 0;
 
 var _IsAudioPlaying = false;
@@ -96,7 +96,7 @@ var _canvasIds = [
         "canvasHazards"
 ];
 
-var FullScreenResize = function ()
+var FullScreenResize = function (AutoRefresh)
 {
     var iframeDoc = $(iframeTwc[0].contentWindow.document);
     var WindowWidth = $(window).width();
@@ -146,6 +146,12 @@ var FullScreenResize = function ()
             //divTwcLeft.find(">div").css("padding-right", "12px").css("padding-left", "");
             divTwcLeft.attr("style", "width:" + LeftWidth + "px; height:100%; border:none; margin:0; padding:0; overflow:hidden; z-index:999999;");
             divTwcLeft.css("visibility", "visible");
+            divTwcLeft.css("opacity", "1");
+            if (AutoRefresh === true)
+            {
+                divTwcLeft.css("opacity", "0");
+                divTwcLeft.css("visibility", "hidden");
+            }
             divTwcLeft.css("position", "");
 
             //RightWidth = ((((WindowHeight * 16) / 9) - (WindowHeight * 1.25)) / 2) + "px";
@@ -158,6 +164,12 @@ var FullScreenResize = function ()
             //divTwcRight.find(">div").css("padding-left", "12px").css("padding-right", "");
             divTwcRight.attr("style", "width:" + RightWidth + "px; height:100%; border:none; margin:0; padding:0; overflow:hidden; z-index:999999;");
             divTwcRight.css("visibility", "visible");
+            divTwcRight.css("opacity", "1");
+            if (AutoRefresh === true)
+            {
+                divTwcRight.css("opacity", "0");
+                divTwcRight.css("visibility", "hidden");
+            }
             divTwcRight.css("position", "");
 
             IFrameWidth = WindowWidth - LeftWidth - RightWidth;
@@ -172,6 +184,7 @@ var FullScreenResize = function ()
             NewWidth = WindowWidth + "px";
             divTwcTop.show();
             divTwcBottom.show();
+
             //divTwcLeft.hide();
             //divTwcRight.hide();
             //Offset = 400;
@@ -196,6 +209,12 @@ var FullScreenResize = function ()
             }
             divTwcBottom.attr("style", "width:100%; height:" + BottomHeight + "px; border:none; margin:0; padding:0; overflow:hidden; z-index:999999;");
             divTwcBottom.css("visibility", "visible");
+            divTwcBottom.css("opacity", "1");
+            if (AutoRefresh === true)
+            {
+                divTwcBottom.css("opacity", "0");
+                divTwcBottom.css("visibility", "hidden");
+            }
 
             IFrameHeight = WindowHeight - TopHeight - BottomHeight;
             NewHeight = IFrameHeight + "px";
@@ -205,8 +224,6 @@ var FullScreenResize = function ()
             divTwcBottomLeft.hide();
             divTwcBottomMiddle.hide();
             divTwcBottomRight.hide();
-
-
             divTwcLeft.show();
             divTwcRight.show();
 
@@ -219,6 +236,12 @@ var FullScreenResize = function ()
             //divTwcLeft.find(">div").css("padding-right", "0px");
             divTwcLeft.attr("style", "width:" + LeftWidth + "px; height:" + IFrameHeight + "px; border:none; margin:0; padding:0; overflow:hidden; z-index:1000000;");
             divTwcLeft.css("visibility", "visible");
+            divTwcLeft.css("opacity", "1");
+            if (AutoRefresh === true)
+            {
+                divTwcLeft.css("opacity", "0");
+                divTwcLeft.css("visibility", "hidden");
+            }
             divTwcLeft.css("position", "absolute");
             divTwcLeft.css("left", "12px");
 
@@ -231,6 +254,12 @@ var FullScreenResize = function ()
             //divTwcRight.find(">div").css("padding-left", "0px");
             divTwcRight.attr("style", "width:" + RightWidth + "px; height:" + IFrameHeight + "px; border:none; margin:0; padding:0; overflow:hidden; z-index:1000000;");
             divTwcRight.css("visibility", "visible");
+            divTwcRight.css("opacity", "1");
+            if (AutoRefresh === true)
+            {
+                divTwcRight.css("opacity", "0");
+                divTwcRight.css("visibility", "hidden");
+            }
             divTwcRight.css("position", "absolute");
             divTwcRight.css("right", "12px");
         }
@@ -460,7 +489,7 @@ var btnNavigateMenu_click = function ()
     return false;
 };
 
-var LoadTwcData = function (Url)
+var LoadTwcData = function (Url, AutoRefresh)
 {
     txtAddress.blur();
     StopAutoRefreshTimer();
@@ -488,7 +517,7 @@ var LoadTwcData = function (Url)
 
             default:
                 iframeTwc.off("load");
-                FullScreenResize();
+                FullScreenResize(AutoRefresh);
 
                 if (chkScrollText.is(":checked") == true)
                 {
@@ -1454,7 +1483,7 @@ var StartAutoRefreshTimer = function ()
         if (_AutoRefreshCountMs >= _AutoRefreshTotalIntervalMs)
         {
             // Time has elapsed.
-            LoadTwcData(_TwcDataUrl);
+            LoadTwcData(_TwcDataUrl, true);
         }
     };
     _AutoRefreshIntervalId = window.setInterval(AutoRefreshTimer, _AutoRefreshIntervalMs);
