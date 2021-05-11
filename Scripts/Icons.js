@@ -324,6 +324,16 @@ var GetWeatherIconFromIconLink = function (WeatherIconLink, WeatherConditions, W
         case "skc90.png":
         case "skc100.png":
         case "m_skc.png":
+            //case "Sunny":
+            //case "Clear":
+            //case "Patchy Frost":
+            //case "Areas Frost":
+            //case "Frost":
+            //case "Hot":
+            //case "Cold":
+            Icon = "cc_clear1.gif";
+            break;
+
         case "few.png":
         case "few10.png":
         case "few20.png":
@@ -336,14 +346,7 @@ var GetWeatherIconFromIconLink = function (WeatherIconLink, WeatherConditions, W
         case "few90.png":
         case "few100.png":
         case "m_few.png":
-            //case "Sunny":
-            //case "Clear":
-            //case "Patchy Frost":
-            //case "Areas Frost":
-            //case "Frost":
-            //case "Hot":
-            //case "Cold":
-            Icon = "cc_clear1.gif";
+            Icon = "Mostly-Sunny.gif";
             break;
 
         case "hot.png":
@@ -365,6 +368,9 @@ var GetWeatherIconFromIconLink = function (WeatherIconLink, WeatherConditions, W
         case "nskc80.png":
         case "nskc90.png":
         case "nskc100.png":
+            Icon = "cc_clear0.gif";
+            break;
+
         case "nfew.png":
         case "nfew10.png":
         case "nfew20.png":
@@ -376,7 +382,7 @@ var GetWeatherIconFromIconLink = function (WeatherIconLink, WeatherConditions, W
         case "nfew80.png":
         case "nfew90.png":
         case "nfew100.png":
-            Icon = "cc_clear0.gif";
+            Icon = "Mostly-Clear2.gif";
             break;
 
         case "bkn.png":
@@ -1394,6 +1400,14 @@ var GetWeatherRegionalIconFromIconLink = function (WeatherIconLink, WeatherCondi
 
         case "cc_partly_clear_windy.gif":
             Icon = "partly-clear-wind.gif";
+            break;
+
+        case "mostly-clear2.gif":
+            Icon = "Mostly-Clear2.gif";
+            break;
+
+        case "mostly-sunny.gif":
+            Icon = "Mostly-Sunny.gif";
             break;
 
         default:
