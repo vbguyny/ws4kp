@@ -599,7 +599,6 @@ var AssignThemes = function (e)
     var butncolor;
     var brdrcolor;
     var invert;
-    var themecolor;
 
     switch (e.Themes)
     {
@@ -625,7 +624,6 @@ var AssignThemes = function (e)
             butncolor = "rgb(96, 96, 96)";
             brdrcolor = "rgb(255, 255, 255)";
             invert = "100";
-            themecolor = "#000000";
             break;
         default:
             forecolor = "rgb(0, 0, 0)";
@@ -633,16 +631,14 @@ var AssignThemes = function (e)
             butncolor = "rgb(224, 224, 224)";
             brdrcolor = "rgb(0, 0, 0)";
             invert = "0";
-            themecolor = "#ffffff";
             break;
     }
 
     $("button, input").css("background-color", butncolor);
     $("input, button").css("border", "solid 1px " + brdrcolor);
     $("body, input, button").css("color", forecolor);
-    $("body, input[type=text]").css("background-color", backcolor);
+    $("body, input[type='text']").css("background-color", backcolor);
     $("#imgGetGps").css("filter", "invert(" + invert + "%)");
-    $("meta[name=theme-color]").attr("content", themecolor);
 };
 
 var AssignLastUpdate = function ()
