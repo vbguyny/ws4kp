@@ -232,6 +232,7 @@ input[type=text] {
 {
     visibility: hidden;
     position: absolute;
+    position: absolute;
 }
 
 #iframeTwc
@@ -247,8 +248,21 @@ input[type=text] {
     cursor: none !important;
 }
 
-#txtScrollText
-{
-    width: 475px;
+#txtScrollText, #txtScrollRss {
+    width: 470px;
     /*text-transform: uppercase;*/
+}
+
+#lblScrollText, #lblScrollRss {
+    display: inline-block;
+    width: 100px;
+}
+
+#frmScrollText, #frmScrollRss {
+    display: initial;
+}
+
+.Disabled{
+    pointer-events: none;
+    opacity: 0.5;
 }

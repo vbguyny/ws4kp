@@ -43,10 +43,17 @@ var spanStationId;
 var spanRadarId;
 var spanZoneId;
 
+var radScrollDefault;
+
 var frmScrollText;
-var chkScrollText;
+var radScrollText;
 var txtScrollText;
 var btnScrollText;
+
+var frmScrollRss;
+var radScrollRss;
+var txtScrollRss;
+var btnScrollRss;
 
 //var _InFullScreen = false;
 var _AutoSelectQuery = false;
@@ -519,9 +526,13 @@ var LoadTwcData = function (Url, AutoRefresh)
                 iframeTwc.off("load");
                 FullScreenResize(AutoRefresh);
 
-                if (chkScrollText.is(":checked") == true)
+                if (radScrollText.is(":checked") == true)
                 {
-                    iframeTwc[0].contentWindow.AssignScrollText({ ScrollText: txtScrollText.val() });
+                    AssignScrollText({ ScrollText: txtScrollText.val() });
+                }
+                else if (radScrollRss.is(":checked") == true)
+                {
+                    AssignScrollText({ ScrollRss: txtScrollRss.val() });
                 }
 
                 AssignThemes({ Themes: $("input[type='radio'][name='radThemes']:checked").val() });
@@ -1093,8 +1104,11 @@ $(function ()
     divTwcBottomMiddle = $("#divTwcBottomMiddle");
     divTwcBottomRight = $("#divTwcBottomRight");
 
+    radScrollDefault = $("#radScrollDefault");
+    radScrollDefault.on("change", radScroll_change);
+
     frmScrollText = $("#frmScrollText");
-    chkScrollText = $("#chkScrollText");
+    radScrollText = $("#radScrollText");
     txtScrollText = $("#txtScrollText");
     btnScrollText = $("#btnScrollText");
 
@@ -1103,7 +1117,19 @@ $(function ()
     {
         txtScrollText.select();
     });
-    chkScrollText.on("change", chkScrollText_change);
+    radScrollText.on("change", radScroll_change);
+
+    frmScrollRss = $("#frmScrollRss");
+    radScrollRss = $("#radScrollRss");
+    txtScrollRss = $("#txtScrollRss");
+    btnScrollRss = $("#btnScrollRss");
+
+    frmScrollRss.on("submit", frmScrollRss_submit);
+    txtScrollRss.on("focus", function ()
+    {
+        txtScrollRss.select();
+    });
+    radScrollRss.on("change", radScroll_change);
 
     txtAddress.on("focus", function ()
     {
@@ -1377,6 +1403,10 @@ $(function ()
         _IsNarrationPlaying = true;
     }
 
+    radScrollDefault.prop("checked", "");
+    radScrollText.prop("checked", "");
+    radScrollRss.prop("checked", "");
+
     var TwcScrollText = localStorage.getItem("TwcScrollText");
     if (TwcScrollText)
     {
@@ -1385,12 +1415,26 @@ $(function ()
     var TwcScrollTextChecked = localStorage.getItem("TwcScrollTextChecked");
     if (TwcScrollTextChecked && TwcScrollTextChecked == "true")
     {
-        chkScrollText.prop("checked", "checked");
+        localStorage.setItem("TwcScrollChecked", "radScrollText");
+    }
+
+    var TwcScrollRss = localStorage.getItem("TwcScrollRss");
+    if (TwcScrollRss)
+    {
+        txtScrollRss.val(TwcScrollRss);
+    }
+
+    var TwcScrollChecked = localStorage.getItem("TwcScrollChecked");
+    if (TwcScrollChecked)
+    {
+        $("#" + TwcScrollChecked).prop("checked", "checked");
     }
     else
     {
-        chkScrollText.prop("checked", "");
+        radScrollDefault.prop("checked", "checked");
     }
+
+    radScroll_change();
 
     btnClearQuery.on("click", function ()
     {
@@ -1400,8 +1444,16 @@ $(function ()
         spanRadarId.text("");
         spanZoneId.text("");
 
-        chkScrollText.prop("checked", "");
+        radScrollDefault.prop("checked", "checked");
+
+        radScrollText.prop("checked", "");
         txtScrollText.val("");
+
+        radScrollRss.prop("checked", "");
+        txtScrollRss.val("");
+
+        radScroll_change();
+
         localStorage.removeItem("TwcScrollText");
         localStorage.removeItem("TwcScrollTextChecked");
 
@@ -1631,27 +1683,66 @@ var PopulateWeatherParameters = function ()
 
 var frmScrollText_submit = function (e)
 {
-    chkScrollText_change();
+    radScroll_change();
 
     return false;
 };
 
-var chkScrollText_change = function (e)
+var frmScrollRss_submit = function (e)
+{
+    radScroll_change();
+
+    return false;
+};
+
+var radScroll_change = function (e)
 {
     txtScrollText.blur();
+    txtScrollText.addClass("Disabled");
+    btnScrollText.addClass("Disabled");
 
-    var ScrollText = txtScrollText.val();
-    localStorage.setItem("TwcScrollText", ScrollText);
+    txtScrollRss.blur();
+    txtScrollRss.addClass("Disabled");
+    btnScrollRss.addClass("Disabled");
 
-    var ScrollTextChecked = chkScrollText.is(":checked");
-    localStorage.setItem("TwcScrollTextChecked", ScrollTextChecked);
+    var ScrollCheckedId = $("input[name='radScroll']:checked").attr("id");
+    localStorage.setItem("TwcScrollChecked", ScrollCheckedId);
 
-    if (chkScrollText.is(":checked") == false)
+    switch (ScrollCheckedId)
     {
-        ScrollText = "";
-    }
+        case "radScrollDefault":
+            AssignScrollText(null);
+            break;
 
-    iframeTwc[0].contentWindow.AssignScrollText({ ScrollText: ScrollText });
+        case "radScrollText":
+            txtScrollText.removeClass("Disabled");
+            btnScrollText.removeClass("Disabled");
+
+            var ScrollText = txtScrollText.val();
+            localStorage.setItem("TwcScrollText", ScrollText);
+
+            AssignScrollText({ ScrollText: ScrollText });
+            break;
+
+        case "radScrollRss":
+            txtScrollRss.removeClass("Disabled");
+            btnScrollRss.removeClass("Disabled");
+
+            var ScrollRss = txtScrollRss.val();
+            localStorage.setItem("TwcScrollRss", ScrollRss);
+
+            AssignScrollText({ ScrollRss: ScrollRss });
+            break;
+
+    }
+};
+
+var AssignScrollText = function (e)
+{
+    if (iframeTwc[0].contentWindow.AssignScrollText)
+    {
+        iframeTwc[0].contentWindow.AssignScrollText(e);
+    }
 };
 
 var getParameterByName = function (name, url)

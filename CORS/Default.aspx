@@ -59,11 +59,17 @@
                 // Allowed
                 break;
             default:
-                // Not allowed
-                Page.Response.Clear();
-                Page.Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
-                Page.Response.End();
-                return;
+
+                if (Url.EndsWith("?rss=1") == false)
+                {
+                    // Not allowed
+                    Page.Response.Clear();
+                    Page.Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+                    Page.Response.End();
+                    return;
+                }
+
+                break;
         }
 
 
@@ -96,7 +102,8 @@
 
         if (Url.Contains("api.weather.gov") == true)
         {
-            client.Headers.Add("User-Agent", "(WeatherStar 4000+, vbguyny@gmail.com)");
+            //client.Headers.Add("User-Agent", "(WeatherStar 4000+, vbguyny@gmail.com)");
+            client.Headers.Add("User-Agent", "(WeatherStar 4000+/v1 (https://battaglia.ddns.net/twc; vbguyny@gmail.com)");
             client.Headers.Add("Accept", "application/vnd.noaa.dwml+xml");
         }
         else
@@ -109,7 +116,7 @@
             //client.Headers.Add("Cache-Control", "max-age=0");
         }
 
-        // Use if weather.gov blocks IP
+        //// Use if weather.gov blocks IP
         //switch (Uri.Host.ToLower())
         //{
         //    case "forecast.weather.gov":
@@ -119,8 +126,8 @@
         //    case "radar.weather.gov":
         //    case "www.aviationweather.gov":
         //        Url = "https://us.hidester.com/proxy.php?u=" + HttpUtility.UrlEncode(Url) + "&b=6&f=norefer";
-        //        client.Headers.Add(HttpRequestHeader.Cookie, "s=kphvfnirolpl16oh947tuf63n1");
-        //        break; 
+        //        client.Headers.Add(HttpRequestHeader.Cookie, "qa1co2m3mf23banno56catfnb3");
+        //        break;
         //}
 
         CacheItemPolicy cacheItemPolicy = new CacheItemPolicy();

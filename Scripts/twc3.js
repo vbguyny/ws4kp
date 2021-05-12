@@ -12445,7 +12445,7 @@ var Progress = function (e)
             ////DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "Conditions", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 55, "WeatherStar", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "4000+", 3);
-            DrawTitleText(context, "WeatherStar", "4000+ 1.61");
+            DrawTitleText(context, "WeatherStar", "4000+ 1.62");
 
             // Draw a box for the progress.
             //context.fillStyle = "#000000";
@@ -14680,10 +14680,60 @@ var GetWindDirectionWords = function (WindDirection)
 
 var AssignScrollText = function (e)
 {
-    _ScrollText = e.ScrollText;
+    if (e && e.ScrollText)
+    {
+        _ScrollText = e.ScrollText;
+    }
+    else if (e && e.ScrollRss)
+    {
+        _ScrollText = "Loading RSS Feed '" + e.ScrollRss + "'...";
+        GetRssFeed(e.ScrollRss);
+    }
+    else
+    {
+        _ScrollText = "";
+    }
+
     _UpdateCustomScrollTextMs = 0;
     _UpdateWeatherCurrentConditionType = CurrentConditionTypes.Title;
     _UpdateWeatherCurrentConditionCounterMs = 0;
+};
+
+var GetRssFeed = function (RssUrl)
+{
+    $.ajaxCORS({
+        type: "GET",
+        url: RssUrl + "?rss=1",
+        dataType: "xml",
+        crossDomain: true,
+        cache: false,
+        success: function (data)
+        {
+            var ScrollText = "";
+
+            var $xml = $(data);
+            $xml.find("item").each(function ()
+            {
+                var $this = $(this),
+                    item = {
+                        title: $this.find("title").text().trim(),
+                        link: $this.find("link").text(),
+                        description: $this.find("description").text(),
+                        pubDate: $this.find("pubDate").text(),
+                        author: $this.find("author").text()
+                    };
+
+                ScrollText += item.title + "... ";
+            });
+
+            AssignScrollText({ ScrollText: ScrollText });
+        },
+        error: function (xhr, error, errorThrown)
+        {
+            console.error("GetRssFeed failed: " + errorThrown);
+            AssignScrollText(null);
+        }
+    });
 };
 
 var GetTravelCitiesDayName = function (TravelCities)

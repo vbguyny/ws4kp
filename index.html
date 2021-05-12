@@ -27,17 +27,17 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="theme-color" content="#ffffff">
 
-    <link rel="manifest" href="manifest.json?v=61" />
+    <link rel="manifest" href="manifest.json?v=62" />
     <link rel="icon" href="images/logo192.png" />
-    <link rel="stylesheet" type="text/css" href="Styles/index.css?v=61" />
+    <link rel="stylesheet" type="text/css" href="Styles/index.css?v=62" />
     
     <script type="text/javascript" src="Scripts/jquery-3.1.0.min.js"></script>
     <script type="text/javascript" src="Scripts/jquery.autocomplete.min.js"></script>
     <script type="text/javascript" src="Scripts/NoSleep.min.js"></script>
     <script type="text/javascript" src="Scripts/jquery.touchSwipe.min.js"></script>
-    <script type="text/javascript" src="Scripts/Timer.js?v=61"></script>
-    <script type="text/javascript" src="Scripts/index.js?v=61"></script>
-    <script type="text/javascript" src="Scripts/States.js?v=61"></script>
+    <script type="text/javascript" src="Scripts/Timer.js?v=62"></script>
+    <script type="text/javascript" src="Scripts/index.js?v=62"></script>
+    <script type="text/javascript" src="Scripts/States.js?v=62"></script>
 
     <!-- Place this tag in your head or just before your close body tag. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
@@ -187,9 +187,20 @@
     <br />
 
     <div id="divScrollText">
-        <form id="frmScrollText">
+        <!--<form id="frmScrollText">
             <input id="chkScrollText" name="chkScrollText" type="checkbox" /><label id="lblScrollText" for="chkScrollText">Scroll Text: </label><input id="txtScrollText" type="text" autocomplete="off" value="" /><input id="btnScrollText" type="submit" value="Set" />
-        </form>
+        </form>-->
+
+        Scroll Options:<br />
+        <input id="radScrollDefault" name="radScroll" type="radio" /><label id="lblScrollDefault" for="radScrollDefault">Current Conditions</label><br />
+        <input id="radScrollText" name="radScroll" type="radio" /><label id="lblScrollText" for="radScrollText">Custom Text: </label>
+            <form id="frmScrollText">
+                <input id="txtScrollText" type="text" autocomplete="off" value="" /><input id="btnScrollText" type="submit" value="Set" />
+            </form><br />
+        <input id="radScrollRss" name="radScroll" type="radio" /><label id="lblScrollRss" for="radScrollRss">RSS Feed: </label>
+            <form id="frmScrollRss">
+                <input id="txtScrollRss" type="text" autocomplete="off" value="" /><input id="btnScrollRss" type="submit" value="Set" />
+            </form><br />
     </div>
 
     <br />
