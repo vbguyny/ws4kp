@@ -30,10 +30,13 @@ This project was originally created by Mike Battaglia in the Fall of 2016 becaus
 * Convert between English and Metric units.
 * Choose between three built-in themes.
 * Supply custom text to scroll at the bottom of the screen.
+* Supply RSS feed to scroll at the bottom of the screen.
 
 ## Setup
 
 It is recommended that you download all of the source code to a folder and use Internet Information Services (IIS) 7.5 or later with ASP .NET 4.5 or later to create a virtual directory which points to this folder.
+
+Please refer to the instructions here: https://github.com/vbguyny/ws4kp/blob/master/HowToInstall.txt
 
 If you plan on exposing this site publicly, you will need to update the code in `CORS/Default.aspx` to have your public IP address and domain name:
 ```c#
