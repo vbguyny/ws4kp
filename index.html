@@ -27,17 +27,17 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="theme-color" content="#ffffff">
 
-    <link rel="manifest" href="manifest.json?v=62" />
+    <link rel="manifest" href="manifest.json?v=63" />
     <link rel="icon" href="images/logo192.png" />
-    <link rel="stylesheet" type="text/css" href="Styles/index.css?v=62" />
+    <link rel="stylesheet" type="text/css" href="Styles/index.css?v=63" />
     
     <script type="text/javascript" src="Scripts/jquery-3.1.0.min.js"></script>
     <script type="text/javascript" src="Scripts/jquery.autocomplete.min.js"></script>
     <script type="text/javascript" src="Scripts/NoSleep.min.js"></script>
     <script type="text/javascript" src="Scripts/jquery.touchSwipe.min.js"></script>
-    <script type="text/javascript" src="Scripts/Timer.js?v=62"></script>
-    <script type="text/javascript" src="Scripts/index.js?v=62"></script>
-    <script type="text/javascript" src="Scripts/States.js?v=62"></script>
+    <script type="text/javascript" src="Scripts/Timer.js?v=63"></script>
+    <script type="text/javascript" src="Scripts/index.js?v=63"></script>
+    <script type="text/javascript" src="Scripts/States.js?v=63"></script>
 
     <!-- Place this tag in your head or just before your close body tag. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
@@ -152,24 +152,49 @@
 
     <br />
 
+    <div id="divGitHub">
+        <!--<a class="github-button" href="https://github.com/vbguyny/ws4kp" data-style="large" data-count-href="/vbguyny/ws4kp/network" data-count-api="/repos/vbguyny/ws4kp#forks_count" data-count-aria-label="# forks on GitHub" aria-label="Fork vbguyny/ws4kp on GitHub">GitHub</a>-->
+        <a class="github-button" href="https://github.com/vbguyny/ws4kp" data-icon="" data-size="large" data-show-count="false" aria-label="GitHub">GitHub</a>
+        <a class="github-button" href="https://github.com/vbguyny/ws4kp" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star vbguyny/ws4kp on GitHub">Star</a>
+        <a class="github-button" href="https://github.com/vbguyny/ws4kp/fork" data-icon="octicon-repo-forked" data-size="large" data-show-count="true" aria-label="Fork vbguyny/ws4kp on GitHub">Fork</a>        <a class="github-button" href="https://github.com/vbguyny/ws4kp/issues" data-icon="octicon-issue-opened" data-size="large" aria-label="Issue vbguyny/ws4kp on GitHub">Issue</a>
+        <a class="github-button" href="https://github.com/vbguyny" data-size="large" aria-label="Follow @vbguyny on GitHub">Follow @vbguyny</a>
+    </div>
+
+    <br />
+
     <div id="divInfo">
-        Location: <span id="spanCity"></span> <span id="spanState"></span><br />
-        Station Id: <span id="spanStationId"></span><br />
-        Radar Id: <span id="spanRadarId"></span><br />
-        Zone Id: <span id="spanZoneId"></span><br />
+        <span id="spanLocation">
+            Location: <span id="spanCity"></span> <span id="spanState"></span>
+        </span>
+        <span id="spanStation">
+            Station Id: <span id="spanStationId"></span>
+        </span>
+        <br />
+        <span id="spanRadar">
+            Radar Id: <span id="spanRadarId"></span>
+        </span>
+        <span id="spanZone">
+            Zone Id: <span id="spanZoneId"></span>
+        </span>
+        <br />
     </div>
 
     <br />
 
     <div id="divRefresh">
-        Last Update: <span id="spanLastRefresh">(None)</span><br />
-        <input id="chkAutoRefresh" name="chkAutoRefresh" type="checkbox" /><label id="lblRefreshCountDown" for="chkAutoRefresh">Auto Refresh: <span id="spanRefreshCountDown">--:--</span></label>
+        <span id="spanLastUpdate">
+            Last Update: <span id="spanLastRefresh">(None)</span>
+        </span>
+        <span id="spanAutoRefresh">
+            <input id="chkAutoRefresh" name="chkAutoRefresh" type="checkbox" /><label id="lblRefreshCountDown" for="chkAutoRefresh">Auto Refresh: <span id="spanRefreshCountDown">--:--</span></label>
+        </span>
+        <br />
     </div>
 
     <br />
 
     <div id="divUnits">
-        Units:
+        <span id="spanUnits">Units:</span>
         <input id="radEnglish" name="radUnits" type="radio" value="ENGLISH" /><label for="radEnglish">English</label>
         <input id="radMetric" name="radUnits" type="radio" value="METRIC" /><label for="radMetric">Metric</label>
     </div>
@@ -177,7 +202,7 @@
     <br />
 
     <div id="divThemes">
-        Themes:
+        <span id="spanThemes">Themes:</span>
         <input id="radThemeA" name="radThemes" type="radio" value="THEMEA" /><label for="radThemeA">Classic</label>
         <input id="radThemeD" name="radThemes" type="radio" value="THEMED" /><label for="radThemeD">Dark</label>
         <input id="radThemeB" name="radThemes" type="radio" value="THEMEB" /><label for="radThemeB">Sea Foam</label>
@@ -190,24 +215,18 @@
         <!--<form id="frmScrollText">
             <input id="chkScrollText" name="chkScrollText" type="checkbox" /><label id="lblScrollText" for="chkScrollText">Scroll Text: </label><input id="txtScrollText" type="text" autocomplete="off" value="" /><input id="btnScrollText" type="submit" value="Set" />
         </form>-->
-
         Scroll Options:<br />
         <input id="radScrollDefault" name="radScroll" type="radio" /><label id="lblScrollDefault" for="radScrollDefault">Current Conditions</label><br />
         <input id="radScrollText" name="radScroll" type="radio" /><label id="lblScrollText" for="radScrollText">Custom Text: </label>
-            <form id="frmScrollText">
-                <input id="txtScrollText" type="text" autocomplete="off" value="" /><input id="btnScrollText" type="submit" value="Set" />
-            </form><br />
+        <form id="frmScrollText">
+            <input id="txtScrollText" type="text" autocomplete="off" value="" /><input id="btnScrollText" type="submit" value="Set" />
+        </form><br />
         <input id="radScrollRss" name="radScroll" type="radio" /><label id="lblScrollRss" for="radScrollRss">RSS Feed: </label>
-            <form id="frmScrollRss">
-                <input id="txtScrollRss" type="text" autocomplete="off" value="" /><input id="btnScrollRss" type="submit" value="Set" />
-            </form><br />
+        <form id="frmScrollRss">
+            <input id="txtScrollRss" type="text" autocomplete="off" value="" /><input id="btnScrollRss" type="submit" value="Set" />
+        </form><br />
+        <input id="chkScrollHazardText" name="chkScrollHazardText" type="checkbox" /><label id="lblScrollHazardText" for="chkScrollHazardText">Hazardous Weather</label>
     </div>
-
-    <br />
-
-    <!-- Place this tag where you want the button to render. -->
-    <a class="github-button" href="https://github.com/vbguyny/ws4kp" data-style="mega" data-count-href="/vbguyny/ws4kp/network" data-count-api="/repos/vbguyny/ws4kp#forks_count" data-count-aria-label="# forks on GitHub" aria-label="Fork vbguyny/ws4kp on GitHub">GitHub</a>
-
 
 </body>
 </html>

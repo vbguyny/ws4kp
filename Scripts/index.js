@@ -55,6 +55,8 @@ var radScrollRss;
 var txtScrollRss;
 var btnScrollRss;
 
+var chkScrollHazardText;
+
 //var _InFullScreen = false;
 var _AutoSelectQuery = false;
 var _TwcDataUrl = "";
@@ -535,6 +537,11 @@ var LoadTwcData = function (Url, AutoRefresh)
                     AssignScrollText({ ScrollRss: txtScrollRss.val() });
                 }
 
+                else if (chkScrollHazardText.is(":checked") == true)
+                {
+                    ScrollHazardText(true);
+                }
+
                 AssignThemes({ Themes: $("input[type='radio'][name='radThemes']:checked").val() });
                 iframeTwc[0].contentWindow.AssignThemes({ Themes: $("input[type='radio'][name='radThemes']:checked").val() });
 
@@ -649,9 +656,9 @@ var AssignThemes = function (e)
     }
 
     $("button, input").css("background-color", butncolor);
-    $("input, button").css("border", "solid 1px " + brdrcolor);
-    $("body, input, button").css("color", forecolor);
-    $("body, input[type=text]").css("background-color", backcolor);
+    $("input, button, .autocomplete-suggestions").css("border", "solid 1px " + brdrcolor);
+    $("body, input, button, .autocomplete-suggestion").css("color", forecolor);
+    $("body, input[type=text], .autocomplete-suggestions").css("background-color", backcolor);
     $("#imgGetGps").css("filter", "invert(" + invert + "%)");
     $("meta[name=theme-color]").attr("content", themecolor);
 };
@@ -1346,7 +1353,7 @@ $(function ()
         noSuggestionNotice: 'No results found. Please try a different search string.',
         onSelect: OnSelect,
         //width: 400
-        width: 490,
+        width: 493
     });
 
     var ac = $("#frmGetLatLng #txtAddress").devbridgeAutocomplete();
@@ -1412,11 +1419,6 @@ $(function ()
     {
         txtScrollText.val(TwcScrollText);
     }
-    var TwcScrollTextChecked = localStorage.getItem("TwcScrollTextChecked");
-    if (TwcScrollTextChecked && TwcScrollTextChecked == "true")
-    {
-        localStorage.setItem("TwcScrollChecked", "radScrollText");
-    }
 
     var TwcScrollRss = localStorage.getItem("TwcScrollRss");
     if (TwcScrollRss)
@@ -1456,6 +1458,9 @@ $(function ()
 
         localStorage.removeItem("TwcScrollText");
         localStorage.removeItem("TwcScrollTextChecked");
+
+        chkScrollHazardText.prop("checked", "");
+        localStorage.removeItem("TwcScrollHazardText");
 
         chkAutoRefresh.prop("checked", "checked");
         localStorage.removeItem("TwcAutoRefresh");
@@ -1572,7 +1577,35 @@ $(function ()
     spanRadarId = $("#spanRadarId");
     spanZoneId = $("#spanZoneId");
 
+    chkScrollHazardText = $("#chkScrollHazardText");
+    chkScrollHazardText.on("change", function ()
+    {
+        var Checked = $(this).is(":checked");
+
+        ScrollHazardText(Checked);
+
+        localStorage.setItem("TwcScrollHazardText", Checked);
+    });
+
+    var TwcScrollHazardText = localStorage.getItem("TwcScrollHazardText");
+    if (TwcScrollHazardText && TwcScrollHazardText == "true")
+    {
+        chkScrollHazardText.prop("checked", "checked");
+    }
+    else
+    {
+        chkScrollHazardText.prop("checked", "");
+    }
+
 });
+
+var ScrollHazardText = function (enable)
+{
+    if (iframeTwc[0].contentWindow.ScrollHazardText)
+    {
+        iframeTwc[0].contentWindow.ScrollHazardText(enable);
+    }
+};
 
 var StartAutoRefreshTimer = function ()
 {

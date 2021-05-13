@@ -163,6 +163,7 @@ var _UpdateWeatherCurrentConditionType = CurrentConditionTypes.Title;
 var _UpdateWeatherCurrentConditionCounterMs = 0;
 
 var _UpdateCustomScrollTextMs = 0;
+var _UpdateScrollHazardTextMs = 0;
 
 //var _UpdateTravelCitiesInterval = 30;
 var _UpdateTravelCitiesInterval = 150;
@@ -7891,8 +7892,11 @@ var PopulateHazardConditions = function (WeatherParameters)
     WeatherHazardConditions.HazardsTextC = ConvertConditionsToMetric(HazardsText);
     if (_Units == Units.Metric)
     {
-        HazardsText = WeatherHazardConditions.HazardsTextC
+        HazardsText = WeatherHazardConditions.HazardsTextC;
     }
+
+    WeatherHazardConditions.HazardsScrollText = WeatherHazardConditions.HazardsText.replaceAll("\n", " ");
+    WeatherHazardConditions.HazardsScrollTextC = WeatherHazardConditions.HazardsText.replaceAll("\n", " ");
 
     var HazardsWrapped = HazardsText.wordWrap(32);
     //HazardsWrapped = HazardsWrapped.replaceAll("\n ", "\n");
@@ -12445,7 +12449,7 @@ var Progress = function (e)
             ////DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "Conditions", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 55, "WeatherStar", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "4000+", 3);
-            DrawTitleText(context, "WeatherStar", "4000+ 1.62");
+            DrawTitleText(context, "WeatherStar", "4000+ 1.63");
 
             // Draw a box for the progress.
             //context.fillStyle = "#000000";
@@ -12573,6 +12577,7 @@ var UpdateWeatherCanvases = function (WeatherParameters)
         _UpdateHazardsCounterMs += _UpdateWeatherUpdateMs;
         _UpdateLocalForecastCounterMs += _UpdateWeatherUpdateMs;
         _UpdateCustomScrollTextMs += _UpdateWeatherUpdateMs;
+        _UpdateScrollHazardTextMs += _UpdateWeatherUpdateMs;
         //console.log(_UpdateWeatherUpdateMs);
     }
 };
@@ -12584,6 +12589,7 @@ var UpdateWeatherCanvas = function (WeatherParameters, Canvas)
     var OkToDrawCurrentDateTime = true;
     var OkToDrawLogoImage = true;
     var OkToDrawCustomScrollText = false;
+    var OkToDrawScrollHazardText = false;
     var bottom = undefined;
 
     var context = Canvas[0].getContext("2d");
@@ -12591,6 +12597,12 @@ var UpdateWeatherCanvas = function (WeatherParameters, Canvas)
     if (_ScrollText != "")
     {
         OkToDrawCustomScrollText = true;
+    }
+
+    if (_ScrollHazardText == true && WeatherParameters.WeatherHazardConditions.HazardsText != "")
+    {
+        OkToDrawCustomScrollText = false;
+        OkToDrawScrollHazardText = true;
     }
 
     if (Canvas[0] == canvasProgress[0])
@@ -12679,6 +12691,11 @@ var UpdateWeatherCanvas = function (WeatherParameters, Canvas)
     if (OkToDrawCustomScrollText == true)
     {
         DrawCustomScrollText(WeatherParameters, context);
+    }
+
+    if (OkToDrawScrollHazardText == true)
+    {
+        DrawScrollHazardText(WeatherParameters, context);
     }
 
 };
@@ -13099,9 +13116,6 @@ var DrawCustomScrollText = function (WeatherParameters, context)
     context.drawImage(canvasBackGroundCurrentConditions[0], 0, 0, 640, 75, 0, 405, 640, 75);
 
     text = _ScrollText;
-    //text = "WELCOME TO THE WEATHER STAR 4000+! IF YOU ARE ENJOYING THIS SITE THEN YOU WILL LOVE THE WEATHER STAR 4000 SIMULATOR!";
-    //text = "Hello World!";
-    //text = "A";
 
     x = 640 - ((_UpdateCustomScrollTextMs / _UpdateWeatherUpdateMs) * 5);
     if (x < ((text.length + 10) * 15 * -1)) // Wait an extra 5 characters.
@@ -13113,6 +13127,49 @@ var DrawCustomScrollText = function (WeatherParameters, context)
     // Draw the current condition.
     DrawText(context, font, size, color, x, y, text, shadow);
 
+};
+
+var DrawScrollHazardText = function (WeatherParameters, context)
+{
+    var font, size, color, x, y, shadow;
+    var text;
+
+    font = "Star4000";
+    size = "24pt";
+    color = "#ffffff";
+    shadow = 2;
+    x = 640;
+    y = 430;
+
+    if (WeatherParameters.Progress.GetTotalPercentage() != 100)
+    {
+        return;
+    }
+
+    // Clear the date and time area.
+    DrawBox(context, "rgb(112, 35, 35)", 0, 405, 640, 75);
+
+    var WeatherHazardConditions = WeatherParameters.WeatherHazardConditions;
+
+    var text = "";
+    if (_Units == Units.Metric)
+    {
+        text = WeatherHazardConditions.HazardsScrollTextC;
+    }
+    else
+    {
+        text = WeatherHazardConditions.HazardsScrollText;
+    }
+
+    x = 640 - ((_UpdateScrollHazardTextMs / _UpdateWeatherUpdateMs) * 5);
+    if (x < ((text.length + 10) * 15 * -1)) // Wait an extra 5 characters.
+    {
+        _UpdateScrollHazardTextMs = 0;
+        x = 640;
+    }
+
+    // Draw the text.
+    DrawText(context, font, size, color, x, y, text, shadow);
 };
 
 $.ajaxCORS = function (e)
@@ -13216,6 +13273,7 @@ var _SideColor1 = "rgb(46, 18, 80)";
 var _SideColor2 = "rgb(192, 91, 2)";
 
 var _ScrollText = "";
+var _ScrollHazardText = false;
 
 var _DontLoadGifs = false;
 var _RefreshGifs = false;
@@ -14752,4 +14810,18 @@ var GetTravelCitiesDayName = function (TravelCities)
     });
 
     return DayName;
+};
+
+var ScrollHazardText = function (enable)
+{
+    _ScrollHazardText = enable;
+
+    if (_ScrollHazardText == true)
+    {
+        _UpdateScrollHazardTextMs = 0;
+    }
+    else if (_WeatherParameters.WeatherHazardConditions.HazardsScrollText != "")
+    {
+        AssignScrollText({ ScrollText: _ScrollText });
+    }
 };

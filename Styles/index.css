@@ -62,7 +62,7 @@ input[type=text] {
 #txtAddress
 {
     /*width: 400px;*/
-    width: 490px;
+    width: 493px;
     font-size: 16pt;
 }
 
@@ -246,6 +246,66 @@ input[type=text] {
 .HideCursor
 {
     cursor: none !important;
+}
+
+#divInfo
+{
+    width: 640px;
+}
+
+#divGitHub 
+{
+    width: 640px;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+/*.btn {
+    background-color: black !important;
+    color: white !important;
+    background-image: url() !important;
+    border-color: white !important;
+}*/
+
+#spanLocation, #spanRadar {
+    float: left;
+}
+
+#spanStation, #spanZone 
+{
+    float: right;
+}
+
+#spanStationId, #spanZoneId
+{
+    display: inline-block;
+    width: 50px;
+}
+
+#divRefresh
+{
+    width: 640px;
+}
+
+#spanLastUpdate 
+{
+    float: left;
+}
+
+#spanAutoRefresh 
+{
+    float: right;
+}
+
+#divUnits, #divThemes
+{
+    width: 640px;
+}
+
+#spanUnits, #spanThemes 
+{
+    display: inline-block;
+    width: 50px;
 }
 
 #txtScrollText, #txtScrollRss {
