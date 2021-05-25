@@ -6,7 +6,8 @@ Windows 10:
 	a. Programs and Features
 	b. Turn Windows Features on or off
 		i. Internet Information Services
-			1. World Wide Web Services > Application Development Features > ASP.NET 4.8
+			1. Web Management Tools > IIS Management Console
+			2. World Wide Web Services > Application Development Features > ASP.NET 4.8
 	c. Click OK
 	d. Confirm IIS is installed properly "http://localhost"
 3. Download a zip file of the code from https://github.com/vbguyny/ws4kp
