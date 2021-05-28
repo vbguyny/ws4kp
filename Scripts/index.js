@@ -537,7 +537,7 @@ var LoadTwcData = function (Url, AutoRefresh)
                     AssignScrollText({ ScrollRss: txtScrollRss.val() });
                 }
 
-                else if (chkScrollHazardText.is(":checked") == true)
+                if (chkScrollHazardText.is(":checked") == true)
                 {
                     ScrollHazardText(true);
                 }
