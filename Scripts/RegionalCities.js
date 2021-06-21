@@ -598,7 +598,7 @@ var _RegionalCities = [
         Longitude: "-77.9447",
     },
     {
-        Name: "Tuscan",
+        Name: "Tucson",
         Latitude: "32.2216",
         Longitude: "-110.9698",
     },
