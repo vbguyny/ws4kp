@@ -1981,9 +1981,12 @@ var GetMarineForecast = function (WeatherParameters)
                         }
                     });
 
-                    WeatherParameters.MarineForecast = MarineForecast;
+                    if (MarineForecast.TodayWindSpeedHigh != undefined)
+                    {
+                        WeatherParameters.MarineForecast = MarineForecast;
 
-                    PopulateMarineForecast(WeatherParameters);
+                        PopulateMarineForecast(WeatherParameters);
+                    }
 
                     //PopulateAlmanacInfo(_WeatherParameters);
                     //GetCurrentWeather(WeatherParameters);
@@ -12449,7 +12452,7 @@ var Progress = function (e)
             ////DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "Conditions", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 55, "WeatherStar", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "4000+", 3);
-            DrawTitleText(context, "WeatherStar", "4000+ 1.65");
+            DrawTitleText(context, "WeatherStar", "4000+ 1.66");
 
             // Draw a box for the progress.
             //context.fillStyle = "#000000";

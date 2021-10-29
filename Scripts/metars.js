@@ -257,17 +257,24 @@
         {
             return;
         }
-        this.next();
 
-        var direction = this.current.slice(0, 3);
+        var peek = this.peek();
+
+        var direction = peek.slice(0, 3);
         if (direction === "VRB")
         {
             this.result.wind.direction = "VRB";
             this.result.wind.variation = true;
         } else
         {
+            if (isNaN(asInt(direction)))
+            {
+                return;
+            }
             this.result.wind.direction = asInt(direction);
         }
+
+        this.next();
 
         var gust = this.current.slice(5, 8);
         if (gust[0] === "G")
