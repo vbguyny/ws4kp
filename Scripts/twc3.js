@@ -222,6 +222,15 @@ var _AudioCurrentTime = 0;
 var _AudioGain = null;
 var _AudioRefreshIntervalId = null;
 
+var _IsBeepPlaying = false;
+var _BeepRefreshIntervalId = null;
+var _BeepContext = null;
+var _BeepBufferSource = null;
+var _BeepDuration = 0;
+var _BeepCurrentTime = 0;
+var _BeepGain = null;
+var audBeep = null;
+
 var _IsNarrationPlaying = false;
 var _Utterance = false;
 var _CurrentUtterance = false;
@@ -3350,6 +3359,8 @@ $(function ()
     //audMusic[0].onplay = RefreshStateOfMusicAudio;
     //audMusic[0].onpause = RefreshStateOfMusicAudio;
     //audMusic[0].onplaying = RefreshStateOfMusicAudio;
+
+    audBeep = $("#audBeep");
 
     canvasProgress.mousemove(canvasProgress_mousemove);
     canvasProgress.click(canvasProgress_click);
@@ -12452,7 +12463,7 @@ var Progress = function (e)
             ////DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "Conditions", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 55, "WeatherStar", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "4000+", 3);
-            DrawTitleText(context, "WeatherStar", "4000+ 1.66");
+            DrawTitleText(context, "WeatherStar", "4000+ 1.67");
 
             // Draw a box for the progress.
             //context.fillStyle = "#000000";
@@ -13171,6 +13182,17 @@ var DrawScrollHazardText = function (WeatherParameters, context)
         x = 640;
     }
 
+    if (_UpdateScrollHazardTextMs == 0)
+    {
+        //console.log("Hazard text reseted");
+
+        if (IsAudioPlaying() == true)
+        {
+            // Start the beeping sound
+            LoadBeep();
+        }
+    }
+
     // Draw the text.
     DrawText(context, font, size, color, x, y, text, shadow);
 };
@@ -13413,6 +13435,11 @@ var AudioPlayToggle = function ()
             PlayAudio();
             //RefreshStateOfMusicAudio();
 
+            if (_BeepRefreshIntervalId)
+            {
+                PlayBeep();
+            }
+
         }, _AudioPlayInterval);
     }
     else
@@ -13425,6 +13452,11 @@ var AudioPlayToggle = function ()
 
         //audio.pause();
         PauseAudio();
+
+        if (_BeepRefreshIntervalId)
+        {
+            PauseBeep();
+        }
     }
 
     if (_CallBack) _CallBack({ Status: "ISAUDIOPLAYING", Value: _IsAudioPlaying });
@@ -14823,8 +14855,193 @@ var ScrollHazardText = function (enable)
     {
         _UpdateScrollHazardTextMs = 0;
     }
-    else if (_WeatherParameters.WeatherHazardConditions.HazardsScrollText != "")
+    else
     {
-        AssignScrollText({ ScrollText: _ScrollText });
+        PauseBeep();
+
+        if (_WeatherParameters.WeatherHazardConditions.HazardsScrollText != "")
+        {
+            AssignScrollText({ ScrollText: _ScrollText });
+        }
     }
+};
+
+var LoadBeep = function ()
+{
+    var Url = "Audio/beep.mp3";
+
+    if (_BeepRefreshIntervalId)
+    {
+        window.clearIntervalWorker(_BeepRefreshIntervalId);
+        _BeepRefreshIntervalId = null;
+    }
+
+    if (window.AudioContext)
+    {
+        if (_BeepContext)
+        {
+            _BeepContext.close();
+            _BeepContext = null;
+        }
+        if (_BeepBufferSource)
+        {
+            _BeepBufferSource.stop();
+            _BeepBufferSource = null;
+        }
+        _BeepContext = new AudioContext();
+        _BeepDuration = 0;
+        _BeepCurrentTime = 0;
+
+        var req = new XMLHttpRequest();
+        req.open("GET", Url, true);
+        req.responseType = "arraybuffer";
+        req.onload = function ()
+        {
+            //decode the loaded data 
+            _BeepContext.decodeAudioData(req.response, function (buffer)
+            {
+                if (_IsBeepPlaying == true)
+                {
+                    return;
+                }
+
+                //create a source node from the buffer 
+                _BeepBufferSource = _BeepContext.createBufferSource();
+                _BeepBufferSource.buffer = buffer;
+
+                _BeepDuration = buffer.duration;
+                _BeepCurrentTime = 0;
+
+                //create a gain node
+                _BeepGain = _BeepContext.createGain();
+                _BeepBufferSource.connect(_BeepGain);
+                _BeepGain.connect(_BeepContext.destination);
+                _BeepGain.gain.value = 1.00;
+
+                _BeepBufferSource.start();
+                _BeepContext.resume();
+
+                _BeepRefreshIntervalId = window.setIntervalWorker(function ()
+                {
+                    BeepOnTimeUpdate();
+                }, 100);
+
+                RefreshStateOfBeepAudio();
+            });
+        };
+        req.send();
+    }
+    else
+    {
+        var beep = audMusic[0];
+
+        PauseBeep();
+
+        _BeepDuration = 0;
+        _BeepCurrentTime = 0;
+
+        beep.volume = 1.00;
+        beep.oncanplaythrough = function ()
+        {
+            if (_IsBeepPlaying == true)
+            {
+                return;
+            }
+
+            _BeepDuration = beep.duration;
+            _BeepCurrentTime = 0;
+
+            PlayBeep();
+
+            _BeepRefreshIntervalId = window.setIntervalWorker(function ()
+            {
+                BeepOnTimeUpdate();
+            }, 100);
+
+            RefreshStateOfBeepAudio();
+        };
+        beep.src = Url;
+        beep.load();
+    }
+};
+var PlayBeep = function ()
+{
+    if (window.AudioContext)
+    {
+        if (_BeepDuration != 0)
+        {
+            _BeepContext.resume();
+        }
+    }
+    else
+    {
+        var beep = audBeep[0];
+        beep.play();
+    }
+    RefreshStateOfBeepAudio();
+};
+var PauseBeep = function ()
+{
+    if (window.AudioContext)
+    {
+        if (_BeepDuration != 0)
+        {
+            _BeepContext.suspend();
+        }
+    }
+    else
+    {
+        var beep = audBeep[0];
+        beep.pause();
+    }
+    RefreshStateOfBeepAudio();
+};
+
+var RefreshStateOfBeepAudio = function ()
+{
+    var IsBeepPlaying = _IsBeepPlaying;
+    var MaxDuration = 5.0;
+
+    if (window.AudioContext)
+    {
+        _IsBeepPlaying = (_BeepContext.state == "running" && _BeepDuration != 0 && _BeepCurrentTime < MaxDuration);
+    }
+    else
+    {
+        var beep = audBeep[0];
+        _IsBeepPlaying = (beep.paused == false && _BeepDuration != 0 && _BeepCurrentTime < MaxDuration);
+    }
+
+    //if (IsBeepPlaying != _IsBeepPlaying)
+    //{
+    //    if (_CallBack) _CallBack({ Status: "ISBEEPPLAYING", Value: _IsBeepPlaying });
+    //}
+};
+
+var BeepOnTimeUpdate = function ()
+{
+    if (window.AudioContext)
+    {
+        _BeepCurrentTime = _BeepContext.currentTime;
+    }
+    else
+    {
+        var beep = audBeep[0];
+
+        _BeepCurrentTime = beep.currentTime;
+    }
+    //console.log(_BeepCurrentTime.toString() + " " + _BeepDuration.toString());
+
+    var vol = VolumeAudio();
+
+    if (_IsBeepPlaying == true && vol == 1)
+    {
+        VolumeAudio(0.25);
+    }
+    else if (_IsBeepPlaying == false && vol == 0.25)
+    {
+        VolumeAudio(1);
+    }
+
+    RefreshStateOfBeepAudio();
 };

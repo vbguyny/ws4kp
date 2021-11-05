@@ -1,0 +1,7 @@
+ffmpeg -i w.mp3 -ss 36.6 -to 37.1 -codec:a libmp3lame  w-2.mp3 
+
+ffmpeg -i w.mp3 -ss 38.5 -to 39.1 -codec:a libmp3lame w-2.mp3 
+
+sox -n -r 44100 -c 2 silence.mp3 trim 0.0 0.5
+
+sox w-2.mp3 silence.mp3 beep.mp3 repeat 4

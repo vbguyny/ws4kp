@@ -73,6 +73,7 @@ var _AutoRefreshTotalIntervalMs = 600000; // 10 min.
 var _AutoRefreshCountMs = 0;
 
 var _IsAudioPlaying = false;
+var _IsBeepPlaying = false;
 
 var _IsNarrationPlaying = false;
 
