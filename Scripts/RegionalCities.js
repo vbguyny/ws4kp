@@ -602,5 +602,10 @@ var _RegionalCities = [
         Latitude: "32.2216",
         Longitude: "-110.9698",
     },
+    {
+        Name: "Lubbock",
+        Latitude: "33.5779",
+        Longitude: "-101.8552",
+    }
 ];
 

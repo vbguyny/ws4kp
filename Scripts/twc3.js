@@ -9296,7 +9296,11 @@ var WeatherTravelForecast = function (WeatherDwmlParser, ForceToday, ForceTonigh
     {
         index = 0;
     }
-    this.Conditions = WeatherDwmlParser.data_forecast.parameters.weather.weather_conditions[index].weather_summary.trim();
+    this.Conditions = "";
+    if (WeatherDwmlParser.data_forecast.parameters.weather.weather_conditions.length > index)
+    {
+        this.Conditions = WeatherDwmlParser.data_forecast.parameters.weather.weather_conditions[index].weather_summary.trim();
+    }
 
     _LayoutKey = WeatherDwmlParser.data_forecast.parameters.conditions_icon.time_layout;
     var index = _PeriodIndex[_LayoutKey];
@@ -10735,8 +10739,27 @@ var ShowRegionalMap = function (WeatherParameters, TomorrowForecast1, TomorrowFo
                         return;
                     }
 
+                    var StationId = GetStationIdFromUrl(weatherDwmlParser.data_current_observations.moreWeatherInformation.value);
+                    if (StationId == undefined)
+                    {
+                        console.error("Unable to locate StationId for RegionalCity " + RegionalCity.City + ", " + RegionalCity.State);
+
+                        for (var RegionalCityIndex = 0; RegionalCityIndex < RegionalCities.length; RegionalCityIndex++)
+                        {
+                            if (RegionalCity.Latitude == RegionalCities[RegionalCityIndex].Latitude &&
+                                RegionalCity.Longitude == RegionalCities[RegionalCityIndex].Longitude)
+                            {
+                                RegionalCities.splice(RegionalCityIndex, 1);
+                                Total--;
+                            }
+                        }
+
+                        RegionalMapOnLoad();
+                        return;
+                    }
+
                     var Url = "https://www.aviationweather.gov/adds/dataserver_current/httpparam?datasource=metars&requesttype=retrieve&format=xml&hoursBeforeNow=3";
-                    Url += "&stationString=" + GetStationIdFromUrl(weatherDwmlParser.data_current_observations.moreWeatherInformation.value);
+                    Url += "&stationString=" + StationId;
                     //Url = "cors/?u=" + encodeURIComponent(Url);
 
                     // Load the xml file using ajax 
@@ -12463,7 +12486,7 @@ var Progress = function (e)
             ////DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "Conditions", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 55, "WeatherStar", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "4000+", 3);
-            DrawTitleText(context, "WeatherStar", "4000+ 1.67");
+            DrawTitleText(context, "WeatherStar", "4000+ 1.68");
 
             // Draw a box for the progress.
             //context.fillStyle = "#000000";

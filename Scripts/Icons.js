@@ -1190,6 +1190,11 @@ var GetWeatherRegionalIconFromIconLink = function (WeatherIconLink, WeatherCondi
     var Icon = "";
     var WeatherIcon = WeatherIconLink;
 
+    if (WeatherIconLink == undefined)
+    {
+        return Icon;
+    }
+
     if (WeatherIconLink.indexOf(".gif") === -1)
     {
         if (IsNightTime)
