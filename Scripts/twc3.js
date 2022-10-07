@@ -9823,7 +9823,8 @@ var GetDwmlRegionalStations = function (WeatherParameters, Distance)
                     (WeatherParameters.WeatherCurrentRegionalConditions.WeatherCurrentConditions[StationId].Conditions == "") ||
                     (WeatherParameters.WeatherCurrentRegionalConditions.WeatherCurrentConditions[StationId].Conditions == "NA") ||
                     (WeatherParameters.WeatherCurrentRegionalConditions.WeatherCurrentConditions[StationId].Conditions.trim() == "Unknown Precip") ||
-                    (WeatherParameters.WeatherCurrentRegionalConditions.WeatherCurrentConditions[StationId].Temperature == "NA"))
+                    (WeatherParameters.WeatherCurrentRegionalConditions.WeatherCurrentConditions[StationId].Temperature == "NA") ||
+                    (WeatherParameters.WeatherCurrentRegionalConditions.WeatherCurrentConditions[StationId].Temperature == undefined))
                 {
                     //WeatherParameters.WeatherCurrentRegionalConditions.StationNames = [];
                     WeatherParameters.WeatherCurrentRegionalConditions.SkipStationIds.push(StationId);
@@ -12486,7 +12487,7 @@ var Progress = function (e)
             ////DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "Conditions", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 55, "WeatherStar", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "4000+", 3);
-            DrawTitleText(context, "WeatherStar", "4000+ 1.68");
+            DrawTitleText(context, "WeatherStar", "4000+ 1.69");
 
             // Draw a box for the progress.
             //context.fillStyle = "#000000";

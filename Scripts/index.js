@@ -1385,6 +1385,9 @@ $(function ()
         TwcQuery = TwcQueryStr;
     }
 
+    // Remove "(...)"
+    TwcQuery = TwcQuery.replace(/ *\([^)]*\) */g, "");
+
     if (TwcQuery)
     {
         _AutoSelectQuery = true;
