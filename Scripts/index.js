@@ -1385,8 +1385,11 @@ $(function ()
         TwcQuery = TwcQueryStr;
     }
 
-    // Remove "(...)"
-    TwcQuery = TwcQuery.replace(/ *\([^)]*\) */g, "");
+    if (TwcQuery)
+    {
+        // Remove "(...)"
+        TwcQuery = TwcQuery.replace(/ *\([^)]*\) */g, "");
+    }
 
     if (TwcQuery)
     {
