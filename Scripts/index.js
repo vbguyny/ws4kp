@@ -58,6 +58,7 @@ var btnScrollRss;
 var chkScrollHazardText;
 
 //var _InFullScreen = false;
+var _AutoSelectQuery = false;
 var _TwcDataUrl = "";
 var _IsPlaying = false;
 
@@ -1329,6 +1330,14 @@ $(function ()
         dataType: 'jsonp',
         transformResult: function (response)
         {
+					if (_AutoSelectQuery == true)
+					{
+							_AutoSelectQuery = false;
+							window.setTimeout(function ()
+							{
+									$(ac.suggestionsContainer.children[0]).click();
+							}, 1);
+					}
             return {
                 suggestions: $.map(response.suggestions, function (i)
                 {
@@ -1374,6 +1383,7 @@ $(function ()
     {
         console.log(TwcQueryStr);
         TwcQuery = TwcQueryStr;
+				TwcLatLon = undefined;
     }
 
     if (TwcQuery)
@@ -1382,10 +1392,17 @@ $(function ()
         TwcQuery = TwcQuery.replace(/ *\([^)]*\) */g, "");
     }
 		spanLastRefresh = $("#spanLastRefresh");
-    if (TwcQuery && TwcLatLon)
+    if (TwcQuery)
     {
 			txtAddress.val(TwcQuery);
-			doRedirectToGeometry(JSON.parse(TwcLatLon));
+			if (TwcLatLon) {
+				doRedirectToGeometry(JSON.parse(TwcLatLon));
+
+			} else {
+				_AutoSelectQuery = true;
+				txtAddress.blur();
+				txtAddress.focus();
+			}
     }
 
     var TwcPlay = localStorage.getItem("TwcPlay");
