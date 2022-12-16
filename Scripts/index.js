@@ -87,23 +87,23 @@ var _WindowWidth = 0;
 var _AllowKeyDown = true;
 
 var _canvasIds = [
-        "canvasProgress",
-        "canvasCurrentWeather",
-        "canvasLatestObservations",
-        "canvasTravelForecast",
-        "canvasRegionalForecast1",
-        "canvasRegionalForecast2",
-        "canvasRegionalObservations",
-        "canvasLocalForecast",
-        "canvasExtendedForecast1",
-        "canvasExtendedForecast2",
-        "canvasAlmanac",
-        "canvasAlmanacTides",
-        "canvasOutlook",
-        "canvasMarineForecast",
-        "canvasAirQuality",
-        "canvasLocalRadar",
-        "canvasHazards"
+    "canvasProgress",
+    "canvasCurrentWeather",
+    "canvasLatestObservations",
+    "canvasTravelForecast",
+    "canvasRegionalForecast1",
+    "canvasRegionalForecast2",
+    "canvasRegionalObservations",
+    "canvasLocalForecast",
+    "canvasExtendedForecast1",
+    "canvasExtendedForecast2",
+    "canvasAlmanac",
+    "canvasAlmanacTides",
+    "canvasOutlook",
+    "canvasMarineForecast",
+    "canvasAirQuality",
+    "canvasLocalRadar",
+    "canvasHazards"
 ];
 
 var FullScreenResize = function (AutoRefresh)
@@ -358,7 +358,7 @@ var OnFullScreen = function ()
     }
 };
 
-var InFullScreen = function()
+var InFullScreen = function ()
 {
     //return true;
     //return (document.fullscreenEnabled || document.mozFullScreenEnabled || document.webkitFullscreenEnabled);
@@ -368,7 +368,7 @@ var InFullScreen = function()
     return ((_FullScreenOverride == true) || (GetFullScreenElement() != null) || (window.innerHeight == screen.height) || (window.innerHeight == (screen.height - 1)));
 };
 
-var GetFullScreenElement = function()
+var GetFullScreenElement = function ()
 {
     if (_FullScreenOverride == true)
     {
@@ -438,7 +438,7 @@ var EnterFullScreen = function ()
         // Native full screen.
         //requestMethod.call(element);
         requestMethod.call(element, { navigationUI: "hide" }); // https://bugs.chromium.org/p/chromium/issues/detail?id=933436#c7
-    } 
+    }
     else if (typeof window.ActiveXObject !== "undefined")
     {
         // Older IE.
@@ -551,7 +551,7 @@ var LoadTwcData = function (Url, AutoRefresh)
                 iframeTwc[0].contentWindow.SetCallBack({ CallBack: TwcCallBack });
 
                 iframeTwc[0].contentWindow.GetLatLng(Url);
-                
+
                 if (_IsPlaying == true)
                 {
                     iframeTwc[0].contentWindow.NavigatePlayToggle();
@@ -966,7 +966,7 @@ var document_keydown = function (e)
                 btnFullScreen_click();
                 return false;
                 break;
-                
+
         }
     }
 };
@@ -1173,104 +1173,104 @@ $(function ()
     //var AutoSelectQuery = false;
 
     var categories = [
-			'Land Features',
-			'Bay', 'Channel', 'Cove', 'Dam', 'Delta', 'Gulf', 'Lagoon', 'Lake', 'Ocean', 'Reef', 'Reservoir', 'Sea', 'Sound', 'Strait', 'Waterfall', 'Wharf', // Water Features
-			'Amusement Park', 'Historical Monument', 'Landmark', 'Tourist Attraction', 'Zoo', // POI/Arts and Entertainment
-			'College', // POI/Education
-			'Beach', 'Campground', 'Golf Course', 'Harbor', 'Nature Reserve', 'Other Parks and Outdoors', 'Park', 'Racetrack',
-				'Scenic Overlook', 'Ski Resort', 'Sports Center', 'Sports Field', 'Wildlife Reserve', // POI/Parks and Outdoors
-			'Airport', 'Ferry', 'Marina', 'Pier', 'Port', 'Resort', // POI/Travel
-			'Postal', 'Populated Place'
+        'Land Features',
+        'Bay', 'Channel', 'Cove', 'Dam', 'Delta', 'Gulf', 'Lagoon', 'Lake', 'Ocean', 'Reef', 'Reservoir', 'Sea', 'Sound', 'Strait', 'Waterfall', 'Wharf', // Water Features
+        'Amusement Park', 'Historical Monument', 'Landmark', 'Tourist Attraction', 'Zoo', // POI/Arts and Entertainment
+        'College', // POI/Education
+        'Beach', 'Campground', 'Golf Course', 'Harbor', 'Nature Reserve', 'Other Parks and Outdoors', 'Park', 'Racetrack',
+        'Scenic Overlook', 'Ski Resort', 'Sports Center', 'Sports Field', 'Wildlife Reserve', // POI/Parks and Outdoors
+        'Airport', 'Ferry', 'Marina', 'Pier', 'Port', 'Resort', // POI/Travel
+        'Postal', 'Populated Place'
     ],
-		cats = categories.join(','),
-		overrides = {
-		    '08736, Manasquan, New Jersey, USA': { x: -74.037, y: 40.1128 },
-		    '32899, Orlando, Florida, USA': { x: -80.6774, y: 28.6143 },
-		    '97003, Beaverton, Oregon, USA': { x: -122.8752489, y: 45.5050916 },
-		    '99734, Prudhoe Bay, Alaska, USA': { x: -148.3372, y: 70.2552 },
+        cats = categories.join(','),
+        overrides = {
+            '08736, Manasquan, New Jersey, USA': { x: -74.037, y: 40.1128 },
+            '32899, Orlando, Florida, USA': { x: -80.6774, y: 28.6143 },
+            '97003, Beaverton, Oregon, USA': { x: -122.8752489, y: 45.5050916 },
+            '99734, Prudhoe Bay, Alaska, USA': { x: -148.3372, y: 70.2552 },
 
-		    'Guam, Oceania': { x: 144.74, y: 13.46 },
-		    'Andover, Maine, United States': { x: -70.7525, y: 44.634167 },
-		    'Bear Creek, Pennsylvania, United States': { x: -75.772809, y: 41.204074 },
-		    'Bear Creek Village, Pennsylvania, United States': { x: -75.772809, y: 41.204074 },
-		    'New York City, New York, United States': { x: -74.0059, y: 40.7142 },
-		    'Pinnacles National Monument, San Benito County,California, United States': { x: -121.147278, y: 36.47075 },
-		    'Pinnacles National Park, CA-146, Paicines, California': { x: -121.147278, y: 36.47075 },
-		    'Welcome, Maryland, United States': { x: -77.081212, y: 38.4692469 },
-		    'Tampa, Florida, United States (City)': { x: -82.5329, y: 27.9756 },
-		    'San Francisco, California, United States': { x: -122.3758, y: 37.6188 },
-		    //'Dayton, Ohio, United States (City)': { x: -84.05, y: 39.85 },
-		},
-		roundToPlaces = function (num, decimals)
-		{
-		    var n = Math.pow(10, decimals);
-		    return Math.round((n * num).toFixed(decimals)) / n;
-		},
-		doRedirectToGeometry = function (geom)
-		{
-		    var location = window.location,
-				query = '?lat=' + roundToPlaces(geom.y, 4) + '&lon=' + roundToPlaces(geom.x, 4),
-				origin, domain;
-		    var Url = "";
+            'Guam, Oceania': { x: 144.74, y: 13.46 },
+            'Andover, Maine, United States': { x: -70.7525, y: 44.634167 },
+            'Bear Creek, Pennsylvania, United States': { x: -75.772809, y: 41.204074 },
+            'Bear Creek Village, Pennsylvania, United States': { x: -75.772809, y: 41.204074 },
+            'New York City, New York, United States': { x: -74.0059, y: 40.7142 },
+            'Pinnacles National Monument, San Benito County,California, United States': { x: -121.147278, y: 36.47075 },
+            'Pinnacles National Park, CA-146, Paicines, California': { x: -121.147278, y: 36.47075 },
+            'Welcome, Maryland, United States': { x: -77.081212, y: 38.4692469 },
+            'Tampa, Florida, United States (City)': { x: -82.5329, y: 27.9756 },
+            'San Francisco, California, United States': { x: -122.3758, y: 37.6188 },
+            //'Dayton, Ohio, United States (City)': { x: -84.05, y: 39.85 },
+        },
+        roundToPlaces = function (num, decimals)
+        {
+            var n = Math.pow(10, decimals);
+            return Math.round((n * num).toFixed(decimals)) / n;
+        },
+        doRedirectToGeometry = function (geom)
+        {
+            var location = window.location,
+                query = '?lat=' + roundToPlaces(geom.y, 4) + '&lon=' + roundToPlaces(geom.x, 4),
+                origin, domain;
+            var Url = "";
 
-		    if (location.pathname.match(/MapClick.php$/))
-		    {
-		        if (location.origin)
-		        {
-		            origin = location.origin;
-		        } else
-		        {
-		            origin = location.protocol + "//" + location.hostname + (location.port ? ':' + location.port : '');
-		        }
-		        //window.location = origin + location.pathname + query;
-		        Url = origin + location.pathname + query;
-		    }
-		    else
-		    {
-		        if (location.hostname.match(/dev\.nids\.noaa\.gov$/))
-		        {
-		            domain = 'forecast.dev.nids.noaa.gov';
-		        } else if (location.hostname.match(/preview.*\.weather\.gov$/))
-		        {
-		            domain = 'preview-forecast.weather.gov';
-		        } else
-		        {
-		            domain = 'forecast.weather.gov';
-		        }
-		        //window.location = location.protocol + '//' + domain + '/MapClick.php' + query;
-		        //Url = location.protocol + '//' + domain + '/MapClick.php' + query;
-		        Url =  'https://' + domain + '/MapClick.php' + query;
-		    }
-		    Url = "cors/?u=" + encodeURIComponent(Url);
+            if (location.pathname.match(/MapClick.php$/))
+            {
+                if (location.origin)
+                {
+                    origin = location.origin;
+                } else
+                {
+                    origin = location.protocol + "//" + location.hostname + (location.port ? ':' + location.port : '');
+                }
+                //window.location = origin + location.pathname + query;
+                Url = origin + location.pathname + query;
+            }
+            else
+            {
+                if (location.hostname.match(/dev\.nids\.noaa\.gov$/))
+                {
+                    domain = 'forecast.dev.nids.noaa.gov';
+                } else if (location.hostname.match(/preview.*\.weather\.gov$/))
+                {
+                    domain = 'preview-forecast.weather.gov';
+                } else
+                {
+                    domain = 'forecast.weather.gov';
+                }
+                //window.location = location.protocol + '//' + domain + '/MapClick.php' + query;
+                //Url = location.protocol + '//' + domain + '/MapClick.php' + query;
+                Url = 'https://' + domain + '/MapClick.php' + query;
+            }
+            Url = "cors/?u=" + encodeURIComponent(Url);
 
-		    //GetLatLng(Url);
+            //GetLatLng(Url);
 
-		    //// First clear the iframe
-		    //iframeTwc.on("load", function (e)
-		    //{
-		    //    //console.log("loaded...");
+            //// First clear the iframe
+            //iframeTwc.on("load", function (e)
+            //{
+            //    //console.log("loaded...");
 
-		    //    switch (iframeTwc.attr("src"))
-		    //    {
-		    //        case "about:blank":
-		    //            iframeTwc.attr("src", "twc3.html?_=" + (new Date).getTime().toString());
-		    //            //iframeTwc.attr("src", "twc3.html?a");
-		    //            break;
+            //    switch (iframeTwc.attr("src"))
+            //    {
+            //        case "about:blank":
+            //            iframeTwc.attr("src", "twc3.html?_=" + (new Date).getTime().toString());
+            //            //iframeTwc.attr("src", "twc3.html?a");
+            //            break;
 
-		    //            //case "twc3.html":
+            //            //case "twc3.html":
             //        default:
-		    //            iframeTwc.off("load");
-		    //            iframeTwc[0].contentWindow.GetLatLng(Url);
-		    //            break;
-		    //    }
-		    //});
-		    //iframeTwc.attr("src", "about:blank");
-		    LoadTwcData(Url);
+            //            iframeTwc.off("load");
+            //            iframeTwc[0].contentWindow.GetLatLng(Url);
+            //            break;
+            //    }
+            //});
+            //iframeTwc.attr("src", "about:blank");
+            LoadTwcData(Url);
 
-		    // Save the query
-		    localStorage.setItem("TwcQuery", txtAddress.val());
-				localStorage.setItem("TwcLatLon", JSON.stringify(geom))
-		};
+            // Save the query
+            localStorage.setItem("TwcQuery", txtAddress.val());
+            localStorage.setItem("TwcLatLon", JSON.stringify(geom))
+        };
 
     var PreviousSeggestionValue = null;
     var PreviousSeggestion = null;
@@ -1330,14 +1330,14 @@ $(function ()
         dataType: 'jsonp',
         transformResult: function (response)
         {
-					if (_AutoSelectQuery == true)
-					{
-							_AutoSelectQuery = false;
-							window.setTimeout(function ()
-							{
-									$(ac.suggestionsContainer.children[0]).click();
-							}, 1);
-					}
+            if (_AutoSelectQuery == true)
+            {
+                _AutoSelectQuery = false;
+                window.setTimeout(function ()
+                {
+                    $(ac.suggestionsContainer.children[0]).click();
+                }, 1);
+            }
             return {
                 suggestions: $.map(response.suggestions, function (i)
                 {
@@ -1376,14 +1376,13 @@ $(function ()
 
     // Auto load the previous query
     var TwcQuery = localStorage.getItem("TwcQuery");
-    var TwcLatLon = localStorage.getItem("TwcLatLon");
 
     var TwcQueryStr = getParameterByName("location");
     if (TwcQueryStr)
     {
         console.log(TwcQueryStr);
         TwcQuery = TwcQueryStr;
-				TwcLatLon = undefined;
+        TwcLatLon = undefined;
     }
 
     if (TwcQuery)
@@ -1391,18 +1390,20 @@ $(function ()
         // Remove "(...)"
         TwcQuery = TwcQuery.replace(/ *\([^)]*\) */g, "");
     }
-		spanLastRefresh = $("#spanLastRefresh");
+    spanLastRefresh = $("#spanLastRefresh");
     if (TwcQuery)
     {
-			txtAddress.val(TwcQuery);
-			if (TwcLatLon) {
-				doRedirectToGeometry(JSON.parse(TwcLatLon));
+        txtAddress.val(TwcQuery);
+        if (TwcLatLon)
+        {
+            doRedirectToGeometry(JSON.parse(TwcLatLon));
 
-			} else {
-				_AutoSelectQuery = true;
-				txtAddress.blur();
-				txtAddress.focus();
-			}
+        } else
+        {
+            _AutoSelectQuery = true;
+            txtAddress.blur();
+            txtAddress.focus();
+        }
     }
 
     var TwcPlay = localStorage.getItem("TwcPlay");
