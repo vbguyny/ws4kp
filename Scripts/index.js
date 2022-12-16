@@ -1376,6 +1376,7 @@ $(function ()
 
     // Auto load the previous query
     var TwcQuery = localStorage.getItem("TwcQuery");
+    var TwcLatLon = localStorage.getItem("TwcLatLon");
 
     var TwcQueryStr = getParameterByName("location");
     if (TwcQueryStr)
