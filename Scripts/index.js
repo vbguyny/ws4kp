@@ -1269,7 +1269,7 @@ $(function ()
 
 		    // Save the query
 		    localStorage.setItem("TwcQuery", txtAddress.val());
-
+				localStorage.setItem("TwcLatLon", JSON.stringify(geom))
 		};
 
     var PreviousSeggestionValue = null;
@@ -1330,15 +1330,14 @@ $(function ()
         dataType: 'jsonp',
         transformResult: function (response)
         {
-            if (_AutoSelectQuery == true)
-            {
-                _AutoSelectQuery = false;
-                window.setTimeout(function ()
-                {
-                    $(ac.suggestionsContainer.children[0]).click();
-                }, 1);
-            }
-
+					if (_AutoSelectQuery == true)
+					{
+							_AutoSelectQuery = false;
+							window.setTimeout(function ()
+							{
+									$(ac.suggestionsContainer.children[0]).click();
+							}, 1);
+					}
             return {
                 suggestions: $.map(response.suggestions, function (i)
                 {
@@ -1377,12 +1376,14 @@ $(function ()
 
     // Auto load the previous query
     var TwcQuery = localStorage.getItem("TwcQuery");
+    var TwcLatLon = localStorage.getItem("TwcLatLon");
 
     var TwcQueryStr = getParameterByName("location");
     if (TwcQueryStr)
     {
         console.log(TwcQueryStr);
         TwcQuery = TwcQueryStr;
+				TwcLatLon = undefined;
     }
 
     if (TwcQuery)
@@ -1390,13 +1391,18 @@ $(function ()
         // Remove "(...)"
         TwcQuery = TwcQuery.replace(/ *\([^)]*\) */g, "");
     }
-
+		spanLastRefresh = $("#spanLastRefresh");
     if (TwcQuery)
     {
-        _AutoSelectQuery = true;
-        txtAddress.val(TwcQuery);
-        txtAddress.blur();
-        txtAddress.focus();
+			txtAddress.val(TwcQuery);
+			if (TwcLatLon) {
+				doRedirectToGeometry(JSON.parse(TwcLatLon));
+
+			} else {
+				_AutoSelectQuery = true;
+				txtAddress.blur();
+				txtAddress.focus();
+			}
     }
 
     var TwcPlay = localStorage.getItem("TwcPlay");
@@ -1492,6 +1498,7 @@ $(function ()
         _IsPlaying = true;
 
         localStorage.removeItem("TwcQuery");
+        localStorage.removeItem("TwcLatLon");
         PreviousSeggestionValue = null;
         PreviousSeggestion = null;
 
@@ -1544,7 +1551,6 @@ $(function ()
     });
 
     divRefresh = $("#divRefresh");
-    spanLastRefresh = $("#spanLastRefresh");
     chkAutoRefresh = $("#chkAutoRefresh");
     lblRefreshCountDown = $("#lblRefreshCountDown");
     spanRefreshCountDown = $("#spanRefreshCountDown");
