@@ -11679,12 +11679,10 @@ var ShowDopplerMap2 = function (WeatherParameters)
         //var Url = "https://radar.weather.gov/Conus/RadarImg/";
         //https://mesonet.agron.iastate.edu/archive/data/2020/11/26/GIS/uscomp/
         var Today = new Date();
-        //var Tomorrow = Today.addDays(1);
         var Yesterday = Today.addDays(-1);
         var UrlLinks = [
             "https://mesonet.agron.iastate.edu/archive/data/" + Yesterday.getUTCYYYYMMDDSlashed() + "/GIS/" + FolderName + "/",
             "https://mesonet.agron.iastate.edu/archive/data/" + Today.getUTCYYYYMMDDSlashed() + "/GIS/" + FolderName + "/",
-            //"https://mesonet.agron.iastate.edu/archive/data/" + Tomorrow.getYYYYMMDDSlashed() + "/GIS/" + FolderName + "/"
         ];
 
         var TimesCount = 0;
@@ -11693,7 +11691,7 @@ var ShowDopplerMap2 = function (WeatherParameters)
         var RadarContexts = [];
 
         var UrlCounter = 0;
-        var UrlMax = 3;
+        var UrlMax = UrlLinks.length;
         var CheckFinishedRadarUrls = function ()
         {
             UrlCounter++;
