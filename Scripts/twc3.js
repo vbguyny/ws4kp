@@ -6623,6 +6623,9 @@ Date.prototype.getYYYYMMDDSlashed = function ()
     //return this.toISOString().split('T')[0].replaceAll("-", "/");
     return this.getFullYear() + "/" + (this.getMonth() + 1).pad(2) + "/" + this.getDate().pad(2);
 };
+Date.prototype.getUTCYYYYMMDDSlashed = function () {
+    return this.getUTCFullYear() + "/" + (this.getUTCMonth() + 1).pad(2) + "/" + this.getUTCDate().pad(2);
+};
 
 var PopulateExtendedForecast = function (WeatherParameters, ScreenIndex)
 {
@@ -11676,12 +11679,12 @@ var ShowDopplerMap2 = function (WeatherParameters)
         //var Url = "https://radar.weather.gov/Conus/RadarImg/";
         //https://mesonet.agron.iastate.edu/archive/data/2020/11/26/GIS/uscomp/
         var Today = new Date();
-        var Tomorrow = Today.addDays(1);
+        //var Tomorrow = Today.addDays(1);
         var Yesterday = Today.addDays(-1);
         var UrlLinks = [
-            "https://mesonet.agron.iastate.edu/archive/data/" + Yesterday.getYYYYMMDDSlashed() + "/GIS/" + FolderName + "/",
-            "https://mesonet.agron.iastate.edu/archive/data/" + Today.getYYYYMMDDSlashed() + "/GIS/" + FolderName + "/",
-            "https://mesonet.agron.iastate.edu/archive/data/" + Tomorrow.getYYYYMMDDSlashed() + "/GIS/" + FolderName + "/"
+            "https://mesonet.agron.iastate.edu/archive/data/" + Yesterday.getUTCYYYYMMDDSlashed() + "/GIS/" + FolderName + "/",
+            "https://mesonet.agron.iastate.edu/archive/data/" + Today.getUTCYYYYMMDDSlashed() + "/GIS/" + FolderName + "/",
+            //"https://mesonet.agron.iastate.edu/archive/data/" + Tomorrow.getYYYYMMDDSlashed() + "/GIS/" + FolderName + "/"
         ];
 
         var TimesCount = 0;
