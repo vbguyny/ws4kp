@@ -9992,7 +9992,7 @@ var PopulateRegionalObservations = function (WeatherParameters)
 
             //DrawText(context, "Star4000", "24pt", "#FFFFFF", 495, y, (WeatherCurrentCondition.WindSpeed == 0 ? "Calm" : WeatherCurrentCondition.WindDirection + (Array(6 - WeatherCurrentCondition.WindDirection.length - WeatherCurrentCondition.WindSpeed.toString().length).join(" ")) + WeatherCurrentCondition.WindSpeed), 2);
             //if (WeatherCurrentCondition.WindSpeed > 0)
-            if (WindSpeed > 0)
+            if (WindSpeed > 0 && WeatherCurrentCondition.WindDirection !== undefined)
             {
                 DrawText(context, "Star4000", "24pt", "#FFFFFF", 495, y, WeatherCurrentCondition.WindDirection + (Array(6 - WeatherCurrentCondition.WindDirection.length - WindSpeed.toString().length).join(" ")) + WindSpeed.toString(), 2);
             }
