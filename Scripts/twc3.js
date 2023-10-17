@@ -366,7 +366,7 @@ var GetClosestCurrentWeather = function (WeatherParameters, Distance)
     }
 
     // Get the current weather from the next closest station.
-    var Url = "https://www.aviationweather.gov/adds/dataserver_current/httpparam?datasource=metars&requesttype=retrieve&format=xml&hoursBeforeNow=1";
+    var Url = "https://aviationweather.gov/cgi-bin/data/dataserver.php?datasource=metars&requesttype=retrieve&format=xml&hoursBeforeNow=1";
     Url += "&radialDistance=" + Distance.toString();
     Url += ";" + WeatherParameters.Longitude;
     Url += "," + WeatherParameters.Latitude;
@@ -3118,7 +3118,7 @@ var GetWeatherHazards3 = function (WeatherParameters)
 
 var GetWeatherMetar = function (WeatherParameters)
 {
-    var Url = "https://www.aviationweather.gov/adds/dataserver_current/httpparam?datasource=metars&requesttype=retrieve&format=xml&hoursBeforeNow=3";
+    var Url = "https://aviationweather.gov/cgi-bin/data/dataserver.php?datasource=metars&requesttype=retrieve&format=xml&hoursBeforeNow=3";
     Url += "&stationString=" + WeatherParameters.StationId;
     //Url += "," + (new Date().getTime()); // Prevents caching
     //Url = "https://crossorigin.me/" + Url; // Need to do this for Chrome and CORS
@@ -9643,7 +9643,7 @@ var GetRegionalStations = function (WeatherParameters, Distance)
         WeatherParameters.WeatherCurrentRegionalConditions = new WeatherCurrentRegionalConditions();
     }
 
-    var Url = "https://www.aviationweather.gov/adds/dataserver_current/httpparam?datasource=metars&requesttype=retrieve&format=xml&hoursBeforeNow=1";
+    var Url = "https://aviationweather.gov/cgi-bin/data/dataserver.php?datasource=metars&requesttype=retrieve&format=xml&hoursBeforeNow=1";
     Url += "&radialDistance=" + Distance.toString();
     Url += ";" + WeatherParameters.Longitude;
     Url += "," + WeatherParameters.Latitude;
@@ -10492,7 +10492,7 @@ var ShowRegionalMap = function (WeatherParameters, TomorrowForecast1, TomorrowFo
             var maxLon = MinMaxLatLon.MaxLongitude - 1; // Prevent cities from being cut off on the right side.
             var minLon = MinMaxLatLon.MinLongitude;
 
-            var Url = "https://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource=metars&requestType=retrieve&format=xml&hoursBeforeNow=1&minLon=" + minLon + "&minLat=" + minLat + "&maxLon=" + maxLon + "&maxLat=" + maxLat;
+            var Url = "https://aviationweather.gov/cgi-bin/data/dataserver.php?dataSource=metars&requestType=retrieve&format=xml&hoursBeforeNow=1&minLon=" + minLon + "&minLat=" + minLat + "&maxLon=" + maxLon + "&maxLat=" + maxLat;
 
             if (DontLoadGifs == true)
             {
@@ -10768,7 +10768,7 @@ var ShowRegionalMap = function (WeatherParameters, TomorrowForecast1, TomorrowFo
                         return;
                     }
 
-                    var Url = "https://www.aviationweather.gov/adds/dataserver_current/httpparam?datasource=metars&requesttype=retrieve&format=xml&hoursBeforeNow=3";
+                    var Url = "https://aviationweather.gov/cgi-bin/data/dataserver.php?datasource=metars&requesttype=retrieve&format=xml&hoursBeforeNow=3";
                     Url += "&stationString=" + StationId;
                     //Url = "cors/?u=" + encodeURIComponent(Url);
 
@@ -12494,7 +12494,7 @@ var Progress = function (e)
             ////DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "Conditions", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 55, "WeatherStar", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "4000+", 3);
-            DrawTitleText(context, "WeatherStar", "4000+ 1.74");
+            DrawTitleText(context, "WeatherStar", "4000+ 1.75");
 
             // Draw a box for the progress.
             //context.fillStyle = "#000000";

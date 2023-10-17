@@ -1,42 +1,41 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29519.87
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4C09BEDF-4156-4DEE-AB45-BAE0AF4FA9F1}"
-	ProjectSection(SolutionItems) = preProject
-		CORS\Default.aspx = CORS\Default.aspx
-		GenerateStationsJson.aspx = GenerateStationsJson.aspx
-		Scripts\Icons.js = Scripts\Icons.js
-		Styles\index.css = Styles\index.css
-		index.html = index.html
-		Scripts\index.js = Scripts\index.js
-		Scripts\jeoquery.js = Scripts\jeoquery.js
-		Scripts\jquery-3.1.0.min.js = Scripts\jquery-3.1.0.min.js
-		Scripts\jquery.autocomplete.min.js = Scripts\jquery.autocomplete.min.js
-		Scripts\jquery.touchSwipe.min.js = Scripts\jquery.touchSwipe.min.js
-		Scripts\libgif.js = Scripts\libgif.js
-		manifest.json = manifest.json
-		Scripts\metars.js = Scripts\metars.js
-		README.md = README.md
-		Scripts\RegionalCities.js = Scripts\RegionalCities.js
-		Scripts\States.js = Scripts\States.js
-		Scripts\stations.js = Scripts\stations.js
-		Scripts\timemachine.min.js = Scripts\timemachine.min.js
-		Scripts\Timer.js = Scripts\Timer.js
-		Scripts\TimerWorker.js = Scripts\TimerWorker.js
-		Scripts\TravelCities.js = Scripts\TravelCities.js
-		Styles\twc3.css = Styles\twc3.css
-		twc3.html = twc3.html
-		Scripts\twc3.js = Scripts\twc3.js
-		web.config = web.config
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "ws4pk", "http://localhost/ws4pk", "{2931965C-BEEA-418B-9EF7-EABE07FCBE3F}"
+	ProjectSection(WebsiteProperties) = preProject
+		UseIISExpress = "false"
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.8"
+		Debug.AspNetCompiler.VirtualPath = "/ws4pk"
+		Debug.AspNetCompiler.PhysicalPath = "D:\Projects\Code\ws4kp\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\ws4pk\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/ws4pk"
+		Release.AspNetCompiler.PhysicalPath = "D:\Projects\Code\ws4kp\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\ws4pk\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		SlnRelativePath = "D:\Projects\Code\ws4kp\"
 	EndProjectSection
 EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2931965C-BEEA-418B-9EF7-EABE07FCBE3F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2931965C-BEEA-418B-9EF7-EABE07FCBE3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {BB3BA2C9-58CE-4851-8CA5-2C3218FE60F9}
+		SolutionGuid = {9A9600AB-279F-4ABC-8466-A30F104B04E1}
 	EndGlobalSection
 EndGlobal

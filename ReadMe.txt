@@ -31,11 +31,11 @@ Use for current conditions (appears to update every hour):
 http://www.aviationweather.gov/adds/dataserver_current/httpparam?datasource=metars&requesttype=retrieve&format=xml&hoursBeforeNow=1&stationString=KHWV
 http://heras-gilsanz.com/manuel/METAR-Decoder.html
 https://aviationweather.gov/adds/dataserver_current/httpparam?dataSource=metars&requestType=retrieve&format=xml&hoursBeforeNow=4&minLon=-73&minLat=40&maxLon=-72&maxLat=41
-https://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource=metars&requestType=retrieve&format=xml&radialDistance=20;-72.989731,40.84706&hoursBeforeNow=4
-https://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource=metars&requestType=retrieve&format=xml&radialDistance=20;-74.0059,40.7142&hoursBeforeNow=1
+https://aviationweather.gov/cgi-bin/data/dataserver.php?dataSource=metars&requestType=retrieve&format=xml&radialDistance=20;-72.989731,40.84706&hoursBeforeNow=4
+https://aviationweather.gov/cgi-bin/data/dataserver.php?dataSource=metars&requestType=retrieve&format=xml&radialDistance=20;-74.0059,40.7142&hoursBeforeNow=1
 http://www.moratech.com/aviation/metar-class/metar-pg10-sky.html
 http://www.moratech.com/aviation/metar-class/metar.html#INDEX
-https://www.aviationweather.gov/adds/dataserver/metars/MetarExamples.php
+https://aviationweather.gov/adds/dataserver/metars/MetarExamples.php
 
 Warnings/Alerts:
 https://alerts.weather.gov/cap/wwaatmget.php?x=NYZ080&y=0

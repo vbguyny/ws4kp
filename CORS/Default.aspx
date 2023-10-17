@@ -42,6 +42,7 @@
             case "api.weather.gov":
             case "api.weather.com":
             case "www.aviationweather.gov":
+            case "aviationweather.gov":
             case "www.wunderground.com":
             case "api-ak.wunderground.com":
             case "tidesandcurrents.noaa.gov":
@@ -136,6 +137,7 @@
         {
             case "alerts.weather.gov":
             case "www.aviationweather.gov":
+            case "aviationweather.gov":
             case "mesonet.agron.iastate.edu":
             case "radar.weather.gov":
             case "www2.ehs.niu.edu":
