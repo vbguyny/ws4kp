@@ -3253,357 +3253,358 @@ var GetWeatherForecast = function (WeatherParameters)
     });
 };
 
-$(function ()
-{
-    canvasBackGroundDateTime = $("#canvasBackGroundDateTime");
-    canvasBackGroundCurrentConditions = $("#canvasBackGroundCurrentConditions");
-    canvasProgress = $("#canvasProgress");
-    divProgress = $("#divProgress");
-
-    tblDopplerRadarMap = $("#tblDopplerRadarMap");
-    divDopplerRadarMap = $("#divDopplerRadarMap");
-    canvasLocalRadar = $("#canvasLocalRadar");
-
-    tblRegionalForecastMap = $("#tblRegionalForecastMap");
-    divRegionalForecastMap1 = $("#divRegionalForecastMap1");
-    divRegionalForecastMap2 = $("#divRegionalForecastMap2");
-    canvasRegionalForecast1 = $("#canvasRegionalForecast1");
-    canvasRegionalForecast2 = $("#canvasRegionalForecast2");
-
-    tblRegionalCurrentMap = $("#tblRegionalCurrentMap");
-    divRegionalCurrentMap = $("#divRegionalCurrentMap");
-    canvasRegionalObservations = $("#canvasRegionalObservations");
-
-    btnGetCurrentWeather = $("#btnGetCurrentWeather");
-    tblCurrentWeather = $("#tblCurrentWeather");
-    divTemperature = $("#divTemperature");
-    divStation = $("#divStation");
-    divConditions = $("#divConditions");
-    divHumidity = $("#divHumidity");
-    divIcon = $("#divIcon");
-    divDewpoint = $("#divDewpoint");
-    divCeiling = $("#divCeiling");
-    divVisibility = $("#divVisibility");
-    divWind = $("#divWind");
-    divPressure = $("#divPressure");
-    divGust = $("#divGust");
-    divHeatIndex = $("#divHeatIndex");
-    canvasCurrentWeather = $("#canvasCurrentWeather");
-
-    tblExtendedForecast = $("#tblExtendedForecast");
-    divDayShortName1 = $("#divDayShortName1");
-    divDayShortName2 = $("#divDayShortName2");
-    divDayShortName3 = $("#divDayShortName3");
-    divIcon1 = $("#divIcon1");
-    divIcon2 = $("#divIcon2");
-    divIcon3 = $("#divIcon3");
-    divConditions1 = $("#divConditions1");
-    divConditions2 = $("#divConditions2");
-    divConditions3 = $("#divConditions3");
-    divLo1 = $("#divLo1");
-    divLo2 = $("#divLo2");
-    divLo3 = $("#divLo3");
-    divHi1 = $("#divHi1");
-    divHi2 = $("#divHi2");
-    divHi3 = $("#divHi3");
-    canvasExtendedForecast1 = $("#canvasExtendedForecast1");
-    canvasExtendedForecast2 = $("#canvasExtendedForecast2");
-
-    tblLocalForecast = $("#tblLocalForecast");
-    divLocalForecast1 = $("#divLocalForecast1");
-    divLocalForecast2 = $("#divLocalForecast2");
-    divLocalForecast3 = $("#divLocalForecast3");
-    canvasLocalForecast = $("#canvasLocalForecast");
-
-    tblHazards = $("#tblHazards");
-    divHazards = $("#divHazards");
-    tblHazardsScroll = $("#tblHazardsScroll");
-    divHazardsScroll = $("#divHazardsScroll");
-    canvasHazards = $("#canvasHazards");
-
-    tblSunData = $("#tblSunData");
-    divSunriseTodayName = $("#divSunriseTodayName");
-    divSunsetTomorrowName = $("#divSunsetTomorrowName");
-    divSunrise = $("#divSunrise");
-    divSunriseToday = $("#divSunriseToday");
-    divSunriseTomorrow = $("#divSunriseTomorrow");
-    divSunset = $("#divSunset");
-    divSunsetToday = $("#divSunsetToday");
-    divSunsetTomorrow = $("#divSunsetTomorrow");
-    canvasAlmanac = $("#canvasAlmanac");
-    canvasAlmanacTides = $("#canvasAlmanacTides");
-    canvasOutlook = $("#canvasOutlook");
-    canvasMarineForecast = $("#canvasMarineForecast");
-    canvasAirQuality = $("#canvasAirQuality");
-
-    tblOutlook = $("#tblOutlook");
-    divOutlookTemp = $("#divOutlookTemp");
-    divOutlookPrcp = $("#divOutlookPrcp");
-
-    tblTravelCities = $("#tblTravelCities");
-    divTravelCitiesHigh = $("#divTravelCitiesHigh");
-    divTravelCitiesLow = $("#divTravelCitiesLow");
-    tblTravelCitiesScroll = $("#tblTravelCitiesScroll");
-    divTravelCitiesScroll = $("#divTravelCitiesScroll");
-    canvasTravelForecast = $("#canvasTravelForecast");
-
-    tblRegionalObservations = $("#tblRegionalObservations");
-    divRegionalObservationsCityName = $("#divRegionalObservationsCityName");
-    divRegionalObservationsTemperature = $("#divRegionalObservationsTemperature");
-    divRegionalObservationsConditions = $("#divRegionalObservationsConditions");
-    divRegionalObservationsWindDirection = $("#divRegionalObservationsWindDirection");
-    divRegionalObservationsWindSpeed = $("#divRegionalObservationsWindSpeed");
-    canvasLatestObservations = $("#canvasLatestObservations");
-
-    audMusic = $("#audMusic");
-    PopulateMusicUrls();
-    //audMusic[0].onerror = audMusic_OnError;
-    //audMusic[0].ontimeupdate = AudioOnTimeUpdate;
-    //audMusic[0].onplay = RefreshStateOfMusicAudio;
-    //audMusic[0].onpause = RefreshStateOfMusicAudio;
-    //audMusic[0].onplaying = RefreshStateOfMusicAudio;
-
-    audBeep = $("#audBeep");
-
-    canvasProgress.mousemove(canvasProgress_mousemove);
-    canvasProgress.click(canvasProgress_click);
-
-    _WeatherParameters = {};
-
-    _WeatherParameters.WeatherHazardConditions = {};
-
-    var WeatherCanvases = [];
-    WeatherCanvases.push(canvasProgress);
-    WeatherCanvases.push(canvasCurrentWeather);
-    WeatherCanvases.push(canvasLatestObservations);
-    WeatherCanvases.push(canvasTravelForecast);
-    WeatherCanvases.push(canvasRegionalForecast1);
-    WeatherCanvases.push(canvasRegionalForecast2);
-    WeatherCanvases.push(canvasRegionalObservations);
-    WeatherCanvases.push(canvasAlmanac);
-    WeatherCanvases.push(canvasAlmanacTides);
-    WeatherCanvases.push(canvasOutlook);
-    WeatherCanvases.push(canvasMarineForecast);
-    WeatherCanvases.push(canvasAirQuality);
-    WeatherCanvases.push(canvasLocalForecast);
-    WeatherCanvases.push(canvasExtendedForecast1);
-    WeatherCanvases.push(canvasExtendedForecast2);
-    WeatherCanvases.push(canvasHazards);
-    WeatherCanvases.push(canvasLocalRadar);
-    _WeatherParameters.WeatherCanvases = WeatherCanvases;
-
-    $(WeatherCanvases).each(function ()
+setTimeout(() =>
+    $(function ()
     {
-        var WeatherCanvas = $(this);
-        WeatherCanvas.css("position", "absolute");
-        WeatherCanvas.css("top", "0px");
-        WeatherCanvas.css("left", "0px");
-        WeatherCanvas.hide();
-    });
-    canvasProgress.show();
+        canvasBackGroundDateTime = $("#canvasBackGroundDateTime");
+        canvasBackGroundCurrentConditions = $("#canvasBackGroundCurrentConditions");
+        canvasProgress = $("#canvasProgress");
+        divProgress = $("#divProgress");
 
-    _WeatherParameters.TravelCities = _TravelCities;
+        tblDopplerRadarMap = $("#tblDopplerRadarMap");
+        divDopplerRadarMap = $("#divDopplerRadarMap");
+        canvasLocalRadar = $("#canvasLocalRadar");
 
-    var GetWeatherIntervalId = null;
-    var GetWeather = function ()
-    {
-        if (!_Url)
+        tblRegionalForecastMap = $("#tblRegionalForecastMap");
+        divRegionalForecastMap1 = $("#divRegionalForecastMap1");
+        divRegionalForecastMap2 = $("#divRegionalForecastMap2");
+        canvasRegionalForecast1 = $("#canvasRegionalForecast1");
+        canvasRegionalForecast2 = $("#canvasRegionalForecast2");
+
+        tblRegionalCurrentMap = $("#tblRegionalCurrentMap");
+        divRegionalCurrentMap = $("#divRegionalCurrentMap");
+        canvasRegionalObservations = $("#canvasRegionalObservations");
+
+        btnGetCurrentWeather = $("#btnGetCurrentWeather");
+        tblCurrentWeather = $("#tblCurrentWeather");
+        divTemperature = $("#divTemperature");
+        divStation = $("#divStation");
+        divConditions = $("#divConditions");
+        divHumidity = $("#divHumidity");
+        divIcon = $("#divIcon");
+        divDewpoint = $("#divDewpoint");
+        divCeiling = $("#divCeiling");
+        divVisibility = $("#divVisibility");
+        divWind = $("#divWind");
+        divPressure = $("#divPressure");
+        divGust = $("#divGust");
+        divHeatIndex = $("#divHeatIndex");
+        canvasCurrentWeather = $("#canvasCurrentWeather");
+
+        tblExtendedForecast = $("#tblExtendedForecast");
+        divDayShortName1 = $("#divDayShortName1");
+        divDayShortName2 = $("#divDayShortName2");
+        divDayShortName3 = $("#divDayShortName3");
+        divIcon1 = $("#divIcon1");
+        divIcon2 = $("#divIcon2");
+        divIcon3 = $("#divIcon3");
+        divConditions1 = $("#divConditions1");
+        divConditions2 = $("#divConditions2");
+        divConditions3 = $("#divConditions3");
+        divLo1 = $("#divLo1");
+        divLo2 = $("#divLo2");
+        divLo3 = $("#divLo3");
+        divHi1 = $("#divHi1");
+        divHi2 = $("#divHi2");
+        divHi3 = $("#divHi3");
+        canvasExtendedForecast1 = $("#canvasExtendedForecast1");
+        canvasExtendedForecast2 = $("#canvasExtendedForecast2");
+
+        tblLocalForecast = $("#tblLocalForecast");
+        divLocalForecast1 = $("#divLocalForecast1");
+        divLocalForecast2 = $("#divLocalForecast2");
+        divLocalForecast3 = $("#divLocalForecast3");
+        canvasLocalForecast = $("#canvasLocalForecast");
+
+        tblHazards = $("#tblHazards");
+        divHazards = $("#divHazards");
+        tblHazardsScroll = $("#tblHazardsScroll");
+        divHazardsScroll = $("#divHazardsScroll");
+        canvasHazards = $("#canvasHazards");
+
+        tblSunData = $("#tblSunData");
+        divSunriseTodayName = $("#divSunriseTodayName");
+        divSunsetTomorrowName = $("#divSunsetTomorrowName");
+        divSunrise = $("#divSunrise");
+        divSunriseToday = $("#divSunriseToday");
+        divSunriseTomorrow = $("#divSunriseTomorrow");
+        divSunset = $("#divSunset");
+        divSunsetToday = $("#divSunsetToday");
+        divSunsetTomorrow = $("#divSunsetTomorrow");
+        canvasAlmanac = $("#canvasAlmanac");
+        canvasAlmanacTides = $("#canvasAlmanacTides");
+        canvasOutlook = $("#canvasOutlook");
+        canvasMarineForecast = $("#canvasMarineForecast");
+        canvasAirQuality = $("#canvasAirQuality");
+
+        tblOutlook = $("#tblOutlook");
+        divOutlookTemp = $("#divOutlookTemp");
+        divOutlookPrcp = $("#divOutlookPrcp");
+
+        tblTravelCities = $("#tblTravelCities");
+        divTravelCitiesHigh = $("#divTravelCitiesHigh");
+        divTravelCitiesLow = $("#divTravelCitiesLow");
+        tblTravelCitiesScroll = $("#tblTravelCitiesScroll");
+        divTravelCitiesScroll = $("#divTravelCitiesScroll");
+        canvasTravelForecast = $("#canvasTravelForecast");
+
+        tblRegionalObservations = $("#tblRegionalObservations");
+        divRegionalObservationsCityName = $("#divRegionalObservationsCityName");
+        divRegionalObservationsTemperature = $("#divRegionalObservationsTemperature");
+        divRegionalObservationsConditions = $("#divRegionalObservationsConditions");
+        divRegionalObservationsWindDirection = $("#divRegionalObservationsWindDirection");
+        divRegionalObservationsWindSpeed = $("#divRegionalObservationsWindSpeed");
+        canvasLatestObservations = $("#canvasLatestObservations");
+
+        audMusic = $("#audMusic");
+        PopulateMusicUrls();
+        //audMusic[0].onerror = audMusic_OnError;
+        //audMusic[0].ontimeupdate = AudioOnTimeUpdate;
+        //audMusic[0].onplay = RefreshStateOfMusicAudio;
+        //audMusic[0].onpause = RefreshStateOfMusicAudio;
+        //audMusic[0].onplaying = RefreshStateOfMusicAudio;
+
+        audBeep = $("#audBeep");
+
+        canvasProgress.mousemove(canvasProgress_mousemove);
+        canvasProgress.click(canvasProgress_click);
+
+        _WeatherParameters = {};
+
+        _WeatherParameters.WeatherHazardConditions = {};
+
+        var WeatherCanvases = [];
+        WeatherCanvases.push(canvasProgress);
+        WeatherCanvases.push(canvasCurrentWeather);
+        WeatherCanvases.push(canvasLatestObservations);
+        WeatherCanvases.push(canvasTravelForecast);
+        WeatherCanvases.push(canvasRegionalForecast1);
+        WeatherCanvases.push(canvasRegionalForecast2);
+        WeatherCanvases.push(canvasRegionalObservations);
+        WeatherCanvases.push(canvasAlmanac);
+        WeatherCanvases.push(canvasAlmanacTides);
+        WeatherCanvases.push(canvasOutlook);
+        WeatherCanvases.push(canvasMarineForecast);
+        WeatherCanvases.push(canvasAirQuality);
+        WeatherCanvases.push(canvasLocalForecast);
+        WeatherCanvases.push(canvasExtendedForecast1);
+        WeatherCanvases.push(canvasExtendedForecast2);
+        WeatherCanvases.push(canvasHazards);
+        WeatherCanvases.push(canvasLocalRadar);
+        _WeatherParameters.WeatherCanvases = WeatherCanvases;
+
+        $(WeatherCanvases).each(function ()
         {
-            return;
-        }
-        window.clearInterval(GetWeatherIntervalId);
+            var WeatherCanvas = $(this);
+            WeatherCanvas.css("position", "absolute");
+            WeatherCanvas.css("top", "0px");
+            WeatherCanvas.css("left", "0px");
+            WeatherCanvas.hide();
+        });
+        canvasProgress.show();
 
-        $.ajax({
-            type: "GET",
-            url: _Url,
-            dataType: "html",
-            crossDomain: true,
-            cache: false,
-            success: function (html)
+        _WeatherParameters.TravelCities = _TravelCities;
+
+        var GetWeatherIntervalId = null;
+        var GetWeather = function ()
+        {
+            if (!_Url)
             {
-                //"http://forecast.weather.gov/MapClick.php?lat=40.8224&lon=-72.9847"
-                //var RadarId = getParameterByName("site", ResponseURL);
+                return;
+            }
+            window.clearInterval(GetWeatherIntervalId);
 
-                var Latitude = getParameterByName("lat", _Url);
-                var Longitude = getParameterByName("lon", _Url);
-
-                //divLat.html("Latitude: " + Latitude);
-                //divLng.html("Longitude: " + Longitude);
-
-                //MapClick.php?zoneid=NYZ078
-                var Index1 = html.indexOf("MapClick.php?zoneid=");
-                var ZoneId = html.substr(Index1 + 20, 6);
-
-                if (Index1 == -1)
+            $.ajax({
+                type: "GET",
+                url: _Url,
+                dataType: "html",
+                crossDomain: true,
+                cache: false,
+                success: function (html)
                 {
-                    Index1 = html.indexOf("MapClick.php%3Fzoneid%3D");
-                    ZoneId = html.substr(Index1 + 24, 6);
-                }
+                    //"http://forecast.weather.gov/MapClick.php?lat=40.8224&lon=-72.9847"
+                    //var RadarId = getParameterByName("site", ResponseURL);
 
-                ////obhistory/KHWV.html
-                //var Index2 = html.indexOf("obhistory/");
-                //var StationId = html.substr(Index2 + 10, 4);
-                var Index2_1 = html.indexOf(")</h2>");
-                var Index2 = html.lastIndexOf("(", Index2_1);
-                var StationId = html.substr(Index2 + 1, Index2_1 - (Index2 + 1));
+                    var Latitude = getParameterByName("lat", _Url);
+                    var Longitude = getParameterByName("lon", _Url);
 
-                //a:"OKX"
-                var Index3 = html.indexOf("a:\"");
-                var RadarId = html.substr(Index3 + 3, 3).toUpperCase();
+                    //divLat.html("Latitude: " + Latitude);
+                    //divLng.html("Longitude: " + Longitude);
 
-                //<div id="about_forecast">
-                //<div class="fullRow">
-                //                <div class="left">Point Forecast:</div>
-                //                <div class="right">Medford NY<br>&nbsp;40.81&deg;N 72.99&deg;W (Elev. 79 ft)</div>
-                //                    </div>
-                var Index4 = html.indexOf("<div id=\"about_forecast\">");
-                var Index5 = html.substr(Index4).indexOf("<br>");
-                var Index6 = html.substr(Index4, Index5).lastIndexOf("<div") + Index4;
-                var City = html.substr(Index6 + 19, (Index5 + Index4 - 3) - (Index6 + 19));
-                var State = html.substr(Index6 + 19 + City.length + 1, (Index5 + Index4) - (Index6 + 19 + City.length + 1));
+                    //MapClick.php?zoneid=NYZ078
+                    var Index1 = html.indexOf("MapClick.php?zoneid=");
+                    var ZoneId = html.substr(Index1 + 20, 6);
 
-                ////<div class="fullRow">
-                ////    <div class="left"><a target="_blank" href="http://www.weather.gov/glossary/index.php?word=Last+update">Last Update</a>: </div>
-                ////    <div class="right">6:01 pm HST Dec 25, 2016</div>
-                ////</div>
-                //var Index7 = html.indexOf("Last Update</a>");
-                //var Index8 = html.substr(Index7).indexOf("<div class=\"right\">");
-                //var Index9 = html.substr(Index7 + Index8).indexOf("</div>");
-                //var TimeZone = html.substr(Index7 + Index8 + 19, (Index7 + Index8 + Index9) - (Index7 + Index8 + 19)).split(' ')[2];
-
-                //<div class="fullRow">
-                //    <div class="left"><a target="_blank" href="//www.weather.gov/glossary/index.php?word=forecast+valid+for">Forecast Valid</a>: </div>
-                //    <div class="right">8am EST Nov 1, 2020-6pm EST Nov 7, 2020</div>
-                //</div>
-                var Index7 = html.indexOf("Forecast Valid</a>: ");
-                var Index8 = html.substr(Index7).indexOf("<div class=\"right\">");
-                var Index9 = html.substr(Index7 + Index8).indexOf("</div>");
-                var TimeZone = html.substr(Index7 + Index8 + 19, (Index7 + Index8 + Index9) - (Index7 + Index8 + 19)).split(' ')[1];
-
-                //_WeatherParameters = {
-                //    Latitude: Latitude,
-                //    Longitude: Longitude,
-                //    ZoneId: ZoneId,
-                //    RadarId: RadarId,
-                //    StationId: StationId,
-                //    City: City,
-                //    State: State,
-                //    TimeZone: TimeZone,
-                //};
-
-                if (StationId in _StationInfo)
-                {
-                    City = _StationInfo[StationId].City;
-                    City = City.split("/")[0];
-                }
-
-                _WeatherParameters.Latitude = Latitude;
-                _WeatherParameters.Longitude = Longitude;
-                _WeatherParameters.ZoneId = ZoneId;
-                _WeatherParameters.RadarId = RadarId;
-                _WeatherParameters.StationId = StationId;
-                _WeatherParameters.City = City;
-                _WeatherParameters.State = State;
-                _WeatherParameters.TimeZone = TimeZone;
-                //alert(_WeatherParameters.TimeZone);
-
-                //http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?location=-72.971293%2C+40.850043&f=pjson
-                request = $.ajax({
-                    url: location.protocol + '//geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode',
-                    data: {
-                        location: Longitude + "," + Latitude,
-                        distance: 1000, // Find location upto 1 KM.
-                        f: 'json',
-                        featureTypes: 'postal',
-                    },
-                    jsonp: 'callback',
-                    dataType: 'jsonp'
-                });
-                request.done(function (data)
-                {
-                    console.log(data);
-
-                    if (!("error" in data))
+                    if (Index1 == -1)
                     {
-                        var ZipCode = data.address.Postal;
-                        var Country = data.address.CountryCode;
+                        Index1 = html.indexOf("MapClick.php%3Fzoneid%3D");
+                        ZoneId = html.substr(Index1 + 24, 6);
+                    }
 
-                        switch (ZipCode)
+                    ////obhistory/KHWV.html
+                    //var Index2 = html.indexOf("obhistory/");
+                    //var StationId = html.substr(Index2 + 10, 4);
+                    var Index2_1 = html.indexOf(")</h2>");
+                    var Index2 = html.lastIndexOf("(", Index2_1);
+                    var StationId = html.substr(Index2 + 1, Index2_1 - (Index2 + 1));
+
+                    //a:"OKX"
+                    var Index3 = html.indexOf("a:\"");
+                    var RadarId = html.substr(Index3 + 3, 3).toUpperCase();
+
+                    //<div id="about_forecast">
+                    //<div class="fullRow">
+                    //                <div class="left">Point Forecast:</div>
+                    //                <div class="right">Medford NY<br>&nbsp;40.81&deg;N 72.99&deg;W (Elev. 79 ft)</div>
+                    //                    </div>
+                    var Index4 = html.indexOf("<div id=\"about_forecast\">");
+                    var Index5 = html.substr(Index4).indexOf("<br>");
+                    var Index6 = html.substr(Index4, Index5).lastIndexOf("<div") + Index4;
+                    var City = html.substr(Index6 + 19, (Index5 + Index4 - 3) - (Index6 + 19));
+                    var State = html.substr(Index6 + 19 + City.length + 1, (Index5 + Index4) - (Index6 + 19 + City.length + 1));
+
+                    ////<div class="fullRow">
+                    ////    <div class="left"><a target="_blank" href="http://www.weather.gov/glossary/index.php?word=Last+update">Last Update</a>: </div>
+                    ////    <div class="right">6:01 pm HST Dec 25, 2016</div>
+                    ////</div>
+                    //var Index7 = html.indexOf("Last Update</a>");
+                    //var Index8 = html.substr(Index7).indexOf("<div class=\"right\">");
+                    //var Index9 = html.substr(Index7 + Index8).indexOf("</div>");
+                    //var TimeZone = html.substr(Index7 + Index8 + 19, (Index7 + Index8 + Index9) - (Index7 + Index8 + 19)).split(' ')[2];
+
+                    //<div class="fullRow">
+                    //    <div class="left"><a target="_blank" href="//www.weather.gov/glossary/index.php?word=forecast+valid+for">Forecast Valid</a>: </div>
+                    //    <div class="right">8am EST Nov 1, 2020-6pm EST Nov 7, 2020</div>
+                    //</div>
+                    var Index7 = html.indexOf("Forecast Valid</a>: ");
+                    var Index8 = html.substr(Index7).indexOf("<div class=\"right\">");
+                    var Index9 = html.substr(Index7 + Index8).indexOf("</div>");
+                    var TimeZone = html.substr(Index7 + Index8 + 19, (Index7 + Index8 + Index9) - (Index7 + Index8 + 19)).split(' ')[1];
+
+                    //_WeatherParameters = {
+                    //    Latitude: Latitude,
+                    //    Longitude: Longitude,
+                    //    ZoneId: ZoneId,
+                    //    RadarId: RadarId,
+                    //    StationId: StationId,
+                    //    City: City,
+                    //    State: State,
+                    //    TimeZone: TimeZone,
+                    //};
+
+                    if (StationId in _StationInfo)
+                    {
+                        City = _StationInfo[StationId].City;
+                        City = City.split("/")[0];
+                    }
+
+                    _WeatherParameters.Latitude = Latitude;
+                    _WeatherParameters.Longitude = Longitude;
+                    _WeatherParameters.ZoneId = ZoneId;
+                    _WeatherParameters.RadarId = RadarId;
+                    _WeatherParameters.StationId = StationId;
+                    _WeatherParameters.City = City;
+                    _WeatherParameters.State = State;
+                    _WeatherParameters.TimeZone = TimeZone;
+                    //alert(_WeatherParameters.TimeZone);
+
+                    //http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?location=-72.971293%2C+40.850043&f=pjson
+                    request = $.ajax({
+                        url: location.protocol + '//geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode',
+                        data: {
+                            location: Longitude + "," + Latitude,
+                            distance: 1000, // Find location upto 1 KM.
+                            f: 'json',
+                            featureTypes: 'postal',
+                        },
+                        jsonp: 'callback',
+                        dataType: 'jsonp'
+                    });
+                    request.done(function (data)
+                    {
+                        console.log(data);
+
+                        if (!("error" in data))
                         {
-                            case "88888": // The North Pole.
-                                ZipCode = "20001";
-                                break;
+                            var ZipCode = data.address.Postal;
+                            var Country = data.address.CountryCode;
+
+                            switch (ZipCode)
+                            {
+                                case "88888": // The North Pole.
+                                    ZipCode = "20001";
+                                    break;
+                            }
+
+                            _WeatherParameters.ZipCode = ZipCode;
+                            _WeatherParameters.Country = Country;
                         }
 
-                        _WeatherParameters.ZipCode = ZipCode;
-                        _WeatherParameters.Country = Country;
-                    }
+                        GetMonthPrecipitation(_WeatherParameters);
+                        GetTravelWeather(_WeatherParameters);
+                        //GetAirQuality2(_WeatherParameters);
+                        GetAirQuality3(_WeatherParameters);
+                        ShowRegionalMap(_WeatherParameters, true);
+                        ShowRegionalMap(_WeatherParameters, false, true);
+                        //ShowDopplerMap(_WeatherParameters);
+                        ShowDopplerMap2(_WeatherParameters);
+                        GetWeatherHazards3(_WeatherParameters);
 
-                    GetMonthPrecipitation(_WeatherParameters);
-                    GetTravelWeather(_WeatherParameters);
-                    //GetAirQuality2(_WeatherParameters);
-                    GetAirQuality3(_WeatherParameters);
-                    ShowRegionalMap(_WeatherParameters, true);
-                    ShowRegionalMap(_WeatherParameters, false, true);
+                        if (_UpdateWeatherCanvasInterval)
+                        {
+                            window.clearInterval(_UpdateWeatherCanvasInterval);
+                        }
+                        _UpdateWeatherCanvasInterval = window.setInterval(function ()
+                        {
+                            UpdateWeatherCanvases(_WeatherParameters);
+                        }, _UpdateWeatherUpdateMs);
+
+                        if (_CallBack) _CallBack({ Status: "WEATHERPARAMETERS", WeatherParameters: _WeatherParameters, });
+                    });
+
+                    //////GetMoonPhases(_WeatherParameters);
+                    ////GetTimeZone(_WeatherParameters);
+
+                    ////GetCurrentWeather(_WeatherParameters);
+                    //GetMonthPrecipitation(_WeatherParameters);
+                    ////GetRegionalStations(_WeatherParameters);
+                    //GetTravelWeather(_WeatherParameters); //_TravelCities);
+                    //GetAirQuality(_WeatherParameters);
+                    ////GetMarineForecast(_WeatherParameters);
+                    ////GetWeatherForecast(_WeatherParameters);
+                    ////ShowRegionalMap(_WeatherParameters);
+                    //ShowRegionalMap(_WeatherParameters, true);
                     //ShowDopplerMap(_WeatherParameters);
-                    ShowDopplerMap2(_WeatherParameters);
-                    GetWeatherHazards3(_WeatherParameters);
+                    //GetWeatherHazards3(_WeatherParameters);
 
-                    if (_UpdateWeatherCanvasInterval)
-                    {
-                        window.clearInterval(_UpdateWeatherCanvasInterval);
-                    }
-                    _UpdateWeatherCanvasInterval = window.setInterval(function ()
-                    {
-                        UpdateWeatherCanvases(_WeatherParameters);
-                    }, _UpdateWeatherUpdateMs);
+                    //if (_UpdateWeatherCanvasInterval)
+                    //{
+                    //    window.clearInterval(_UpdateWeatherCanvasInterval);
+                    //}
+                    //_UpdateWeatherCanvasInterval = window.setInterval(function ()
+                    //{
+                    //    UpdateWeatherCanvases(_WeatherParameters);
+                    //}, _UpdateWeatherUpdateMs);
 
-                    if (_CallBack) _CallBack({ Status: "WEATHERPARAMETERS", WeatherParameters: _WeatherParameters, });
-                });
+                    //if (_CallBack) _CallBack({ Status: "WEATHERPARAMETERS", WeatherParameters: _WeatherParameters, });
 
-                //////GetMoonPhases(_WeatherParameters);
-                ////GetTimeZone(_WeatherParameters);
+                },
+                error: function (xhr, error, errorThrown)
+                {
+                    console.error("GetLatLng failed: " + errorThrown);
+                }
+            });
+        };
 
-                ////GetCurrentWeather(_WeatherParameters);
-                //GetMonthPrecipitation(_WeatherParameters);
-                ////GetRegionalStations(_WeatherParameters);
-                //GetTravelWeather(_WeatherParameters); //_TravelCities);
-                //GetAirQuality(_WeatherParameters);
-                ////GetMarineForecast(_WeatherParameters);
-                ////GetWeatherForecast(_WeatherParameters);
-                ////ShowRegionalMap(_WeatherParameters);
-                //ShowRegionalMap(_WeatherParameters, true);
-                //ShowDopplerMap(_WeatherParameters);
-                //GetWeatherHazards3(_WeatherParameters);
-
-                //if (_UpdateWeatherCanvasInterval)
-                //{
-                //    window.clearInterval(_UpdateWeatherCanvasInterval);
-                //}
-                //_UpdateWeatherCanvasInterval = window.setInterval(function ()
-                //{
-                //    UpdateWeatherCanvases(_WeatherParameters);
-                //}, _UpdateWeatherUpdateMs);
-
-                //if (_CallBack) _CallBack({ Status: "WEATHERPARAMETERS", WeatherParameters: _WeatherParameters, });
-
-            },
-            error: function (xhr, error, errorThrown)
+        _WeatherParameters.Progress = new Progress({
+            WeatherParameters: _WeatherParameters,
+            OnLoad: function ()
             {
-                console.error("GetLatLng failed: " + errorThrown);
-            }
+                GetWeatherIntervalId = window.setInterval(function () { GetWeather(); }, 100);
+                GetWeather();
+            },
         });
-    };
-
-    _WeatherParameters.Progress = new Progress({
-        WeatherParameters: _WeatherParameters,
-        OnLoad: function ()
-        {
-            GetWeatherIntervalId = window.setInterval(function () { GetWeather(); }, 100);
-            GetWeather();
-        },
-    });
-});
+    }), 250);
 
 var NavigateMenu = function ()
 {
@@ -12494,7 +12495,7 @@ var Progress = function (e)
             ////DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "Conditions", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 55, "WeatherStar", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "4000+", 3);
-            DrawTitleText(context, "WeatherStar", "4000+ 1.75");
+            DrawTitleText(context, "WeatherStar", "4000+ 1.76");
 
             // Draw a box for the progress.
             //context.fillStyle = "#000000";

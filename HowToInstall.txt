@@ -10,15 +10,29 @@ Windows 10:
 			2. World Wide Web Services > Application Development Features > ASP.NET 4.8
 	c. Click OK
 	d. Confirm IIS is installed properly "http://localhost"
-3. Download a zip file of the code from https://github.com/vbguyny/ws4kp
+3. Install ASP.NET Core Runtime 8
+	a. Download the Hosting Bundle under ASP.NET Core Runtime 8.0
+	b. Run the file downloaded and following the setup prompts
+4. Download a zip file of the code from https://github.com/vbguyny/ws4kp
 	a. Extract the folder "ws4kp-master" to C:\
-4. Create a Virtual Directory that points to "C:\ws4kp-master"
+5. Create a Application that points to "C:\ws4kp-master"
 	a. In IIS, expand, your machine name > Sites > Default Web Site
-	b. Right click on Default Web Site and click Add Virtual Directory
+	b. Right click on Default Web Site and click Add Application
 	c. Alias: ws4kp
 	d. Physical path: C:\ws4kp-master
 	e. Click OK
-5. Open browser and navigate to "http://localhost/ws4kp/"
+6. Create a custom Application Pool for the "ws4kp" Application
+	a. In IIS, expand, your machine name > Application Pools
+	b. Right click on Application Pools and click Add Application Pool
+	c. Name: ws4kp
+	d. .NET CLR Version: No Managed Code
+	e. Click OK
+7. Update the "ws4kp" Application to use the "ws4kp" Application Pool
+	a. In IIS, expand, your machine name > Sites > Default Web Site > ws4kp
+	b. Right click on ws4kp and click Manage Application > Advanced Settings...
+	c. Application Pool: ws4kp
+	d. Click OK
+8. Open browser and navigate to "http://localhost/ws4kp/"
 
 Note: If the site doesn't work when trying to enter a location, open a separate tab to "https://geocode.arcgis.com/" and ensure that you can visit that site first and then refresh the WS4KP site and try again
 Note: The option to get location from GPS only works if the site has an SSL certificate.  See https://certifytheweb.com/

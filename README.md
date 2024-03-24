@@ -34,20 +34,21 @@ This project was originally created by Mike Battaglia in the Fall of 2016 becaus
 
 ## Setup
 
-It is recommended that you download all of the source code to a folder and use Internet Information Services (IIS) 7.5 or later with ASP .NET 4.5 or later to create a virtual directory which points to this folder.
+It is recommended that you download all of the source code to a folder and use Internet Information Services (IIS) 10 or later with ASP .NET 8 or later to create a virtual directory which points to this folder.
 
 Please refer to the instructions here: https://github.com/vbguyny/ws4kp/blob/master/HowToInstall.txt
 
-If you plan on exposing this site publicly, you will need to update the code in `CORS/Default.aspx` to have your public IP address and domain name:
+If you plan on exposing this site publicly, you will need to update the code in `Middleware/CorsMiddleware.cs` to have your public IP address and domain name:
 ```c#
-	switch (Page.Request.Url.Host)
-	{
-		case "localhost":
-		case "192.168.2.98":
-		case "battaglia.ddns.net":
-		case "[Your domain here]":
-			OkToProcessRequest = true;
-			break;
+        switch (hostName)
+        {
+            case "localhost":
+            case "192.168.2.98":
+            case "24.187.197.234":
+            case "battaglia.ddns.net":
+		    case "[Your domain here]":
+			    OkToProcessRequest = true;
+			    break;
 	}
 ```
 
@@ -59,7 +60,7 @@ NOTE: The GPS function will not work in Chrome 50 or later if the site is not us
 
 The design of this site was to have as little back end logic on the server side as possible. However weather.gov has too many issues with cross-origin resource sharing (CORS).  In order to work around CORS prevention in most browsers the AJAX calls go through a server first acting as a middle man which sends the request to weather.gov and the response back to the end user.
 
-In order to setup CORS on your server you will need IIS 7.5 or later which is able to support ASP .NET 4.5 or later.
+In order to setup CORS on your server you will need IIS 10 or later which is able to support ASP .NET 8 or later.
 
 The live site uses itself as the CORS server however there are a few free third-party CORS servers that can be used if you are not able/willing to set one up yourself.
 
