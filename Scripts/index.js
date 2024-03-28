@@ -106,6 +106,28 @@ var _canvasIds = [
     "canvasHazards"
 ];
 
+var OperatingSystems = {
+    Unknown: 0,
+    Windows: 1,
+    MacOS: 2,
+    Linux: 3,
+    Unix: 4,
+    iOS: 5,
+    Andriod: 6,
+    WindowsPhone: 7,
+};
+_OperatingSystem = OperatingSystems.Unknown;
+var _UserAgent = window.navigator.userAgent;
+if (_UserAgent.indexOf("Win") != -1) _OperatingSystem = OperatingSystems.Windows;
+if (_UserAgent.indexOf("Mac") != -1) _OperatingSystem = OperatingSystems.MacOS;
+if (_UserAgent.indexOf("X11") != -1) _OperatingSystem = OperatingSystems.Unix;
+if (_UserAgent.indexOf("Linux") != -1) _OperatingSystem = OperatingSystems.Linux;
+if (_UserAgent.indexOf("iPad") != -1) _OperatingSystem = OperatingSystems.iOS;
+if (_UserAgent.indexOf("iPhone") != -1) _OperatingSystem = OperatingSystems.iOS;
+if (_UserAgent.indexOf("iPod") != -1) _OperatingSystem = OperatingSystems.iOS;
+if (_UserAgent.toLowerCase().indexOf("android") != -1) _OperatingSystem = OperatingSystems.Andriod;
+if (_UserAgent.indexOf("Windows Phone") != -1) _OperatingSystem = OperatingSystems.WindowsPhone;
+
 var FullScreenResize = function (AutoRefresh)
 {
     var iframeDoc = $(iframeTwc[0].contentWindow.document);
@@ -328,6 +350,45 @@ var FullScreenResize = function (AutoRefresh)
     //}
 
     divTwcNavContainer.show();
+
+    if (inIframe())
+    {
+        if (!inFullScreen)
+        {
+            var scaleFactor = 1.0;
+            var orientation = screen.orientation || window.orientation;
+
+            switch (_OperatingSystem)
+            {
+                case OperatingSystems.iOS:
+                    if (orientation == 90 || orientation == -90)
+                    {
+                        scaleFactor = Math.min(document.documentElement.clientWidth, screen.height) / 640;
+                    }
+                    else
+                    {
+                        // 2 = 20
+                        // 3 = 60
+                        var buffer = 20 + 40 * (window.devicePixelRatio - 2);
+
+                        scaleFactor = Math.min(document.documentElement.clientWidth, screen.width - buffer) / 640;
+                    }
+                    break;
+                default:
+                    if (orientation == 90 || orientation == -90)
+                    {
+                        scaleFactor = document.documentElement.clientHeight / 640;
+                    }
+                    else
+                    {
+                        scaleFactor = document.documentElement.clientWidth / 640;
+                    }
+                    break;
+            }
+            var $body = $(document.body);
+            $body.css("transform", `scale(${scaleFactor})`);
+        }
+    }
 };
 
 var _lockOrientation = screen.lockOrientation || screen.mozLockOrientation || screen.msLockOrientation;
@@ -1158,9 +1219,17 @@ $(function ()
 
     $(btnGetGps).on("click", btnGetGps_click);
 
+    if (inIframe())
+    {
+        $(document.body).css("margin", "0 0 0 0")
+            .css("transform-origin", "top left")
+            .css("width", "640px");
+    }
+
     //$(document).on('webkitfullscreenchange mozfullscreenchange fullscreenchange', OnFullScreen);
     $(window).on("resize", OnFullScreen);
     $(window).on("resize", window_resize);
+    $(window).on("orientationchange", FullScreenResize);
     $(document).on("mousemove", document_mousemove);
     $(document).on("mousedown", document_mousemove);
     divTwc.on("mousedown", document_mousemove);
@@ -1353,7 +1422,18 @@ $(function ()
         noSuggestionNotice: 'No results found. Please try a different search string.',
         onSelect: OnSelect,
         //width: 400
-        width: 493
+        width: 492,
+        onSearchComplete: function (query, suggestions)
+        {
+            var $input = $(this);
+            var scaleFactor = getBodyScaleValue(); // Scale factor
+            var inputOffset = $input.offset();
+            var newTop = (inputOffset.top + $input.outerHeight()) / scaleFactor;
+            var newLeft = inputOffset.left / scaleFactor;
+
+            // Apply the new position
+            $('.autocomplete-suggestions').css({ top: newTop + 'px', left: newLeft + 'px' });
+        }
     });
 
     var ac = $("#frmGetLatLng #txtAddress").devbridgeAutocomplete();
@@ -1803,4 +1883,24 @@ var getParameterByName = function (name, url)
     if (!results) return null;
     if (!results[2]) return '';
     return decodeURIComponent(results[2].replace(/\+/g, " "));
+};
+
+var inIframe = function ()
+{
+    try
+    {
+        return window.self !== window.top;
+    }
+    catch (e)
+    {
+        return true;
+    }
+};
+
+var getBodyScaleValue = function ()
+{
+    var transformValue = $(document.body).css('transform');
+    var scaleArray = transformValue.split(',');
+    var scaleValue = parseFloat(scaleArray[scaleArray.length - 3]);
+    return scaleValue;
 };
