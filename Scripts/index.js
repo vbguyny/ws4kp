@@ -1224,6 +1224,13 @@ $(function ()
         $(document.body).css("margin", "0 0 0 0")
             .css("transform-origin", "top left")
             .css("width", "640px");
+
+        $("#divGitHub").hide();
+        $("#divInfo").hide();
+        $("#divRefresh").hide();
+        $("#divUnits").hide();
+        $("#divThemes").hide();
+        $("#divScrollText").hide();
     }
 
     //$(document).on('webkitfullscreenchange mozfullscreenchange fullscreenchange', OnFullScreen);
