@@ -12,7 +12,8 @@ var _MonthShortNames = { 'January': 'Jan', 'February': 'Feb', 'March': 'Mar', 'A
 var _MonthLongNames = { 'Jan': 'January', 'Feb': 'February', 'Mar': 'March', 'Apr': 'April', 'May': 'May', 'Jun': 'June', 'Jul': 'July', 'Aug': 'August', 'Sep': 'September', 'Oct': 'October', 'Nov': 'November', 'Dec': 'December' };
 
 //var _WEATHER_API_KEY = "6532d6454b8aa370768e63d6ba5a832e";
-var _WEATHER_API_KEY = "21d8a80b3d6b444998a80b3d6b1449d3";
+//var _WEATHER_API_KEY = "21d8a80b3d6b444998a80b3d6b1449d3";
+var _WEATHER_API_KEY = "e1f10a1e78da46f5b10a1e78da96f525";
 
 var canvasProgress;
 var divProgress;
