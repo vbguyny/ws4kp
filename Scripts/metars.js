@@ -290,7 +290,9 @@
             this.result.wind.unit = unitMatch[0];
         } else
         {
-            throw new Error("Bad wind unit: " + this.current);
+            //throw new Error("Bad wind unit: " + this.current);
+            console.error("Bad wind unit: " + this.current);
+            return;
         }
 
         var varMatch;
