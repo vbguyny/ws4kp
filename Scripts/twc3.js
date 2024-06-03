@@ -13660,7 +13660,7 @@ var PopulateMusicUrls = function ()
     _MusicUrls.push("Audio/Ficara - High Tides Of Maui.mp3");
     _MusicUrls.push("Audio/Ficara - Stormy Weather.mp3");
     _MusicUrls.push("Audio/Gota - All Alone.mp3");
-    _MusicUrls.push("Audio/Incognito - L'arc en ciel de miles.mp3");
+    _MusicUrls.push("Audio/Incognito - Larc en ciel de miles.mp3");
     _MusicUrls.push("Audio/Incognito - Sunchild.mp3");
     _MusicUrls.push("Audio/Joe Sample - Rainbow Seeker.mp3");
     _MusicUrls.push("Audio/Norman Brown - Celebration.mp3");
@@ -13690,10 +13690,10 @@ var PopulateMusicUrls = function ()
     _MusicUrls.push("Audio/Trammell Starks - Going Home.mp3");
     _MusicUrls.push("Audio/Trammell Starks - Good Ole Days.mp3");
     _MusicUrls.push("Audio/Trammell Starks - Good Times.mp3");
-    _MusicUrls.push("Audio/Trammell Starks - Havin' Fun.mp3");
+    _MusicUrls.push("Audio/Trammell Starks - Havin Fun.mp3");
     _MusicUrls.push("Audio/Trammell Starks - In The Summer.mp3");
     _MusicUrls.push("Audio/Trammell Starks - Jamaican Jam.mp3");
-    _MusicUrls.push("Audio/Trammell Starks - Jumpin'.mp3");
+    _MusicUrls.push("Audio/Trammell Starks - Jumpin.mp3");
     _MusicUrls.push("Audio/Trammell Starks - Kool Kats.mp3");
     _MusicUrls.push("Audio/Trammell Starks - Late Nite Cafe.mp3");
     _MusicUrls.push("Audio/Trammell Starks - Lazy Days.mp3");
@@ -13706,7 +13706,7 @@ var PopulateMusicUrls = function ()
     _MusicUrls.push("Audio/Trammell Starks - Reflections In Time.mp3");
     _MusicUrls.push("Audio/Trammell Starks - Small Town.mp3");
     _MusicUrls.push("Audio/Trammell Starks - Smooth Sailing.mp3");
-    _MusicUrls.push("Audio/Trammell Starks - Takin' It Easy.mp3");
+    _MusicUrls.push("Audio/Trammell Starks - Takin It Easy.mp3");
     _MusicUrls.push("Audio/Trammell Starks - That Latin Beat.mp3");
     _MusicUrls.push("Audio/Trammell Starks - The Chase.mp3");
     _MusicUrls.push("Audio/Trammell Starks - The End Of The Journey.mp3");
