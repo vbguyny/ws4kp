@@ -23,16 +23,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-var fileProvider = new PhysicalFileProvider(Directory.GetCurrentDirectory());
-app.UseDefaultFiles(new DefaultFilesOptions
-{
-    DefaultFileNames = { "index.html" },
-    FileProvider = fileProvider
-});
-app.UseStaticFiles(new StaticFileOptions
-{
-    FileProvider = fileProvider
-});
+app.UseDefaultFiles();
+app.UseStaticFiles();
 
 app.UseRouting();
 
