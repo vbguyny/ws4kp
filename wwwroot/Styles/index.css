@@ -1,0 +1,328 @@
+﻿@font-face 
+{
+    font-family: "Star4000";
+    src: url('../fonts/Star4000.woff') format('woff');
+    /*font-weight: bold;
+    font-style: italic;*/
+}
+@font-face 
+{
+    font-family: "Star 4 Radar";
+    src: url('../fonts/Star 4 Radar.woff') format('woff');
+}
+@font-face 
+{
+    font-family: 'Star4000 Extended';
+    src: url('../fonts/Star4000 Extended.woff') format('woff');
+}
+@font-face 
+{
+    font-family: 'Star4000 Large Compressed Numbers';
+    src: url('../fonts/Star4000 Large Compressed Numbers.woff') format('woff');
+}
+@font-face
+ {
+    font-family: 'Star4000 Large Compressed';
+    src: url('../fonts/Star4000 Large Compressed.woff') format('woff');
+}
+@font-face 
+{
+    font-family: 'Star4000 Large';
+    src: url('../fonts/Star4000 Large.woff') format('woff');
+}
+@font-face
+ {
+    font-family: 'Star4000 Small';
+    src: url('../fonts/Star4000 Small.woff') format('woff');
+}
+body
+{
+    font-family: "Star4000";
+    color: #000000;
+    background-color: #ffffff;
+}
+
+input, button {
+    font-family: "Star4000";
+    background-color: #e0e0e0;
+    border: solid 1px #000000;
+    color: #000000;
+}
+
+input[type=text] {
+    background-color: #ffffff;
+}
+
+#imgGetGps
+{
+    height: 13px;
+    vertical-align: middle;
+}
+
+#txtAddress
+{
+    /*width: 400px;*/
+    width: 492px;
+    font-size: 16pt;
+}
+
+#btnGetGps, #btnGetLatLng, #btnClearQuery
+{
+    font-size: 16pt;
+}
+
+.autocomplete-suggestions
+{
+    background-color: #ffffff;
+    border: 1px solid #000000;
+	/*overflow: auto;*/
+}
+.autocomplete-suggestion 
+{
+	/*padding: 2px 5px;*/
+	white-space: nowrap;
+	overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 16pt;
+}
+.autocomplete-selected
+{
+	background-color: #0000ff;
+    color: #ffffff;
+}
+.autocomplete-suggestions strong
+{
+	/*font-weight: normal;*/
+	/*color: lightseagreen*/
+}
+.autocomplete-group
+{
+	/*padding: 2px 5px;*/
+}
+.autocomplete-group strong 
+{
+	/*display: block;
+	border-bottom: 1px solid black;*/
+}
+
+/*#Star4000LargeCompressedNumbers
+{
+    visibility: hidden;
+    position: absolute;
+    font-family: 'Star4000 Large Compressed Numbers';
+}*/
+
+#divTwc
+{
+    /*display: none;*/
+    display: block;
+    background-color: #000000;
+    color: #ffffff;
+    width: 640px;
+}
+
+#divTwcMiddle
+{
+    display: flex;
+}
+
+#divTwcLeft
+{
+    visibility: hidden;
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    vertical-align: middle;
+}
+#divTwcLeft > div
+{
+    flex: 1;
+    padding-right: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /*position: relative;
+    top: 10%;*/
+}
+
+#divTwcRight
+{
+    visibility: hidden;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    vertical-align: middle;
+}
+#divTwcRight > div
+{
+    flex: 1;
+    padding-left: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /*position: relative;
+    top: 10%;*/
+}
+
+#divTwcBottom
+{
+    visibility: hidden;
+    display: flex;
+    flex-direction: row;
+    background-color: #000000;
+    color: #ffffff;
+    width: 100%;
+}
+#divTwcBottom > div
+{
+    padding-left: 6px;
+    padding-right: 6px;
+}
+#divTwcBottomLeft
+{
+    flex: 1;
+    text-align: left;
+}
+#divTwcBottomMiddle
+{
+    flex: 0;
+    text-align: center;
+}
+#divTwcBottomRight
+{
+    flex: 1;
+    text-align: right;
+}
+
+#divTwcNavContainer
+{
+    display: none;
+}
+
+#divTwcNav
+{
+    display: flex;
+    flex-direction: row;
+    background-color: #000000;
+    color: #ffffff;
+    width: 640px;
+}
+#divTwcNav > div
+{
+    padding-left: 6px;
+    padding-right: 6px;
+}
+#divTwcNavLeft
+{
+    flex: 1;
+    text-align: left;
+}
+#divTwcNavMiddle
+{
+    flex: 0;
+    text-align: center;
+}
+#divTwcNavRight
+{
+    flex: 1;
+    text-align: right;
+}
+
+#imgPause1x, #imgPause2x
+{
+    visibility: hidden;
+    position: absolute;
+    position: absolute;
+}
+
+#iframeTwc
+{
+    width: 640px;
+    height: 480px;
+    overflow: hidden;
+    border: 0;
+}
+
+.HideCursor
+{
+    cursor: none !important;
+}
+
+#divInfo
+{
+    width: 640px;
+}
+
+#divGitHub 
+{
+    width: 640px;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+/*.btn {
+    background-color: black !important;
+    color: white !important;
+    background-image: url() !important;
+    border-color: white !important;
+}*/
+
+#spanLocation, #spanRadar {
+    float: left;
+}
+
+#spanStation, #spanZone 
+{
+    float: right;
+}
+
+#spanStationId, #spanZoneId
+{
+    display: inline-block;
+    width: 50px;
+}
+
+#divRefresh
+{
+    width: 640px;
+}
+
+#spanLastUpdate 
+{
+    float: left;
+}
+
+#spanAutoRefresh 
+{
+    float: right;
+}
+
+#divUnits, #divThemes
+{
+    width: 640px;
+}
+
+#spanUnits, #spanThemes 
+{
+    display: inline-block;
+    width: 50px;
+}
+
+#txtScrollText, #txtScrollRss {
+    width: 470px;
+    /*text-transform: uppercase;*/
+}
+
+#lblScrollText, #lblScrollRss {
+    display: inline-block;
+    width: 100px;
+}
+
+#frmScrollText, #frmScrollRss {
+    display: initial;
+}
+
+.Disabled{
+    pointer-events: none;
+    opacity: 0.5;
+}
