@@ -2991,7 +2991,7 @@ var GetWeatherHazards3 = function (WeatherParameters)
         Hazards: [],
     };
 
-    var Url = "https://alerts.weather.gov/cap/wwaatmget.php?x=" + ZoneId + "&y=0";
+    var Url = "https://api.weather.gov/alerts/active.atom?zone=" + ZoneId;
     //Url = "cors/?u=" + encodeURIComponent(Url);
 
     // Load the xml file using ajax 
