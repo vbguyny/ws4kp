@@ -1810,7 +1810,7 @@ var btnGetGps_click = function ()
 var PopulateWeatherParameters = function ()
 {
     spanCity.text(_WeatherParameters.City + ", ");
-    spanState.text(_WeatherParameters.State);
+    spanState.text(_WeatherParameters.ZoneId.substring(0,2));
     spanStationId.text(_WeatherParameters.StationId);
     spanRadarId.text(_WeatherParameters.RadarId);
     spanZoneId.text(_WeatherParameters.ZoneId);
