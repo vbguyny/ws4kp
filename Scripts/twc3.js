@@ -3085,7 +3085,8 @@ var GetWeatherHazards3 = function (WeatherParameters)
                         console.log(xml);
 
                         var description = $xml.find("description");
-                        WeatherParameters.WeatherHazardConditions.Hazards.push(description.text());
+                        var title = $xml.find("headline");
+                        WeatherParameters.WeatherHazardConditions.Hazards.push(title.text() + " " + description.text());
 
                         HazardCounter++;
                         if (HazardCounter == HazardUrls.length)
