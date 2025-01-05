@@ -1,4 +1,4 @@
-/// <reference path="jquery-3.1.0.min.js" />
+/// <reference path="jquery-3.7.1.min.js" />
 /// <reference path="jquery.touchSwipe.min.js" />
 
 // Redirect user to SSL version of site.
@@ -1810,7 +1810,7 @@ var btnGetGps_click = function ()
 var PopulateWeatherParameters = function ()
 {
     spanCity.text(_WeatherParameters.City + ", ");
-    spanState.text(_WeatherParameters.State);
+    spanState.text(_WeatherParameters.ZoneId.substring(0,2));
     spanStationId.text(_WeatherParameters.StationId);
     spanRadarId.text(_WeatherParameters.RadarId);
     spanZoneId.text(_WeatherParameters.ZoneId);

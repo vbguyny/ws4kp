@@ -1,4 +1,4 @@
-/// <reference path="jquery-3.1.0.min.js" />
+/// <reference path="jquery-3.7.1.min.js" />
 /// <reference path="Timer.js" />
 
 //timemachine.config({
@@ -2991,7 +2991,7 @@ var GetWeatherHazards3 = function (WeatherParameters)
         Hazards: [],
     };
 
-    var Url = "https://alerts.weather.gov/cap/wwaatmget.php?x=" + ZoneId + "&y=0";
+    var Url = "https://api.weather.gov/alerts/active.atom?zone=" + ZoneId;
     //Url = "cors/?u=" + encodeURIComponent(Url);
 
     // Load the xml file using ajax 
@@ -3085,7 +3085,8 @@ var GetWeatherHazards3 = function (WeatherParameters)
                         console.log(xml);
 
                         var description = $xml.find("description");
-                        WeatherParameters.WeatherHazardConditions.Hazards.push(description.text());
+                        var title = $xml.find("headline");
+                        WeatherParameters.WeatherHazardConditions.Hazards.push(title.text() + " " + description.text());
 
                         HazardCounter++;
                         if (HazardCounter == HazardUrls.length)
@@ -12921,8 +12922,8 @@ var DrawNoaaImage = function (context)
         {
             context.drawImage(_NoaaImage, 356, 39);
         };
-        //_NoaaImage.src = "Images/noaa4.png";
-        _NoaaImage.src = "Images/noaa5.gif";
+        //_NoaaImage.src = "images/noaa4.png";
+        _NoaaImage.src = "images/noaa5.gif";
     }
     else
     {
@@ -12941,9 +12942,9 @@ var DrawLogoImage = function (context)
             //SmoothingEnabled(context, true);
             context.drawImage(_LogoImage, 50, 30, 85, 67);
         };
-        //LogoImage.src = "Images/Logo1.png";
-        //_LogoImage.src = "Images/Logo3.gif";
-        _LogoImage.src = "Images/Logo3.png";
+        //LogoImage.src = "images/Logo1.png";
+        //_LogoImage.src = "images/Logo3.gif";
+        _LogoImage.src = "images/Logo3.png";
     }
     else
     {
