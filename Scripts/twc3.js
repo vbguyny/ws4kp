@@ -1,4 +1,4 @@
-/// <reference path="jquery-3.1.0.min.js" />
+/// <reference path="jquery-3.7.1.min.js" />
 /// <reference path="Timer.js" />
 
 //timemachine.config({
