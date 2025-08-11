@@ -3007,7 +3007,7 @@ var GetWeatherHazards3 = function (WeatherParameters)
         Hazards: [],
     };
 
-    var Url = "https://alerts.weather.gov/cap/wwaatmget.php?zone=" + ZoneId;
+    var Url = "https://api.weather.gov/alerts/active.atom?zone=" + ZoneId;
     //Url = "cors/?u=" + encodeURIComponent(Url);
 
     // Load the xml file using ajax 
@@ -12513,7 +12513,7 @@ var Progress = function (e)
             ////DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "Conditions", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 55, "WeatherStar", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "4000+", 3);
-            DrawTitleText(context, "WeatherStar", "4000+ 1.80                             ");
+            DrawTitleText(context, "WeatherStar", "4000+ 1.81                             ");
 
             // Draw a box for the progress.
             //context.fillStyle = "#000000";
