@@ -154,6 +154,7 @@ namespace ws4kp.Middleware
             var expiration = uri.Host.ToLower() switch
                     {
                         "alerts.weather.gov" or 
+                        "api.weather.gov" or 
                         "www.aviationweather.gov" or 
                         "aviationweather.gov" or 
                         "mesonet.agron.iastate.edu" or 

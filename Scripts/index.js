@@ -353,6 +353,9 @@ var FullScreenResize = function (AutoRefresh)
 
     if (inIframe())
     {
+        $("body").hide();
+        throw new Error("IFrame embedding not supported");
+
         if (!inFullScreen)
         {
             var scaleFactor = 1.0;

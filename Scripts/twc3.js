@@ -366,12 +366,25 @@ var GetClosestCurrentWeather = function (WeatherParameters, Distance)
         WeatherParameters.SkipClosestWeatherStationIds = [];
     }
 
+    // approx 70 miles per degree
+    var degreeDistance = (Distance / 2) / 70;
+    var lat0 = parseFloat(WeatherParameters.Latitude) - degreeDistance;
+    var lon0 = parseFloat(WeatherParameters.Longitude) - degreeDistance;
+    var lat1 = parseFloat(WeatherParameters.Latitude) + degreeDistance;
+    var lon1 = parseFloat(WeatherParameters.Longitude) + degreeDistance;
+    var boundingBox = `${lat0},${lon0},${lat1},${lon1}`;
+
+    //// Get the current weather from the next closest station.
+    //var Url = "https://aviationweather.gov/api/data/dataserver?dataSource=metars&requestType=retrieve&format=xml&hoursBeforeNow=1";
+    //Url += "&boundingBox=" + boundingBox;
+    //Url += "&radialDistance=" + Distance.toString();
+    //Url += ";" + WeatherParameters.Longitude;
+    //Url += "," + WeatherParameters.Latitude;
+    ////Url = "cors/?u=" + encodeURIComponent(Url);
+
     // Get the current weather from the next closest station.
-    var Url = "https://aviationweather.gov/cgi-bin/data/dataserver.php?datasource=metars&requesttype=retrieve&format=xml&hoursBeforeNow=1";
-    Url += "&radialDistance=" + Distance.toString();
-    Url += ";" + WeatherParameters.Longitude;
-    Url += "," + WeatherParameters.Latitude;
-    //Url = "cors/?u=" + encodeURIComponent(Url);
+    var Url = "https://aviationweather.gov/api/data/metar?format=xml&hours=1";
+    Url += "&bbox=" + boundingBox;
 
     // Load the xml file using ajax 
     $.ajaxCORS({
@@ -391,8 +404,21 @@ var GetClosestCurrentWeather = function (WeatherParameters, Distance)
                 return;
             }
 
-            //var WeatherRegionalMetarsParser = new WeatherRegionalMetarsParser($xml);
+            var distances = [];
+
             $xml.find("response").find("data").find("METAR").each(function ()
+            {
+                var data_METAR = $(this);
+                var latitude = parseFloat(data_METAR.find("latitude").text());
+                var longitude = parseFloat(data_METAR.find("longitude").text());
+
+                // Calculate distance from the latitude and longitude compared to WeatherParameters.Latitude and WeatherParameters.Longitude
+                var distance = getDistanceFromLatLonInMiles(WeatherParameters.Latitude, WeatherParameters.Longitude, latitude, longitude);
+                data_METAR.data("distance", distance);
+                insertSortedByDistance(distances, data_METAR);
+            });
+
+            $(distances).each(function ()
             {
                 var data_METAR = $(this);
                 var StationId = data_METAR.find("station_id").text();
@@ -583,10 +609,6 @@ var GetClosestCurrentWeather = function (WeatherParameters, Distance)
 //};
 
 var GetMonthPrecipitation = function (WeatherParameters) {
-    var Now = new Date();
-    var FirstOfMonth = new Date(Now.getFullYear(), Now.getMonth(), 1);
-    var LastOfMonth = new Date(Now.getFullYear(), Now.getMonth() + 1, 1).addDays(-1);
-
     //https://api.weather.com/v3/location/near?apiKey=" + _WEATHER_API_KEY + "&geocode=40.83%2C-73.02&product=airport&subproduct=major&format=json
     var Url = "https://api.weather.com/v3/location/near?apiKey=" + _WEATHER_API_KEY + "&geocode=";
     Url += WeatherParameters.Latitude.toString() + "%2C";
@@ -599,98 +621,7 @@ var GetMonthPrecipitation = function (WeatherParameters) {
         crossDomain: true,
         cache: false,
         success: function (json) {
-            var AirportName = json.location.airportName[0];
-            var AirportCode = json.location.iataCode[0];
-            WeatherParameters.AirportCode = AirportCode;
-
-            //https://forecast.weather.gov/product.php?site=NWS&issuedby=ISP&product=CLI&format=txt&version=1&glossary=1&highlight=off
-            var Url = "https://forecast.weather.gov/product.php?site=NWS&issuedby=";
-            Url += AirportCode;
-            Url += "&product=CLI&format=txt&version=1&glossary=1&highlight=off";
-            $.ajaxCORS({
-                type: "GET",
-                url: Url,
-                dataType: "text",
-                crossDomain: true,
-                cache: false,
-                success: function (text) {
-
-                    WeatherParameters.WeatherMonthlyTotalsParser = new WeatherMonthlyTotalsParser(text);
-                    console.log(WeatherParameters.WeatherMonthlyTotalsParser);
-
-                    WeatherParameters.WeatherMonthlyTotals = new WeatherMonthlyTotals(WeatherParameters.WeatherMonthlyTotalsParser);
-                    console.log(WeatherParameters.WeatherMonthlyTotals);
-                    //PopulateCurrentConditions(WeatherParameters.WeatherMonthlyTotals);
-
-                    // Check to see if we need to also parse the Almanac information
-                    if (WeatherParameters.Progress.Almanac != LoadStatuses.Loaded) {
-                        if (WeatherParameters.WeatherMonthlyTotalsParser.Precipitation === "") {
-                            WeatherParameters.Progress.Almanac = LoadStatuses.NoData;
-                            GetCurrentWeather(WeatherParameters);
-                            ShowRegionalMap(_WeatherParameters);
-                            return;
-                        }
-
-                        //https://api.weather.com/v2/astro?apiKey=" + _WEATHER_API_KEY + "&geocode=40.81999969%2C-73&days=1&date=20181223&format=json
-                        //This also has the moon and sun data: https://api.weather.com/v3/wx/forecast/daily/3day?language=en-US&apiKey=" + _WEATHER_API_KEY + "&geocode=40.83%2C-73.02&units=e&format=json
-                        var Url = "https://api.weather.com/v2/astro?apiKey=" + _WEATHER_API_KEY + "&geocode=";
-                        Url += WeatherParameters.Latitude.toString() + "%2C";
-                        Url += WeatherParameters.Longitude.toString();
-                        Url += "&days=1&date=" + Now.getFullYear().pad() + (Now.getMonth() + 1).pad(2) + Now.getDate().pad(2) + "&format=json";
-
-                        // Load the xml file using ajax 
-                        $.ajaxCORS({
-                            type: "GET",
-                            url: Url,
-                            dataType: "json",
-                            crossDomain: true,
-                            cache: false,
-                            success: function (json) {
-                                WeatherParameters.MoonPhasesParser = new MoonPhasesParser3(json);
-                                console.log(WeatherParameters.MoonPhasesParser);
-
-                                WeatherParameters.SunRiseSetParserToday = new SunRiseSetParser3(json);
-                                console.log(WeatherParameters.SunRiseSetParserToday);
-
-                                var Now = new Date();
-                                Now = Now.addDays(1);
-                                //https://api.weather.com/v2/astro?apiKey=" + _WEATHER_API_KEY + "&geocode=40.81999969%2C-73&days=1&date=20181223&format=json
-                                var Url = "https://api.weather.com/v2/astro?apiKey=" + _WEATHER_API_KEY + "&geocode=";
-                                Url += WeatherParameters.Latitude.toString() + "%2C";
-                                Url += WeatherParameters.Longitude.toString();
-                                Url += "&days=1&date=" + Now.getFullYear().pad() + (Now.getMonth() + 1).pad(2) + Now.getDate().pad(2) + "&format=json";
-
-                                $.ajaxCORS({
-                                    type: "GET",
-                                    url: Url,
-                                    dataType: "json",
-                                    crossDomain: true,
-                                    cache: false,
-                                    success: function (json) {
-                                        WeatherParameters.SunRiseSetParserTomorrow = new SunRiseSetParser3(json);
-                                        console.log(WeatherParameters.SunRiseSetParserTomorrow);
-
-                                        WeatherParameters.AlmanacInfo = new AlmanacInfo(WeatherParameters.MoonPhasesParser, WeatherParameters.SunRiseSetParserToday, WeatherParameters.SunRiseSetParserTomorrow);
-                                        console.log(WeatherParameters.AlmanacInfo);
-
-                                        GetOutlook(WeatherParameters);
-                                    },
-                                    error: function (xhr, error, errorThrown) {
-                                        console.error("Getting SunRiseSetParserTomorrow failed: " + errorThrown);
-                                    }
-                                });
-                            },
-                            error: function (xhr, error, errorThrown) {
-                                console.error("Getting SunRiseSetParserTomorrow failed: " + errorThrown);
-                            }
-                        });
-                    }
-                },
-                error: function (xhr, error, errorThrown) {
-                    console.error("GetMonthPrecipitation failed: " + errorThrown);
-                }
-            });
-
+            GetMonthPrecipitationProcessResponse(WeatherParameters, json, 0);
         },
         error: function (xhr, error, errorThrown) {
             console.error("GetMonthPrecipitation failed: " + errorThrown);
@@ -788,6 +719,123 @@ var GetMonthPrecipitation = function (WeatherParameters) {
     //        console.error("GetMonthPrecipitation failed: " + errorThrown);
     //    }
     //});
+};
+
+var GetMonthPrecipitationProcessResponse = function (WeatherParameters, json, index)
+{
+    if (index > json.location.airportName.length - 1)
+    {
+        WeatherParameters.Progress.Almanac = LoadStatuses.NoData;
+        GetCurrentWeather(WeatherParameters);
+        ShowRegionalMap(_WeatherParameters);
+        return;
+    }
+
+    var Now = new Date();
+    var FirstOfMonth = new Date(Now.getFullYear(), Now.getMonth(), 1);
+    var LastOfMonth = new Date(Now.getFullYear(), Now.getMonth() + 1, 1).addDays(-1);
+
+    var AirportName = json.location.airportName[index];
+    var AirportCode = json.location.iataCode[index];
+    WeatherParameters.AirportCode = AirportCode;
+
+    if (AirportCode === null)
+    {
+        GetMonthPrecipitationProcessResponse(WeatherParameters, json, index + 1);
+        return;
+    }
+
+    //https://forecast.weather.gov/product.php?site=NWS&issuedby=ISP&product=CLI&format=txt&version=1&glossary=1&highlight=off
+    var Url = "https://forecast.weather.gov/product.php?site=NWS&issuedby=";
+    Url += AirportCode;
+    Url += "&product=CLI&format=txt&version=1&glossary=1&highlight=off";
+    $.ajaxCORS({
+        type: "GET",
+        url: Url,
+        dataType: "text",
+        crossDomain: true,
+        cache: false,
+        success: function (text)
+        {
+            WeatherParameters.WeatherMonthlyTotalsParser = new WeatherMonthlyTotalsParser(text);
+            console.log(WeatherParameters.WeatherMonthlyTotalsParser);
+
+            WeatherParameters.WeatherMonthlyTotals = new WeatherMonthlyTotals(WeatherParameters.WeatherMonthlyTotalsParser);
+            console.log(WeatherParameters.WeatherMonthlyTotals);
+
+            // Check to see if we need to also parse the Almanac information
+            if (WeatherParameters.Progress.Almanac != LoadStatuses.Loaded)
+            {
+                if (WeatherParameters.WeatherMonthlyTotalsParser.Precipitation === "")
+                {
+                    GetMonthPrecipitationProcessResponse(WeatherParameters, json, index + 1);
+                    return;
+                }
+
+                //https://api.weather.com/v2/astro?apiKey=" + _WEATHER_API_KEY + "&geocode=40.81999969%2C-73&days=1&date=20181223&format=json
+                //This also has the moon and sun data: https://api.weather.com/v3/wx/forecast/daily/3day?language=en-US&apiKey=" + _WEATHER_API_KEY + "&geocode=40.83%2C-73.02&units=e&format=json
+                var Url = "https://api.weather.com/v2/astro?apiKey=" + _WEATHER_API_KEY + "&geocode=";
+                Url += WeatherParameters.Latitude.toString() + "%2C";
+                Url += WeatherParameters.Longitude.toString();
+                Url += "&days=1&date=" + Now.getFullYear().pad() + (Now.getMonth() + 1).pad(2) + Now.getDate().pad(2) + "&format=json";
+
+                // Load the xml file using ajax 
+                $.ajaxCORS({
+                    type: "GET",
+                    url: Url,
+                    dataType: "json",
+                    crossDomain: true,
+                    cache: false,
+                    success: function (json)
+                    {
+                        WeatherParameters.MoonPhasesParser = new MoonPhasesParser3(json);
+                        console.log(WeatherParameters.MoonPhasesParser);
+
+                        WeatherParameters.SunRiseSetParserToday = new SunRiseSetParser3(json);
+                        console.log(WeatherParameters.SunRiseSetParserToday);
+
+                        var Now = new Date();
+                        Now = Now.addDays(1);
+                        //https://api.weather.com/v2/astro?apiKey=" + _WEATHER_API_KEY + "&geocode=40.81999969%2C-73&days=1&date=20181223&format=json
+                        var Url = "https://api.weather.com/v2/astro?apiKey=" + _WEATHER_API_KEY + "&geocode=";
+                        Url += WeatherParameters.Latitude.toString() + "%2C";
+                        Url += WeatherParameters.Longitude.toString();
+                        Url += "&days=1&date=" + Now.getFullYear().pad() + (Now.getMonth() + 1).pad(2) + Now.getDate().pad(2) + "&format=json";
+
+                        $.ajaxCORS({
+                            type: "GET",
+                            url: Url,
+                            dataType: "json",
+                            crossDomain: true,
+                            cache: false,
+                            success: function (json)
+                            {
+                                WeatherParameters.SunRiseSetParserTomorrow = new SunRiseSetParser3(json);
+                                console.log(WeatherParameters.SunRiseSetParserTomorrow);
+
+                                WeatherParameters.AlmanacInfo = new AlmanacInfo(WeatherParameters.MoonPhasesParser, WeatherParameters.SunRiseSetParserToday, WeatherParameters.SunRiseSetParserTomorrow);
+                                console.log(WeatherParameters.AlmanacInfo);
+
+                                GetOutlook(WeatherParameters);
+                            },
+                            error: function (xhr, error, errorThrown)
+                            {
+                                console.error("Getting SunRiseSetParserTomorrow failed: " + errorThrown);
+                            }
+                        });
+                    },
+                    error: function (xhr, error, errorThrown)
+                    {
+                        console.error("Getting SunRiseSetParserTomorrow failed: " + errorThrown);
+                    }
+                });
+            }
+        },
+        error: function (xhr, error, errorThrown)
+        {
+            console.error("GetMonthPrecipitation failed: " + errorThrown);
+        }
+    });
 };
 
 var GetTideInfo = function (WeatherParameters)
@@ -2982,128 +3030,83 @@ Date.prototype.dst = function ()
 var GetWeatherHazards3 = function (WeatherParameters)
 {
     var ZoneId = WeatherParameters.ZoneId;
-    var HazardUrls = [];
-    var HazardCounter = 0;
 
     WeatherParameters.WeatherHazardConditions = 
     {
         ZoneId: WeatherParameters.ZoneId,
+        Headline: "",
         Hazards: [],
     };
 
-    var Url = "https://api.weather.gov/alerts/active.atom?zone=" + ZoneId;
+    var Url = "https://api.weather.gov/alerts/active?zone=" + ZoneId;
     //Url = "cors/?u=" + encodeURIComponent(Url);
 
-    // Load the xml file using ajax 
+    // Load the alerts using ajax 
     $.ajaxCORS({
         type: "GET",
         url: Url,
-        dataType: "text",
+        dataType: "json",
         crossDomain: true,
         cache: false,
-        success: function (text)
+        success: function (json)
         {
-            // IE doesn't support XML tags with colons.
-            text = text.replaceAll("<cap:", "<cap_");
-            text = text.replaceAll("</cap:", "</cap_");
+            console.log(json);
 
-            var $xml = $(text);
-            //console.log(xml);
+            var Now = new Date();
+            var Features = (json != null && json.features != null) ? json.features : [];
 
-            $xml.find("entry").each(function ()
+            // The NWS headline of the first alert is displayed on the first screen of the local forecast.
+            var Headline = "";
+            var FirstProperties = (Features.length > 0) ? Features[0].properties : null;
+            if (FirstProperties != null && FirstProperties.parameters != null &&
+                FirstProperties.parameters.NWSheadline != null && FirstProperties.parameters.NWSheadline.length > 0)
             {
-                var entry = $(this);
+                Headline = FirstProperties.parameters.NWSheadline[0];
+            }
 
-                // Skip Special Weather Statements.
-                //var cap_event = entry.find("*event");
-                var cap_event = entry.find("cap_event");
-                //if (cap_event.text() == "Special Weather Statement")
-                //{
-                //    return true;
-                //}
+            $(Features).each(function ()
+            {
+                var Properties = this.properties;
 
-                // Skip non-alerts.
-                //var cap_msgType = entry.find("*msgType");
-                var cap_msgType = entry.find("cap_msgType");
-                if (cap_msgType.text() != "Alert")
+                // Ignore everything that isn't an alert.
+                if (Properties == null || Properties.messageType != "Alert")
                 {
                     return true;
                 }
 
-                //var counter = 0;
-                //var summary = entry.find("summary");
-                //$(summary.text().split("...")).each(function ()
-                //{
-                //    var text = this.toString();
-                //    if (text == "" || text == " ")
-                //    {
-                //        return true;
-                //    }
+                var Effective = (Properties.effective != null) ? new Date(Properties.effective) : null;
 
-                //    counter++;
-                //    if (counter < 2)
-                //    {
-                //        return true;
-                //    }
+                // Alerts without an ending date fall back to the expiration date.
+                var EndDate = (Properties.ends != null) ? Properties.ends : Properties.expires;
+                var Ends = (EndDate != null) ? new Date(EndDate) : null;
 
-                //    WeatherParameters.WeatherHazardConditions.Summaries.push(text);
-                //    return false;
-                //});
+                // Ignore alerts that aren't currently in effect.
+                if (Effective != null && Now < Effective)
+                {
+                    return true;
+                }
 
-                var link = entry.find("link");
-                var Url = link.attr("href");
+                if (Ends != null && Now >= Ends)
+                {
+                    return true;
+                }
 
-                HazardUrls.push(Url);
+                if (Properties.description != null)
+                {
+                    WeatherParameters.WeatherHazardConditions.Hazards.push(Properties.description);
+                }
             });
 
-            if (HazardUrls.length == 0)
-            {
-                //WeatherParameters.WeatherHazardConditions.Hazards.push("TESTING TESTING 1-2-3 TESTING.");
-                //WeatherParameters.WeatherHazardConditions.Hazards.push("THIS IS A TEST\nTHIS IS SOME REALLY LONG MESSAGE THAT WE WOULD WANT TO WRAP AT SOME POINT.\n\nTHIS IS THE BEGINNING OF OTHER PARAGRAPH WHICH CAN THEN INDICATE THAT THERE IS SOME MORE TEXT THAT WOULD NEED TO BE WRAPPED.\n\n\I WOULD LIKE TO ADD SOME TEST TEXT HERE SO THAT IT WILL CAUSE THE SCREEN TO WRAP BECAUSE IT IS DISPLAYING MORE TEXT THAT WOULD NORMALLY FIX ON THE SCREEN; HOWEVER WE NEED TO ALSO TEST TO SEE IF THERE IS LESS HEIGHT THAN THE MAXIMUM HEIGHT.");
-                //WeatherParameters.WeatherHazardConditions.Hazards.push("...WARNING... .THIS IS NOT A DRILL! .THE RED HOUR IS ALMOST UPON US.  DO YOU HAVE A PLACE TO SLEEP IT OFF, AYUH?");
+            WeatherParameters.WeatherHazardConditions.Headline = Headline;
 
-                PopulateHazardConditions(WeatherParameters);
-                console.log(WeatherParameters.WeatherHazardConditions);
-                //WeatherParameters.Progress.Hazards = LoadStatuses.Loaded;
-                return;
+            PopulateHazardConditions(WeatherParameters);
+            console.log(WeatherParameters.WeatherHazardConditions);
+
+            // The local forecast may have already been drawn without the headline, so draw it again.
+            if (WeatherParameters.Progress.WordedForecast == LoadStatuses.Loaded)
+            {
+                PopulateLocalForecast(WeatherParameters);
             }
-
-            $(HazardUrls).each(function ()
-            {
-                var Url = this.toString();
-                //Url = "cors/?u=" + encodeURIComponent(Url);
-
-                $.ajaxCORS({
-                    type: "GET",
-                    url: Url,
-                    dataType: "xml",
-                    crossDomain: true,
-                    cache: true,
-                    success: function (xml)
-                    {
-                        var $xml = $(xml);
-                        console.log(xml);
-
-                        var description = $xml.find("description");
-                        var title = $xml.find("headline");
-                        WeatherParameters.WeatherHazardConditions.Hazards.push(title.text() + " " + description.text());
-
-                        HazardCounter++;
-                        if (HazardCounter == HazardUrls.length)
-                        {
-                            PopulateHazardConditions(WeatherParameters);
-                            console.log(WeatherParameters.WeatherHazardConditions);
-                            //WeatherParameters.Progress.Hazards = LoadStatuses.Loaded;
-                        }
-                    },
-                    error: function (xhr, error, errorThrown)
-                    {
-                        console.error("GetWeatherHazards3 failed for Url: " + Url);
-                        WeatherParameters.Progress.Hazards = LoadStatuses.Failed;
-                    }
-                });
-            });
-
         },
         error: function (xhr, error, errorThrown)
         {
@@ -3120,8 +3123,11 @@ var GetWeatherHazards3 = function (WeatherParameters)
 
 var GetWeatherMetar = function (WeatherParameters)
 {
-    var Url = "https://aviationweather.gov/cgi-bin/data/dataserver.php?datasource=metars&requesttype=retrieve&format=xml&hoursBeforeNow=3";
-    Url += "&stationString=" + WeatherParameters.StationId;
+    //var Url = "https://aviationweather.gov/api/data/dataserver?dataSource=metars&requestType=retrieve&format=xml&hoursBeforeNow=3";
+    //Url += "&stationString=" + WeatherParameters.StationId;
+    var Url = "https://aviationweather.gov/api/data/metar?format=xml&hours=3";
+    Url += "&ids=" + WeatherParameters.StationId;
+
     //Url += "," + (new Date().getTime()); // Prevents caching
     //Url = "https://crossorigin.me/" + Url; // Need to do this for Chrome and CORS
     //Url = "cors/?u=" + encodeURIComponent(Url);
@@ -3498,6 +3504,7 @@ setTimeout(() =>
                     {
                         City = _StationInfo[StationId].City;
                         City = City.split("/")[0];
+                        State = _StationInfo[StationId].State;
                     }
 
                     _WeatherParameters.Latitude = Latitude;
@@ -7405,7 +7412,27 @@ var PopulateLocalForecast = function (WeatherParameters)
 
     var DontLoadGifs = _DontLoadGifs;
 
-    $("#divLocalForecastAlerts").html(WeatherLocalForecast.Alerts.replaceAll("...", ""));
+    // The hazardous weather text of the first screen comes from the NWS headline of the first active alert.
+    var AlertText = "";
+    if (WeatherParameters.WeatherHazardConditions != null && WeatherParameters.WeatherHazardConditions.Headline != null)
+    {
+        AlertText = WeatherParameters.WeatherHazardConditions.Headline;
+    }
+
+    if (AlertText == "")
+    {
+        if (_Units == Units.Metric)
+        {
+            AlertText = WeatherLocalForecast.AlertsC;
+        }
+        else
+        {
+            AlertText = WeatherLocalForecast.Alerts;
+        }
+    }
+    AlertText = AlertText.replaceAll("...", "");
+
+    $("#divLocalForecastAlerts").html(AlertText);
     $(WeatherLocalForecast.Conditions).each(function (Index, Condition)
     {
         $("#divLocalForecast" + (Index + 1)).html(Condition.DayName.toUpperCase() + "..." + Condition.Text.toUpperCase());
@@ -7431,18 +7458,6 @@ var PopulateLocalForecast = function (WeatherParameters)
         var MaxRows = 7;
         var MaxCols = 32;
         var LocalForecastScreenTexts = [];
-
-        //var AlertText = WeatherLocalForecast.Alerts.replaceAll("...", "");
-        var AlertText = "";
-        if (_Units == Units.English)
-        {
-            AlertText = WeatherLocalForecast.Alerts;
-        }
-        else if (_Units == Units.Metric)
-        {
-            AlertText = WeatherLocalForecast.AlertsC;
-        }
-        AlertText = AlertText.replaceAll("...", "");
 
         var PrependAlert = false;
         //AlertText = "WIND ADVISORY IN EFFECT FROM 2 PM THIS AFTERNOON TO 6 AM EDT SUNDAY";
@@ -8614,8 +8629,8 @@ var SunRiseSetParser3 = function (json) {
     }
     else
     {
-        var riseLocalTime = new Date(riseSet.riseLocal);
-        _self.SunRiseLocal = riseLocalTime.getHours().pad(2) + ":" + riseLocalTime.getMinutes().pad(2);
+        var riseLocalTime = riseSet.riseLocal.split("T")[1].split(":");
+        _self.SunRiseLocal = riseLocalTime[0] + ":" + riseLocalTime[1];
     }
 
     if (riseSet.setLocal == "Sun set doesn't exist" || riseSet.setLocal == undefined)
@@ -8624,8 +8639,8 @@ var SunRiseSetParser3 = function (json) {
     }
     else
     {
-        var setLocalTime = new Date(riseSet.setLocal);
-        _self.SunSetLocal = setLocalTime.getHours().pad(2) + ":" + setLocalTime.getMinutes().pad(2);
+        var setLocalTime = riseSet.setLocal.split("T")[1].split(":");
+        _self.SunSetLocal = setLocalTime[0] + ":" + setLocalTime[1];
     }
 
     var tz = parseInt(riseSet.riseLocal.split("-")[3]) * -1;
@@ -9646,12 +9661,25 @@ var GetRegionalStations = function (WeatherParameters, Distance)
         WeatherParameters.WeatherCurrentRegionalConditions = new WeatherCurrentRegionalConditions();
     }
 
-    var Url = "https://aviationweather.gov/cgi-bin/data/dataserver.php?datasource=metars&requesttype=retrieve&format=xml&hoursBeforeNow=1";
-    Url += "&radialDistance=" + Distance.toString();
-    Url += ";" + WeatherParameters.Longitude;
-    Url += "," + WeatherParameters.Latitude;
-    //Url += "," + (new Date().getTime()); // Prevents caching
-    //Url = "cors/?u=" + encodeURIComponent(Url);
+    // approx 70 miles per degree
+    var degreeDistance = (Distance / 2) / 70;
+    var lat0 = parseFloat(WeatherParameters.Latitude) - degreeDistance;
+    var lon0 = parseFloat(WeatherParameters.Longitude) - degreeDistance;
+    var lat1 = parseFloat(WeatherParameters.Latitude) + degreeDistance;
+    var lon1 = parseFloat(WeatherParameters.Longitude) + degreeDistance;
+    var boundingBox = `${lat0},${lon0},${lat1},${lon1}`;
+
+    //var Url = "https://aviationweather.gov/api/data/dataserver?dataSource=metars&requestType=retrieve&format=xml&hoursBeforeNow=1";
+    //Url += "&boundingBox=" + boundingBox;
+    //Url += "&radialDistance=" + Distance.toString();
+    //Url += ";" + WeatherParameters.Longitude;
+    //Url += "," + WeatherParameters.Latitude;
+    ////Url += "," + (new Date().getTime()); // Prevents caching
+    ////Url = "cors/?u=" + encodeURIComponent(Url);
+
+    // Get the current weather from the next closest station.
+    var Url = "https://aviationweather.gov/api/data/metar?format=xml&hours=1";
+    Url += "&bbox=" + boundingBox;
 
     var Total = _MaximumRegionalStations;
     var Count = 0;
@@ -9674,8 +9702,21 @@ var GetRegionalStations = function (WeatherParameters, Distance)
                 return;
             }
 
-            //var WeatherRegionalMetarsParser = new WeatherRegionalMetarsParser($xml);
+            var distances = [];
+
             $xml.find("response").find("data").find("METAR").each(function ()
+            {
+                var data_METAR = $(this);
+                var latitude = parseFloat(data_METAR.find("latitude").text());
+                var longitude = parseFloat(data_METAR.find("longitude").text());
+
+                // Calculate distance from the latitude and longitude compared to WeatherParameters.Latitude and WeatherParameters.Longitude
+                var distance = getDistanceFromLatLonInMiles(WeatherParameters.Latitude, WeatherParameters.Longitude, latitude, longitude);
+                data_METAR.data("distance", distance);
+                insertSortedByDistance(distances, data_METAR);
+            });
+
+            $(distances).each(function ()
             {
                 var data_METAR = $(this);
                 var StationId = data_METAR.find("station_id").text();
@@ -10495,7 +10536,8 @@ var ShowRegionalMap = function (WeatherParameters, TomorrowForecast1, TomorrowFo
             var maxLon = MinMaxLatLon.MaxLongitude - 1; // Prevent cities from being cut off on the right side.
             var minLon = MinMaxLatLon.MinLongitude;
 
-            var Url = "https://aviationweather.gov/cgi-bin/data/dataserver.php?dataSource=metars&requestType=retrieve&format=xml&hoursBeforeNow=1&minLon=" + minLon + "&minLat=" + minLat + "&maxLon=" + maxLon + "&maxLat=" + maxLat;
+            //var Url = "https://aviationweather.gov/api/data/dataserver?dataSource=metars&requestType=retrieve&format=xml&hoursBeforeNow=1&minLon=" + minLon + "&minLat=" + minLat + "&maxLon=" + maxLon + "&maxLat=" + maxLat;
+            var Url = "https://aviationweather.gov/api/data/metar?format=xml&hours=1&bbox=" + minLat + "," + minLon + "," + maxLat + "," + maxLon;
 
             if (DontLoadGifs == true)
             {
@@ -10771,9 +10813,11 @@ var ShowRegionalMap = function (WeatherParameters, TomorrowForecast1, TomorrowFo
                         return;
                     }
 
-                    var Url = "https://aviationweather.gov/cgi-bin/data/dataserver.php?datasource=metars&requesttype=retrieve&format=xml&hoursBeforeNow=3";
-                    Url += "&stationString=" + StationId;
+                    //var Url = "https://aviationweather.gov/api/data/dataserver?dataSource=metars&requestType=retrieve&format=xml&hoursBeforeNow=3";
+                    //Url += "&stationString=" + StationId;
                     //Url = "cors/?u=" + encodeURIComponent(Url);
+                    var Url = "https://aviationweather.gov/api/data/metar?format=xml&hours=3";
+                    Url += "&ids=" + StationId;
 
                     // Load the xml file using ajax 
                     $.ajaxCORS({
@@ -12497,7 +12541,7 @@ var Progress = function (e)
             ////DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "Conditions", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 55, "WeatherStar", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "4000+", 3);
-            DrawTitleText(context, "WeatherStar", "4000+ 1.79");
+            DrawTitleText(context, "WeatherStar", "4000+ 1.84                             ");
 
             // Draw a box for the progress.
             //context.fillStyle = "#000000";
@@ -15079,3 +15123,30 @@ var BeepOnTimeUpdate = function ()
 
     RefreshStateOfBeepAudio();
 };
+
+// Calculate distance (in miles) between two lat/lon points using the Haversine formula
+function getDistanceFromLatLonInMiles(lat1, lon1, lat2, lon2)
+{
+    var R = 3958.8; // Radius of the earth in miles
+    var dLat = (lat2 - lat1) * Math.PI / 180;
+    var dLon = (lon2 - lon1) * Math.PI / 180;
+    var a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    var d = R * c; // Distance in miles
+    return d;
+}
+
+// Insert an item into a sorted array by a specific property (e.g., distance)
+function insertSortedByDistance(array, item)
+{
+    let i = 0;
+    while (i < array.length
+        && parseFloat(array[i].data("distance")) < parseFloat(item.data("distance")))
+    {
+        i++;
+    }
+    array.splice(i, 0, item);
+}
