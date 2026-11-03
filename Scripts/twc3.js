@@ -13,7 +13,8 @@ var _MonthLongNames = { 'Jan': 'January', 'Feb': 'February', 'Mar': 'March', 'Ap
 
 //var _WEATHER_API_KEY = "6532d6454b8aa370768e63d6ba5a832e";
 //var _WEATHER_API_KEY = "21d8a80b3d6b444998a80b3d6b1449d3";
-var _WEATHER_API_KEY = "e1f10a1e78da46f5b10a1e78da96f525";
+//var _WEATHER_API_KEY = "e1f10a1e78da46f5b10a1e78da96f525";
+var _WEATHER_API_KEY = "71f92ea9dd2f4790b92ea9dd2f779061";
 
 var canvasProgress;
 var divProgress;
@@ -352,6 +353,15 @@ var GetCurrentWeather = function(WeatherParameters)
     });
 };
 
+// The aviationweather.gov data API rejects bounding box values with more than 6 decimal places.
+var GetBoundingBox = function (minLat, minLon, maxLat, maxLon)
+{
+    return [minLat, minLon, maxLat, maxLon].map(function (value)
+    {
+        return parseFloat(value).toFixed(4);
+    }).join(",");
+};
+
 var GetClosestCurrentWeather = function (WeatherParameters, Distance)
 {
     var FoundClosetStation = false;
@@ -372,7 +382,7 @@ var GetClosestCurrentWeather = function (WeatherParameters, Distance)
     var lon0 = parseFloat(WeatherParameters.Longitude) - degreeDistance;
     var lat1 = parseFloat(WeatherParameters.Latitude) + degreeDistance;
     var lon1 = parseFloat(WeatherParameters.Longitude) + degreeDistance;
-    var boundingBox = `${lat0},${lon0},${lat1},${lon1}`;
+    var boundingBox = GetBoundingBox(lat0, lon0, lat1, lon1);
 
     //// Get the current weather from the next closest station.
     //var Url = "https://aviationweather.gov/api/data/dataserver?dataSource=metars&requestType=retrieve&format=xml&hoursBeforeNow=1";
@@ -2491,9 +2501,50 @@ var GetAirQuality2 = function (WeatherParameters)
     });
 };
 
+var GetAirQualityDateString = function (date)
+{
+    var Month = (date.getMonth() + 1).toString();
+    var Day = date.getDate().toString();
+    var Year = (date.getFullYear() % 100).toString();
+
+    if (Month.length < 2) Month = "0" + Month;
+    if (Day.length < 2) Day = "0" + Day;
+    if (Year.length < 2) Year = "0" + Year;
+
+    return Month + "/" + Day + "/" + Year;
+};
+
+var GetAirQualityISODateString = function (date)
+{
+    var Month = (date.getMonth() + 1).toString();
+    var Day = date.getDate().toString();
+
+    if (Month.length < 2) Month = "0" + Month;
+    if (Day.length < 2) Day = "0" + Day;
+
+    return date.getFullYear() + "-" + Month + "-" + Day;
+};
+
+var SetAirQuality = function (WeatherParameters, City, date, IndexValue)
+{
+    var AirQuality = {};
+
+    AirQuality.City = City;
+    AirQuality.Date = date;
+    AirQuality.IndexValue = IndexValue;
+
+    WeatherParameters.AirQuality = AirQuality;
+
+    PopulateAirQuality(WeatherParameters);
+
+    GetMarineForecast(WeatherParameters);
+};
+
 var GetAirQuality3 = function (WeatherParameters)
 {
-    //http://www.airnowapi.org/aq/forecast/zipCode/?format=application/json&zipCode=11763&date=2020-07-21&distance=25&API_KEY=E0E326E6-E199-4ABC-B382-0F9F9522E143
+    // The airnowapi.org web service was retired on October 1, 2026.
+    // This is the v2 service that airnow.gov itself uses.
+    // https://airnowgovapi.com/v2/reportingarea/get?latitude=40.85&longitude=-72.97&maxDistance=50
 
 
     if (!WeatherParameters.ZipCode)
@@ -2502,17 +2553,21 @@ var GetAirQuality3 = function (WeatherParameters)
         return;
     }
 
-    var ZipCode = WeatherParameters.ZipCode;
     var date = new Date();
     if (date.getHours() >= 12)
     {
         date = date.addDays(1);
     }
-    var _Date = date.getYYYYMMDD();
 
-    var Url = "http://www.airnowapi.org/aq/forecast/zipCode/?format=application/json&distance=25&API_KEY=E0E326E6-E199-4ABC-B382-0F9F9522E143";
-    Url += "&zipCode=" + encodeURIComponent(ZipCode);
-    Url += "&date=" + encodeURIComponent(_Date);
+    if (!WeatherParameters.Latitude || !WeatherParameters.Longitude)
+    {
+        GetAirQualityFromOpenMeteo(WeatherParameters, date);
+        return;
+    }
+
+    var Url = "https://airnowgovapi.com/v2/reportingarea/get?maxDistance=50";
+    Url += "&latitude=" + encodeURIComponent(WeatherParameters.Latitude);
+    Url += "&longitude=" + encodeURIComponent(WeatherParameters.Longitude);
 
     WeatherParameters.AirQuality = null;
 
@@ -2525,17 +2580,81 @@ var GetAirQuality3 = function (WeatherParameters)
         cache: false,
         success: function (json)
         {
+            var TargetDate = GetAirQualityDateString(date);
             var maxAQI = 0;
             var City = "";
 
             $(json).each(function ()
             {
-                if (this.AQI > maxAQI)
+                if (this.dataType != "F" || this.validDate != TargetDate)
                 {
-                    City = this.ReportingArea;
-                    maxAQI = this.AQI;
+                    return true;
+                }
+
+                if (this.aqi > maxAQI)
+                {
+                    City = this.reportingArea;
+                    maxAQI = this.aqi;
                 }
             });
+
+            if (maxAQI == 0)
+            {
+                GetAirQualityFromOpenMeteo(WeatherParameters, date);
+                return;
+            }
+
+            SetAirQuality(WeatherParameters, City, date, maxAQI);
+        },
+        error: function (xhr, error, errorThrown)
+        {
+            console.error("GetAirQuality failed: " + errorThrown);
+
+            GetAirQualityFromOpenMeteo(WeatherParameters, date);
+        }
+    });
+};
+
+var GetAirQualityFromOpenMeteo = function (WeatherParameters, date)
+{
+    if (!WeatherParameters.Latitude || !WeatherParameters.Longitude)
+    {
+        GetMarineForecast(WeatherParameters);
+        return;
+    }
+
+    var Url = "https://air-quality-api.open-meteo.com/v1/air-quality?hourly=us_aqi&forecast_days=3&timezone=auto";
+    Url += "&latitude=" + encodeURIComponent(WeatherParameters.Latitude);
+    Url += "&longitude=" + encodeURIComponent(WeatherParameters.Longitude);
+
+    $.ajaxCORS({
+        type: "GET",
+        url: Url,
+        dataType: "json",
+        crossDomain: true,
+        cache: false,
+        success: function (json)
+        {
+            var TargetDate = GetAirQualityISODateString(date);
+            var maxAQI = 0;
+
+            if (json.hourly && json.hourly.time && json.hourly.us_aqi)
+            {
+                $(json.hourly.time).each(function (index)
+                {
+                    if (this.substring(0, 10) != TargetDate)
+                    {
+                        return true;
+                    }
+
+                    var AQI = json.hourly.us_aqi[index];
+
+                    if (AQI != null && AQI > maxAQI)
+                    {
+                        maxAQI = AQI;
+                    }
+                });
+            }
 
             if (maxAQI == 0)
             {
@@ -2543,21 +2662,11 @@ var GetAirQuality3 = function (WeatherParameters)
                 return;
             }
 
-            var AirQuality = {};
-
-            AirQuality.City = City;
-            AirQuality.Date = date;
-            AirQuality.IndexValue = maxAQI;
-
-            WeatherParameters.AirQuality = AirQuality;
-
-            PopulateAirQuality(WeatherParameters);
-
-            GetMarineForecast(WeatherParameters);
+            SetAirQuality(WeatherParameters, WeatherParameters.City, date, Math.round(maxAQI));
         },
         error: function (xhr, error, errorThrown)
         {
-            console.error("GetAirQuality failed: " + errorThrown);
+            console.error("GetAirQualityFromOpenMeteo failed: " + errorThrown);
 
             GetMarineForecast(WeatherParameters);
         }
@@ -9667,7 +9776,7 @@ var GetRegionalStations = function (WeatherParameters, Distance)
     var lon0 = parseFloat(WeatherParameters.Longitude) - degreeDistance;
     var lat1 = parseFloat(WeatherParameters.Latitude) + degreeDistance;
     var lon1 = parseFloat(WeatherParameters.Longitude) + degreeDistance;
-    var boundingBox = `${lat0},${lon0},${lat1},${lon1}`;
+    var boundingBox = GetBoundingBox(lat0, lon0, lat1, lon1);
 
     //var Url = "https://aviationweather.gov/api/data/dataserver?dataSource=metars&requestType=retrieve&format=xml&hoursBeforeNow=1";
     //Url += "&boundingBox=" + boundingBox;
@@ -10537,7 +10646,7 @@ var ShowRegionalMap = function (WeatherParameters, TomorrowForecast1, TomorrowFo
             var minLon = MinMaxLatLon.MinLongitude;
 
             //var Url = "https://aviationweather.gov/api/data/dataserver?dataSource=metars&requestType=retrieve&format=xml&hoursBeforeNow=1&minLon=" + minLon + "&minLat=" + minLat + "&maxLon=" + maxLon + "&maxLat=" + maxLat;
-            var Url = "https://aviationweather.gov/api/data/metar?format=xml&hours=1&bbox=" + minLat + "," + minLon + "," + maxLat + "," + maxLon;
+            var Url = "https://aviationweather.gov/api/data/metar?format=xml&hours=1&bbox=" + GetBoundingBox(minLat, minLon, maxLat, maxLon);
 
             if (DontLoadGifs == true)
             {
@@ -12541,7 +12650,7 @@ var Progress = function (e)
             ////DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "Conditions", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 55, "WeatherStar", 3);
             //DrawText(context, "Star4000 Large", "16pt", "#ffff00", 170, 80, "4000+", 3);
-            DrawTitleText(context, "WeatherStar", "4000+ 1.84                             ");
+            DrawTitleText(context, "WeatherStar", "4000+ 1.85                             ");
 
             // Draw a box for the progress.
             //context.fillStyle = "#000000";

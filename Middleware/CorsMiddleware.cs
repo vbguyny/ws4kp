@@ -5,6 +5,11 @@ namespace ws4kp.Middleware
 {
     public class CorsMiddleware
     {
+        // Returned in place of the empty (204 No Content) response aviationweather.gov sends
+        // when a bounding box contains no reporting stations.
+        private static readonly byte[] EmptyAviationWeatherResponse = System.Text.Encoding.UTF8.GetBytes(
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?><response version=\"4.36\"><errors/><warnings/><data num_results=\"0\"></data></response>");
+
         private readonly RequestDelegate _next;
         private readonly IMemoryCache _memoryCache;
 
@@ -104,6 +109,8 @@ namespace ws4kp.Middleware
                 case "l-36.com":
                 case "airquality.weather.gov":
                 case "airnow.gov":
+                case "airnowgovapi.com":
+                case "air-quality-api.open-meteo.com":
                 case "www.airnowapi.org":
                 case "www2.ehs.niu.edu":
                 case "alerts.weather.gov":
@@ -165,6 +172,8 @@ namespace ws4kp.Middleware
                         "l-36.com" or 
                         "airquality.weather.gov" or 
                         "airnow.gov" or 
+                        "airnowgovapi.com" or 
+                        "air-quality-api.open-meteo.com" or 
                         "www.airnowapi.org" or 
                         "tgftp.nws.noaa.gov" or 
                         "www.cpc.ncep.noaa.gov" or 
@@ -192,6 +201,14 @@ namespace ws4kp.Middleware
                     {
                         byte[] Data;
                         Data = client.DownloadData(url);
+
+                        if (Data.Length == 0 &&
+                            uri.Host.EndsWith("aviationweather.gov", StringComparison.OrdinalIgnoreCase) &&
+                            url.Contains("format=xml", StringComparison.OrdinalIgnoreCase))
+                        {
+                            Data = EmptyAviationWeatherResponse;
+                        }
+
                         await response.Body.WriteAsync(Data);
                         _memoryCache.Set(memKey, Data, expiration);
                     }
