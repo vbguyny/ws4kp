@@ -2529,7 +2529,7 @@ var SetAirQuality = function (WeatherParameters, City, date, IndexValue)
 {
     var AirQuality = {};
 
-    AirQuality.City = City;
+    AirQuality.City = City ? City.replace(/\s+Region\s*$/i, "") : City;
     AirQuality.Date = date;
     AirQuality.IndexValue = IndexValue;
 
